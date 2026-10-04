@@ -69,3 +69,36 @@ survive next to colour classes and still override each other correctly.
 **Rule for later phases:** when a new token scale is added to `tokens.css`, register it in
 `src/lib/utils.ts` as well.
 **Status:** resolved in Phase 1 — no plan.md change needed.
+
+## [Phase 2] `closeDay` can only enforce the MIT limit on date+1 — Tier: Moderate
+**Finding:** `CloseDayInput` carries `tomorrowExisting` (the tasks already on date+1) but
+nothing about any other target day. Ritual step 2 lets a task be moved to an arbitrary date
+(the date chips offer next Monday, the weekend, +1 week). For those moves the domain has no
+way to know whether the target day already holds 3 MITs, so the copy keeps its MIT flag and
+that day can end up with 4+ MITs — a state `createTask` / `moveTask` would never allow.
+**Impact:** Phase 4 (ritual screen + repository) and Phase 5 (persistence). Either the
+screen loads the task lists of every distinct target date and the contract grows a
+`targets: Record<ISODate, Task[]>` field, or the over-limit day is accepted and repaired the
+next time it is edited.
+**How it was handled:** implemented exactly as specified — `moveTask` is called with an
+empty target day for any date other than date+1, so the MIT flag survives the move. Encoded
+in the test "ignores a tomorrowMit entry for a task moved elsewhere". Not changed on my own
+authority because `CloseDayInput` is a locked contract that Phase 4/5 consume.
+**Status:** unresolved — needs a decision from the planning session before Phase 4 builds
+the ritual screen.
+
+## [Phase 2] `validateSettings` returns English diagnostics, not Vietnamese copy — Tier: Moderate
+**Finding:** the contract asks for "a list of human-readable problems", while CLAUDE.md
+requires every user-facing string to live in `src/content/copy.vi.json` and forbids
+hard-coded Vietnamese outside it. `copy.vi.json` contains no settings-validation strings at
+all, and `src/domain/` must stay free of UI concerns.
+**Impact:** Phase 3/4 Settings + Onboarding. These strings cannot be rendered to the user
+as-is.
+**How it was handled:** the function returns stable English developer diagnostics (e.g.
+`'lockTime must be between 07:00 and 14:00'`) and is positioned as a guard for data loaded
+from Supabase or an older local draft, not as form-field copy. The Settings and Onboarding
+screens constrain the inputs to valid values with pickers (that is how the handoff designs
+them), so they never need to surface a message; if a message is ever needed, add a copy key
+and map it from the problem list rather than printing the raw string.
+**Status:** resolved in Phase 2 — no plan.md change needed, but Phase 3/4 should not render
+these strings directly.
