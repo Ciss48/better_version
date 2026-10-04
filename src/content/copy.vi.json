@@ -12,7 +12,9 @@
   "common": {
     "continue": "Tiếp tục", "back": "Quay lại", "skip": "Bỏ qua", "later": "Để sau", "cancel": "Hủy",
     "readOnly": "Chỉ đọc", "mit": "MIT", "important": "Quan trọng", "urgent": "Gấp", "adhoc": "Phát sinh",
-    "size": "Độ lớn", "done": "Hoàn thành", "remove": "Xóa", "escHint": "Esc"
+    "size": "Độ lớn", "done": "Hoàn thành", "remove": "Xóa", "escHint": "Esc",
+    "saveError": "Chưa lưu được — thử lại nhé",
+    "loadError": "Chưa đọc được dữ liệu của bạn. Thử tải lại trang nhé."
   },
   "format": {
     "duration": { "minutes": "{m} phút", "hours": "{h} giờ", "hoursMinutes": "{h} giờ {m} phút" }
@@ -22,6 +24,7 @@
     "weekdayLong": ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"],
     "longFormat": "{weekday}, {d} tháng {m}",
     "shortFormat": "{weekdayShort} {d}/{m}",
+    "weekdayDayMonth": "{weekday}, {d}/{m}",
     "month": "Tháng {m}, {y}",
     "monthShort": "thg {m}"
   },
@@ -236,7 +239,8 @@
         "01:00": "Tick việc lúc 00:40 vẫn được tính cho hôm trước.",
         "02:00": "Tick việc lúc 01:30 sáng vẫn được tính cho hôm trước.",
         "03:00": "Tick việc lúc 02:30 sáng vẫn được tính cho hôm trước — hợp với cú đêm.",
-        "04:00": "Tick việc lúc 03:30 sáng vẫn được tính cho hôm trước."
+        "04:00": "Tick việc lúc 03:30 sáng vẫn được tính cho hôm trước.",
+        "05:00": "Tick việc lúc 04:30 sáng vẫn được tính cho hôm trước."
       }
     },
     "done": {

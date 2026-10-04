@@ -40,5 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# phase-03 screenshot output
+# phase-03/05 screenshot output
 /artifacts/
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/.playwright/

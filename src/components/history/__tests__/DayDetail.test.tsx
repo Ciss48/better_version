@@ -53,5 +53,22 @@ describe('DayDetail', () => {
       />,
     );
     expect(screen.getByText(t('history.noReflection'))).toBeInTheDocument();
+    // Energy 0 means the question was skipped — no "—/5" line at all.
+    expect(screen.queryByText(/Năng lượng/)).not.toBeInTheDocument();
+  });
+
+  it('shows the energy line when it was answered', () => {
+    renderWithClock(
+      <DayDetail
+        date={HISTORY_SELECTED}
+        tasks={historyTasks()}
+        dayLog={HISTORY_DAY_LOG}
+        planTiming={{ kind: 'morning', time: '07:59' }}
+        mode="past"
+      />,
+    );
+    expect(
+      screen.getByText(t('history.reflection.energy', { n: HISTORY_DAY_LOG.energy })),
+    ).toBeInTheDocument();
   });
 });

@@ -1,11 +1,14 @@
-import { PageContainer } from '@/components/app-shell/PageContainer';
-import { t } from '@/lib/copy';
+import { Suspense } from 'react';
+import { TodayScreen } from '@/features/today/TodayScreen';
 
+/**
+ * `TodayScreen` reads `?focus=input` (onboarding hands the input the focus), so
+ * it needs a Suspense boundary around `useSearchParams`.
+ */
 export default function TodayPage() {
   return (
-    <PageContainer width="narrow">
-      <p className="text-label font-semibold uppercase text-ink-3">{t('app.tagline')}</p>
-      <h1 className="mt-3 text-display-md app:text-display-xl">{t('nav.today')}</h1>
-    </PageContainer>
+    <Suspense>
+      <TodayScreen />
+    </Suspense>
   );
 }

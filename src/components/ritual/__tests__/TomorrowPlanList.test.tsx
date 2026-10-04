@@ -24,6 +24,19 @@ describe('TomorrowPlanList', () => {
     );
   });
 
+  it('offers quick add without the syntax legend', () => {
+    renderWithClock(
+      <TomorrowPlanList
+        items={TOMORROW_ITEMS}
+        onToggleMit={vi.fn()}
+        onRemove={vi.fn()}
+        onAdd={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.queryByText(t('today.input.syntax.important'))).not.toBeInTheDocument();
+  });
+
   it('reports a star toggle with the item id', async () => {
     const user = userEvent.setup();
     const onToggleMit = vi.fn();

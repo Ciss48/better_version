@@ -40,6 +40,16 @@ export function formatDateShort(date: ISODate): string {
   return t('date.shortFormat', { weekdayShort: weekdayShort(date), d, m });
 }
 
+/**
+ * Weekday plus day/month: 'Chủ Nhật, 4/10'. The design uses this shorter form
+ * wherever a weekday has to sit next to other text — the plan-reminder banner,
+ * the ritual meta line and the step-3 heading.
+ */
+export function formatWeekdayDayMonth(date: ISODate): string {
+  const { d, m } = parts(date);
+  return t('date.weekdayDayMonth', { weekday: weekdayLong(date), d, m });
+}
+
 /** Day and month only. */
 export function formatDayMonth(date: ISODate): string {
   const { d, m } = parts(date);

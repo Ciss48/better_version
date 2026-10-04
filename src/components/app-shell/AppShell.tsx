@@ -10,11 +10,14 @@ import { useShortcut } from '@/lib/hooks/use-shortcut';
 import { useHydrated } from '@/lib/use-hydrated';
 import { cn } from '@/lib/utils';
 import { ConsistencyMini } from './ConsistencyMini';
+import type { ConsistencyDay } from './ConsistencyMini';
 import { NavItem } from './NavItem';
 import { MORE_VIEWS, SIDEBAR_NAV, TAB_NAV, viewFromPathname } from './nav-config';
 
 export interface AppShellProps {
   children: React.ReactNode;
+  /** The last 30 days for the sidebar card; the screens' store supplies them. */
+  consistencyDays?: ConsistencyDay[];
 }
 
 /** Two overlapping circles — the logo mark from design/screenshots. */
@@ -49,7 +52,7 @@ const SHORTCUT_HINTS = [
   { kbd: 'T', labelKey: 'nav.shortcuts.theme' },
 ] as const;
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, consistencyDays }: AppShellProps) {
   const pathname = usePathname();
   const view = viewFromPathname(pathname);
   const { isDark, toggle } = useThemeToggle();
@@ -87,7 +90,7 @@ export function AppShell({ children }: AppShellProps) {
 
         <div className="flex-1" />
 
-        <ConsistencyMini />
+        <ConsistencyMini days={consistencyDays} />
 
         <div className="flex flex-wrap gap-x-3 gap-y-1.5 px-1.5 text-caption text-ink-3">
           {SHORTCUT_HINTS.map((hint) => (

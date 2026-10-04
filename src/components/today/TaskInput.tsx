@@ -18,6 +18,8 @@ export interface TaskInputProps {
   scope?: 'today' | 'tomorrow';
   /** Starting text — the gallery uses it to show the preview chips. */
   defaultValue?: string;
+  /** The quick-add legend under the field. Ritual step 3 hides it. */
+  showSyntax?: boolean;
   className?: string;
 }
 
@@ -47,6 +49,7 @@ export function TaskInput({
   enableShortcut = false,
   scope = 'today',
   defaultValue = '',
+  showSyntax = true,
   className,
 }: TaskInputProps) {
   const [value, setValue] = useState(defaultValue);
@@ -119,16 +122,18 @@ export function TaskInput({
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-x-3.5 gap-y-1.5 pl-[18px] text-caption text-ink-3">
-        {SYNTAX.map((item) => (
-          <span key={item.token}>
-            <b className="font-mono text-ink-2">{item.token}</b> {t(item.labelKey)}
-          </span>
-        ))}
-        {locked && scope === 'today' ? (
-          <span className="text-accent-ink">{t('today.input.lockedHint')}</span>
-        ) : null}
-      </div>
+      {showSyntax ? (
+        <div className="flex flex-wrap gap-x-3.5 gap-y-1.5 pl-[18px] text-caption text-ink-3">
+          {SYNTAX.map((item) => (
+            <span key={item.token}>
+              <b className="font-mono text-ink-2">{item.token}</b> {t(item.labelKey)}
+            </span>
+          ))}
+          {locked && scope === 'today' ? (
+            <span className="text-accent-ink">{t('today.input.lockedHint')}</span>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

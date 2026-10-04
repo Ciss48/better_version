@@ -149,3 +149,36 @@ token classes before using the component, and never leave a `bg-accent` hover/hi
 If the registry times out again, fall back to hand-writing over the matching Base UI part, as
 Phase 3 did; the bundled docs at `node_modules/@base-ui/react/docs/` remain the API reference.
 **Status:** resolved in Phase 4 — no plan.md change needed.
+
+## [Phase 5] The "no seeds in `.next/static`" check needed the dev routes out of the production build — Tier: Moderate
+**Finding:** the Phase 5 DoD asks that a `NODE_ENV=production` build contain no seed fixture
+titles anywhere in `.next/static`. The app routes were already clean — `StoreBootstrap` reaches
+`src/dev/DevParams.tsx` only through an `await import()` inside a
+`process.env.NODE_ENV !== 'production'` branch, which Next inlines and dead-code-eliminates, so
+the dev params, `src/dev/seeds.ts` and `src/dev/fixtures.ts` never enter the app's module graph.
+But the check still failed, because the **Phase 3/4 gallery routes** `/dev/components` and
+`/dev/tokens` import `fixtures.ts` directly and were being built like any other page. Those
+titles have therefore been shipping since Phase 3.
+**Impact:** every build from here on, and Phase 9 (deploy) in particular — the gallery and its
+sample data should not be on a public URL.
+**How it was handled:** the two gallery pages were renamed `page.dev.tsx` and `next.config.ts`
+now sets `pageExtensions` to `['dev.tsx', 'tsx', 'ts']` in development and `['tsx', 'ts']` in
+production. Next only treats a file as a route when its basename is exactly `page.<ext>`, so in
+production `/dev/*` is not a route at all and nothing it imports is bundled. `pnpm dev` is
+unchanged, so `/dev/components`, `/dev/tokens` and `pnpm shots` (128 PNGs) still work.
+Verified: `grep -rl "<fixture title>" .next/static` → 0 chunks for every fixture title tried,
+and the production route list is 11 routes with no `/dev` entry.
+**Rule for later phases:** anything dev-only that is a *route* goes in a `page.dev.tsx`;
+anything dev-only that is a *module* must be reached through a dynamic import behind a
+`NODE_ENV` check, never a static import behind a runtime `if`.
+**Status:** resolved in Phase 5 — no plan.md change needed.
+
+## [Phase 5] `docs/plan.md` still carries the pre-renumbering phase list — Tier: Minor (flagged, not fixed)
+**Finding:** the Phase 5 task file and the session brief use the new numbering (5 app core,
+6 stats & history, 7 Supabase, 8 SQL analytics, 9 ship), but `docs/plan.md` §3 still lists
+Phase 6 as "Supabase persistence & auth", 7 as "Stats in SQL" and 8 as "Ship", with no Phase 9.
+**Impact:** anyone reading plan.md alone will map `Repository` → Supabase to the wrong phase.
+**How it was handled:** nothing — `docs/plan.md` is edited only by the user and the planning
+model (CLAUDE.md). The task file was treated as authoritative: `src/data/repository.ts` names
+**Phase 7** as the Supabase implementer, and stats/History are deferred to **Phase 6**.
+**Status:** open — for the user/planning session to reconcile in `docs/plan.md`.

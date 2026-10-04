@@ -45,6 +45,17 @@ describe('TaskInput', () => {
     expect(input).toHaveValue('   ');
   });
 
+  it('hides the syntax legend when showSyntax is false', () => {
+    const { unmount } = render(<TaskInput locked={false} onAdd={vi.fn()} />);
+    expect(screen.getByText('Quan trọng')).toBeInTheDocument();
+    unmount();
+
+    // Ritual step 3 renders the field without the legend.
+    render(<TaskInput locked={false} onAdd={vi.fn()} showSyntax={false} />);
+    expect(screen.queryByText('Quan trọng')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
   it('shows the locked hint only for the today scope', () => {
     const { unmount } = render(<TaskInput locked onAdd={vi.fn()} />);
     expect(screen.getByText('· việc mới sẽ vào Phát sinh')).toBeInTheDocument();

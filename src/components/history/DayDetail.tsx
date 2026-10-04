@@ -157,11 +157,12 @@ export function DayDetail({
           <div className="flex flex-col gap-2.5 rounded-tile bg-surface px-[18px] py-4">
             <div className="flex items-center justify-between gap-2.5">
               <b className="font-semibold">{t('history.reflection.title')}</b>
-              <span className="text-caption text-ink-2">
-                {t('history.reflection.energy', {
-                  n: dayLog === null || dayLog.energy === 0 ? '—' : dayLog.energy,
-                })}
-              </span>
+              {/* Energy 0 means "not answered" — say nothing rather than "—/5". */}
+              {dayLog === null || dayLog.energy === 0 ? null : (
+                <span className="text-caption text-ink-2">
+                  {t('history.reflection.energy', { n: dayLog.energy })}
+                </span>
+              )}
             </div>
             {hasReflection ? (
               <div className="flex flex-col gap-2 text-[14.5px] leading-[1.45]">

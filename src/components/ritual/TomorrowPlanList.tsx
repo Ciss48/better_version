@@ -99,7 +99,9 @@ export function TomorrowPlanList({
         )}
       </div>
 
-      <TaskInput locked={false} scope="tomorrow" onAdd={onAdd} />
+      {/* Step 3 is not where the quick-add syntax is taught — the design
+          leaves the legend off here. */}
+      <TaskInput locked={false} scope="tomorrow" showSyntax={false} onAdd={onAdd} />
     </div>
   );
 }

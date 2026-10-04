@@ -4,6 +4,7 @@ import {
   formatClock,
   formatDateLong,
   formatDateShort,
+  formatWeekdayDayMonth,
   formatDayMonth,
   formatDuration,
   formatHourLoose,
@@ -34,6 +35,16 @@ describe('formatDateShort', () => {
 
   it('formats a Wednesday', () => {
     expect(formatDateShort('2026-10-14')).toBe('T4 14/10');
+  });
+});
+
+describe('formatWeekdayDayMonth', () => {
+  it('spells the weekday out but keeps the date short', () => {
+    expect(formatWeekdayDayMonth('2026-10-04')).toBe('Chủ Nhật, 4/10');
+  });
+
+  it('does not pad the day or the month', () => {
+    expect(formatWeekdayDayMonth('2026-01-05')).toBe('Thứ Hai, 5/1');
   });
 });
 
