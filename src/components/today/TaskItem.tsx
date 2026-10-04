@@ -4,8 +4,9 @@ import { addDays } from '@/domain';
 import type { ISODate, Size, Task } from '@/domain';
 import { DatePicker } from '@/components/date/DatePicker';
 import { Tag } from '@/components/common/Tag';
+import { useClock } from '@/lib/clock';
 import { t } from '@/lib/copy';
-import { formatClockLocal, formatDateShort } from '@/lib/format';
+import { formatClock, formatDateShort } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { SizeBadge } from './SizeBadge';
 import { TaskCheckbox } from './TaskCheckbox';
@@ -61,6 +62,7 @@ export function TaskItem({
   onRestore,
   className,
 }: TaskItemProps) {
+  const { settings } = useClock();
   const isDone = task.status === 'done';
   const isGone = task.status === 'moved' || task.status === 'dropped';
   const struck = isDone || task.status === 'dropped';
@@ -125,7 +127,7 @@ export function TaskItem({
               {task.urgent ? <Tag variant="urgent">{t('common.urgent')}</Tag> : null}
               {task.adhoc ? (
                 <span className="text-ink-3">
-                  {t('today.task.addedAt', { time: formatClockLocal(task.createdAt) })}
+                  {t('today.task.addedAt', { time: formatClock(task.createdAt, settings.timezone) })}
                 </span>
               ) : null}
               {showPostponed ? (

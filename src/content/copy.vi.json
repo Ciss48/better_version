@@ -12,7 +12,7 @@
   "common": {
     "continue": "Tiếp tục", "back": "Quay lại", "skip": "Bỏ qua", "later": "Để sau", "cancel": "Hủy",
     "readOnly": "Chỉ đọc", "mit": "MIT", "important": "Quan trọng", "urgent": "Gấp", "adhoc": "Phát sinh",
-    "size": "Độ lớn", "done": "Hoàn thành", "escHint": "Esc"
+    "size": "Độ lớn", "done": "Hoàn thành", "remove": "Xóa", "escHint": "Esc"
   },
   "format": {
     "duration": { "minutes": "{m} phút", "hours": "{h} giờ", "hoursMinutes": "{h} giờ {m} phút" }
@@ -103,6 +103,7 @@
   },
   "ritual": {
     "kicker": "Nghi thức buổi tối",
+    "stepperAria": "Tiến trình",
     "meta": "{date} · {time}",
     "later": "Để sau",
     "steps": ["Nhìn lại hôm nay", "Phản tỉnh", "Plan ngày mai"],
@@ -183,6 +184,7 @@
   "history": {
     "kicker": "Lịch sử",
     "title": "Những trang đã viết",
+    "calendarAria": "Lịch tháng",
     "monthSummary": "{planned}/{total} ngày có plan · TB {avg}%",
     "monthEmpty": "Chưa có dữ liệu",
     "readOnly": "Chỉ đọc",

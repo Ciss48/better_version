@@ -2,6 +2,19 @@
 
 import { notFound } from 'next/navigation';
 import { useState } from 'react';
+import { Phase2Notice } from '@/components/common/Phase2Notice';
+import { DayDetail } from '@/components/history/DayDetail';
+import { OnboardingDots } from '@/components/onboarding/OnboardingDots';
+import { OnboardingSummary } from '@/components/onboarding/OnboardingSummary';
+import { RitualFooter } from '@/components/ritual/RitualFooter';
+import { RitualSummary } from '@/components/ritual/RitualSummary';
+import { Stepper } from '@/components/ritual/Stepper';
+import { PlanWindowTimeline } from '@/components/settings/PlanWindowTimeline';
+import { SettingsSection } from '@/components/settings/SettingsSection';
+import { Heatmap } from '@/components/stats/Heatmap';
+import { InsightCard } from '@/components/stats/InsightCard';
+import { StatCard } from '@/components/stats/StatCard';
+import { WeekdayChart } from '@/components/stats/WeekdayChart';
 import { EmptyState } from '@/components/common/EmptyState';
 import { Kbd } from '@/components/common/Kbd';
 import { Segmented } from '@/components/common/Segmented';
@@ -20,18 +33,46 @@ import { TaskInput } from '@/components/today/TaskInput';
 import { TaskItem } from '@/components/today/TaskItem';
 import { ViewToggle } from '@/components/today/ViewToggle';
 import type { ViewMode } from '@/components/today/ViewToggle';
-import type { Decision, ISODate, Task } from '@/domain';
+import { DEFAULT_SETTINGS, settingsForHabit } from '@/domain';
+import type { Decision, HHMM, ISODate, Settings, Task } from '@/domain';
 import {
+  FIRST_USE,
+  GALLERY_CLOCK,
   GALLERY_SAMPLES,
+  HISTORY_DAY_LOG,
+  HISTORY_MONTH,
+  HISTORY_SELECTED,
+  historyDays,
+  historyTasks,
   MATRIX_TASKS,
   MATRIX_TASKS_WITH_EMPTY,
+  NEW_USER_FIRST_USE,
+  newUserDays,
+  statsDays,
   TASK_STATES,
   TODAY,
+  TOMORROW_ITEMS,
+  WEEKDAY_EMPTY,
+  WEEKDAY_VALUES,
 } from '@/dev/fixtures';
+import { ClockProvider } from '@/lib/clock';
 import { t, tRaw } from '@/lib/copy';
+import { formatHourLoose } from '@/lib/format';
 import type { CopyKey } from '@/lib/copy';
 import { noticeKey, showToast } from '@/lib/toast';
+import {
+  CalendarMonthDemo,
+  DayEndChipsDemo,
+  HabitDemo,
+  ReflectionDemo,
+  ReviewRowDemo,
+  SwitchDemo,
+  TimeChipsDemo,
+  TimeSelectDemo,
+  TomorrowListDemo,
+} from './Demos';
 import { Playground } from './Playground';
+import { RitualPlayground } from './RitualPlayground';
 
 /**
  * Component gallery. Headings and labels here are developer-facing, so they
@@ -161,15 +202,58 @@ const TOAST_BUTTONS: { label: string; key: CopyKey }[] = [
   { label: 'mitLimit · toggle · tomorrow', key: noticeKey('mitLimit', 'toggle', 'tomorrow') },
 ];
 
+
+const RITUAL_STEPS = tRaw<string[]>('ritual.steps');
+const WEEKDAY_LONG = tRaw<string[]>('date.weekdayLong');
+
+const MORNING_SETTINGS: Settings = settingsForHabit(DEFAULT_SETTINGS, 'morning');
+const LATE_SETTINGS: Settings = {
+  ...DEFAULT_SETTINGS,
+  windowStart: { hour: 20, dayOffset: -1 },
+  dayEnd: '03:00',
+};
+
+const START_OPTIONS: { value: HHMM; label: string }[] = [
+  ...(['17:00', '18:00', '19:00', '20:00'] as HHMM[]).map((value) => ({
+    value,
+    label: t('settings.window.startOptionPrev', { time: value }),
+  })),
+  ...(['05:00', '06:00'] as HHMM[]).map((value) => ({
+    value,
+    label: t('settings.window.startOptionSame', { time: value }),
+  })),
+];
+
+const LOCK_OPTIONS: { value: HHMM; label: string }[] = (
+  ['08:00', '09:00', '10:00', '11:00', '12:00'] as HHMM[]
+).map((value) => ({ value, label: t('settings.window.lockOption', { time: value }) }));
+
+const INSIGHTS: { text: string; tone: 'success' | 'accent' }[] = [
+  { text: t('stats.insights.evening', { n: 13 }), tone: 'success' },
+  { text: t('stats.insights.mit', { mit: 83, other: 52 }), tone: 'accent' },
+  {
+    text: t('stats.insights.weekday', {
+      best: WEEKDAY_LONG[2],
+      bestPct: 77,
+      worst: WEEKDAY_LONG[0],
+      worstPct: 56,
+    }),
+    tone: 'success',
+  },
+];
+
+const OCTOBER_SUMMARY = { planned: 2, total: 2, avg: 92 };
+
 const WELCOME_STEPS = tRaw<{ title: string; body: string }[]>('today.welcome.steps');
 
 export default function ComponentsGalleryPage() {
   if (process.env.NODE_ENV === 'production') notFound();
 
   return (
+    <ClockProvider value={GALLERY_CLOCK}>
     <div className="mx-auto flex w-full max-w-[1080px] flex-col gap-6 p-4 app:p-8">
       <header className="flex flex-col gap-1">
-        <h1 className="font-display text-display-md">Component gallery · phase 03</h1>
+        <h1 className="font-display text-display-md">Component gallery · phase 04</h1>
         <p className="text-body-sm text-ink-3">
           Every section id below is a screenshot target for <code>pnpm shots</code>.
         </p>
@@ -257,7 +341,12 @@ export default function ComponentsGalleryPage() {
             <PlanStatus locked lockAt="10:00" minutesLeft={null} />
           </Variant>
           <Variant label="late night · dayEnd 03:00">
-            <PlanStatus locked lockAt="10:00" minutesLeft={null} lateNight={{ dayEnd: '03:00' }} />
+            <PlanStatus
+              locked
+              lockAt="10:00"
+              minutesLeft={null}
+              lateNight={{ dayEnd: formatHourLoose('03:00') }}
+            />
           </Variant>
         </div>
       </Section>
@@ -523,6 +612,386 @@ export default function ComponentsGalleryPage() {
         </div>
       </Section>
 
+
+      <Section id="stepper" title="Stepper">
+        <div className="flex flex-col gap-5">
+          {([0, 1, 2] as const).map((current) => (
+            <Variant key={current} label={`current=${current}`}>
+              <Stepper steps={RITUAL_STEPS} current={current} onStepClick={noop} />
+            </Variant>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="review-row" title="ReviewRow" note="Ritual step 1 rows.">
+        <div className="flex flex-col gap-4">
+          <Variant label="done">
+            <ReviewRowDemo task={TASK_STATES.done} />
+          </Variant>
+          <Variant label="undecided">
+            <ReviewRowDemo task={TASK_STATES.todo} />
+          </Variant>
+          <Variant label="decided · move to tomorrow">
+            <ReviewRowDemo
+              task={TASK_STATES.expanded}
+              initial={{ kind: 'move', date: '2026-10-04' }}
+            />
+          </Variant>
+          <Variant label="decided · drop">
+            <ReviewRowDemo task={TASK_STATES.postponed1} initial={{ kind: 'drop' }} />
+          </Variant>
+          <Variant label="adhoc">
+            <ReviewRowDemo task={TASK_STATES.adhoc} />
+          </Variant>
+          <Variant label="postponed 3 · nudge">
+            <ReviewRowDemo task={TASK_STATES.postponed3} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="ritual-footer" title="RitualFooter">
+        <div className="flex flex-col gap-5">
+          <Variant label="step 1 · blocked (remaining 2)">
+            <RitualFooter
+              status={{ remaining: 2 }}
+              primaryLabel={t('ritual.step1.cta')}
+              disabled
+              onNext={noop}
+              onBlockedClick={() => showToast('ritual.step1.blocked')}
+            />
+          </Variant>
+          <Variant label="step 1 · ready">
+            <RitualFooter
+              status={{ remaining: 0 }}
+              primaryLabel={t('ritual.step1.cta')}
+              onNext={noop}
+            />
+          </Variant>
+          <Variant label="step 2 · back + skip label">
+            <RitualFooter
+              primaryLabel={t('ritual.step2.ctaEmpty')}
+              onNext={noop}
+              onBack={noop}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="reflection" title="ReflectionForm">
+        <div className="flex flex-col gap-8">
+          <Variant label="empty">
+            <ReflectionDemo initial={{ energy: 0, good: '', improve: '' }} />
+          </Variant>
+          <Variant label="energy 4 + both texts">
+            <ReflectionDemo
+              initial={{
+                energy: 4,
+                good: GALLERY_SAMPLES.reflectionGood,
+                improve: GALLERY_SAMPLES.reflectionImprove,
+              }}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="tomorrow-list" title="TomorrowPlanList">
+        <div className="flex flex-col gap-8">
+          <Variant label="empty">
+            <TomorrowListDemo initial={[]} />
+          </Variant>
+          <Variant label="2 carried (one postponed 4) + 1 new · 2/3 MIT">
+            <TomorrowListDemo initial={TOMORROW_ITEMS} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="ritual-summary" title="RitualSummary">
+        <div className="flex flex-col gap-10">
+          <Variant label="pct 100">
+            <RitualSummary
+              date={TODAY}
+              pct={100}
+              done={8}
+              total={8}
+              adhocDone={0}
+              moved={0}
+              dropped={0}
+              energy={5}
+              good={GALLERY_SAMPLES.reflectionGood}
+              tomorrow={{ count: 4, mitTitles: GALLERY_SAMPLES.summaryMitTitles }}
+              consistencyPlanned={26}
+              onDone={noop}
+            />
+          </Variant>
+          <Variant label="pct 62 · adhoc + moved + dropped">
+            <RitualSummary
+              date={TODAY}
+              pct={62}
+              done={5}
+              total={8}
+              adhocDone={1}
+              moved={3}
+              dropped={1}
+              energy={4}
+              good={GALLERY_SAMPLES.reflectionGood}
+              tomorrow={{ count: 4, mitTitles: GALLERY_SAMPLES.summaryMitTitles }}
+              consistencyPlanned={26}
+              onDone={noop}
+            />
+          </Variant>
+          <Variant label="pct 30 · no good text">
+            <RitualSummary
+              date={TODAY}
+              pct={30}
+              done={2}
+              total={8}
+              adhocDone={0}
+              moved={4}
+              dropped={0}
+              energy={0}
+              good=""
+              tomorrow={{ count: 2, mitTitles: GALLERY_SAMPLES.summaryMitTitles.slice(0, 1) }}
+              consistencyPlanned={21}
+              onDone={noop}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section
+        id="ritual-playground"
+        title="Ritual playground"
+        note="Fixed now = 2026-10-03T14:30:00Z (21:30 Saturday). Steps 1 → 3 run the real toggleDone / patchTask / closeDay and apply the returned Mutation."
+      >
+        <RitualPlayground />
+      </Section>
+
+      <Section id="stat-card" title="StatCard">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+          <StatCard label={t('stats.cards.avg7')} value={76} unit="%" delta={6} />
+          <StatCard label={t('stats.cards.avg30')} value={75} unit="%" delta={-4} />
+          <StatCard
+            label={t('stats.cards.consistency.label')}
+            value={26}
+            unit="ratio30"
+            note={t('stats.cards.consistency.note')}
+          />
+          <StatCard
+            label={t('stats.cards.adhoc.label')}
+            value={null}
+            unit="%"
+            delta={6}
+            note={t('stats.cards.adhoc.note')}
+          />
+        </div>
+      </Section>
+
+      <Section id="heatmap" title="Heatmap">
+        <div className="flex flex-col gap-5">
+          <Variant label="26 weeks · gaps">
+            <Heatmap
+              days={statsDays(26)}
+              weeks={26}
+              firstUseDate={FIRST_USE}
+              onSelectDay={noop}
+            />
+          </Variant>
+          <Variant label="13 weeks">
+            <Heatmap
+              days={statsDays(13)}
+              weeks={13}
+              firstUseDate={FIRST_USE}
+              onSelectDay={noop}
+            />
+          </Variant>
+          <Variant label="new user · first use 5 days ago">
+            <Heatmap
+              days={newUserDays()}
+              weeks={13}
+              firstUseDate={NEW_USER_FIRST_USE}
+              onSelectDay={noop}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="weekday-chart" title="WeekdayChart">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+          <WeekdayChart values={WEEKDAY_VALUES} />
+          <WeekdayChart values={WEEKDAY_EMPTY} />
+        </div>
+      </Section>
+
+      <Section id="insights" title="InsightCard">
+        <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+          <InsightCard items={INSIGHTS} />
+          <InsightCard items={[]} />
+        </div>
+      </Section>
+
+      <Section id="calendar-month" title="CalendarMonth">
+        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+          <Variant label="Oct 2026 · yesterday selected">
+            <CalendarMonthDemo
+              month={HISTORY_MONTH}
+              days={historyDays()}
+              initial={HISTORY_SELECTED}
+              summary={OCTOBER_SUMMARY}
+            />
+          </Variant>
+          <Variant label="empty month · prev disabled">
+            <CalendarMonthDemo
+              month="2026-11"
+              days={[]}
+              initial={HISTORY_SELECTED}
+              summary={null}
+              canPrev={false}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="day-detail" title="DayDetail">
+        <div className="flex flex-col gap-5">
+          <Variant label="past · tasks + reflection">
+            <DayDetail
+              date={HISTORY_SELECTED}
+              tasks={historyTasks()}
+              dayLog={HISTORY_DAY_LOG}
+              planTiming={{ kind: 'morning', time: '07:59' }}
+              mode="past"
+            />
+          </Variant>
+          <Variant label="past · no reflection">
+            <DayDetail
+              date={HISTORY_SELECTED}
+              tasks={historyTasks()}
+              dayLog={{ ...HISTORY_DAY_LOG, energy: 0, good: '', improve: '' }}
+              planTiming={{ kind: 'evening', time: '21:10' }}
+              mode="past"
+            />
+          </Variant>
+          <Variant label="past · no plan">
+            <DayDetail
+              date="2026-09-30"
+              tasks={[]}
+              dayLog={null}
+              planTiming={null}
+              mode="past"
+            />
+          </Variant>
+          <Variant label="today">
+            <DayDetail
+              date={TODAY}
+              tasks={historyTasks()}
+              dayLog={null}
+              planTiming={{ kind: 'evening', time: '21:10' }}
+              mode="today"
+              onOpenToday={noop}
+            />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="settings-controls" title="SettingsSection · TimeSelect · Switch · DayEndChips">
+        <div className="flex flex-col gap-4">
+          <SettingsSection
+            title={t('settings.window.title')}
+            description={t('settings.window.body')}
+          >
+            <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))]">
+              <label className="flex flex-col gap-1.5">
+                <span className="text-caption font-semibold">{t('settings.window.start')}</span>
+                <TimeSelectDemo
+                  initial="18:00"
+                  options={START_OPTIONS}
+                  ariaLabel={t('settings.window.start')}
+                />
+              </label>
+              <label className="flex flex-col gap-1.5">
+                <span className="text-caption font-semibold">{t('settings.window.lock')}</span>
+                <TimeSelectDemo
+                  initial="10:00"
+                  options={LOCK_OPTIONS}
+                  ariaLabel={t('settings.window.lock')}
+                />
+              </label>
+            </div>
+          </SettingsSection>
+
+          <SettingsSection title={t('settings.reminders.title')}>
+            <div className="flex items-center gap-5">
+              <SwitchDemo initial ariaLabel={t('settings.reminders.toggleAria')} />
+              <SwitchDemo initial={false} ariaLabel={t('settings.reminders.toggleAria')} />
+            </div>
+          </SettingsSection>
+
+          <SettingsSection title={t('settings.dayEnd.title')} description={t('settings.dayEnd.body')}>
+            <DayEndChipsDemo initial="03:00" />
+          </SettingsSection>
+
+          <SettingsSection title={t('settings.theme.title')}>
+            <Segmented
+              value="light"
+              ariaLabel={t('settings.theme.title')}
+              options={[
+                { value: 'light', label: t('settings.theme.light') },
+                { value: 'dark', label: t('settings.theme.dark') },
+                { value: 'system', label: t('settings.theme.system') },
+              ]}
+              onChange={noop}
+              className="self-start"
+            />
+          </SettingsSection>
+        </div>
+      </Section>
+
+      <Section id="plan-window-timeline" title="PlanWindowTimeline">
+        <div className="flex flex-col gap-5">
+          <Variant label="evening default · 18:00 → 10:00">
+            <PlanWindowTimeline settings={DEFAULT_SETTINGS} />
+          </Variant>
+          <Variant label="morning · 06:00 same day">
+            <PlanWindowTimeline settings={MORNING_SETTINGS} />
+          </Variant>
+          <Variant label="evening 20:00 · dayEnd 03:00">
+            <PlanWindowTimeline settings={LATE_SETTINGS} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="onboarding" title="Onboarding">
+        <div className="flex flex-col gap-6">
+          <Variant label="dots · step 0 / 1 / 2">
+            <div className="flex flex-col gap-2">
+              {([0, 1, 2] as const).map((step) => (
+                <OnboardingDots key={step} step={step} />
+              ))}
+            </div>
+          </Variant>
+          <Variant label="HabitCardGroup">
+            <HabitDemo initial="evening" />
+          </Variant>
+          <Variant label="TimeChips · evening reminder options">
+            <TimeChipsDemo
+              options={['20:30', '21:00', '21:30', '22:00']}
+              initial="21:30"
+              ariaLabel={t('onboarding.step2.plan')}
+            />
+          </Variant>
+          <Variant label="DayEndChips">
+            <DayEndChipsDemo initial="00:00" />
+          </Variant>
+          <Variant label="OnboardingSummary">
+            <OnboardingSummary settings={DEFAULT_SETTINGS} onFinish={noop} />
+          </Variant>
+        </div>
+      </Section>
+
+      <Section id="phase2-notice" title="Phase2Notice">
+        <Phase2Notice />
+      </Section>
+
       <Section
         id="playground"
         title="Today playground"
@@ -531,5 +1000,6 @@ export default function ComponentsGalleryPage() {
         <Playground />
       </Section>
     </div>
+    </ClockProvider>
   );
 }

@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   formatClock,
-  formatClockLocal,
   formatDateLong,
   formatDateShort,
   formatDayMonth,
   formatDuration,
+  formatHourLoose,
   formatMonth,
   formatMonthShort,
   weekdayLong,
@@ -108,8 +108,10 @@ describe('weekday names', () => {
   });
 });
 
-describe('formatClockLocal', () => {
-  it('uses the app default timezone (Asia/Ho_Chi_Minh)', () => {
-    expect(formatClockLocal('2026-10-03T07:10:00Z')).toBe('14:10');
+describe('formatHourLoose', () => {
+  it('drops the leading zero of the hour and keeps the minutes', () => {
+    expect(formatHourLoose('03:00')).toBe('3:00');
+    expect(formatHourLoose('10:00')).toBe('10:00');
+    expect(formatHourLoose('00:00')).toBe('0:00');
   });
 });

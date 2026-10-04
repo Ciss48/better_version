@@ -1,4 +1,6 @@
-import type { ISODate, Task } from '@/domain';
+import { addDays, DEFAULT_SETTINGS, isoWeekday } from '@/domain';
+import type { DayLog, DaySummary, ISODate, Task } from '@/domain';
+import type { ClockValue } from '@/lib/clock';
 
 /**
  * Sample data for /dev/components, copied from the titles and flags of
@@ -12,6 +14,21 @@ import type { ISODate, Task } from '@/domain';
 /** 14:10 Saturday in Asia/Ho_Chi_Minh — the plan for 10-03 locked at 10:00. */
 export const PLAYGROUND_NOW = new Date('2026-10-03T07:10:00Z');
 export const TODAY: ISODate = '2026-10-03';
+
+/** The clock every /dev/components section is rendered with. */
+export const GALLERY_CLOCK: ClockValue = {
+  now: PLAYGROUND_NOW,
+  today: TODAY,
+  settings: DEFAULT_SETTINGS,
+};
+
+/** 21:30 Saturday — the ritual playground runs after the evening window opens. */
+export const RITUAL_NOW = new Date('2026-10-03T14:30:00Z');
+export const RITUAL_CLOCK: ClockValue = {
+  now: RITUAL_NOW,
+  today: TODAY,
+  settings: DEFAULT_SETTINGS,
+};
 
 const BASE: Omit<Task, 'id' | 'title'> = {
   planDate: TODAY,
@@ -182,4 +199,245 @@ export const GALLERY_SAMPLES = {
   quickAdd: 'Học 2 chương Databricks * !^ ~L',
   /** Type specimen for /dev/tokens — needs the full Vietnamese diacritic set. */
   typeSpecimen: 'Tiến bộ 1% mỗi ngày — Việc quan trọng nhất',
+  /** Ritual step 2, filled in. */
+  reflectionGood: 'Vẫn chạy bộ dù trời mưa',
+  reflectionImprove: 'Bắt đầu việc khó trước 9 giờ',
+  /** Tomorrow's MITs, as the ritual summary lists them. */
+  summaryMitTitles: [
+    'Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai',
+    'Viết blog về tối ưu Spark',
+  ],
 };
+
+/** Tomorrow's plan as ritual step 3 shows it: 2 carried, 1 typed, 2 of 3 MITs. */
+export const TOMORROW_ITEMS = [
+  {
+    id: 'ti1',
+    title: 'Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai',
+    mit: true,
+    carried: true,
+    postponedCount: 4,
+    removable: false,
+  },
+  {
+    id: 'ti2',
+    title: 'Đọc 20 trang "Atomic Habits"',
+    mit: false,
+    carried: true,
+    postponedCount: 0,
+    removable: false,
+  },
+  {
+    id: 'ti3',
+    title: 'Viết blog về tối ưu Spark',
+    mit: true,
+    carried: false,
+    postponedCount: 0,
+    removable: true,
+  },
+];
+
+// ── Phase 04 fixtures ───────────────────────────────────────────────────────
+
+/** Deterministic pseudo-random in [0, 1) — the gallery must not move between runs. */
+function noise(seed: number): number {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+/** The Monday of `date`'s week. */
+function mondayOf(date: ISODate): ISODate {
+  return addDays(date, -(isoWeekday(date) - 1));
+}
+
+/** The user's first day in the app, well before the 26-week window. */
+export const FIRST_USE: ISODate = '2026-04-27';
+
+/**
+ * One summary per day from the first column of a `weeks`-wide heatmap up to
+ * TODAY, with realistic gaps: every seventh-ish day has no plan.
+ */
+export function statsDays(weeks: 26 | 13 = 26): DaySummary[] {
+  const start = addDays(mondayOf(TODAY), -(weeks - 1) * 7);
+  const days: DaySummary[] = [];
+  for (let date = start; date <= TODAY; date = addDays(date, 1)) {
+    const seed = Number(date.slice(5, 7)) * 100 + Number(date.slice(8, 10));
+    const r = noise(seed);
+    const hasPlan = date === TODAY || (date >= FIRST_USE && r > 0.14);
+    days.push({
+      date,
+      hasPlan,
+      pct: hasPlan ? Math.round(28 + noise(seed + 7) * 72) : 0,
+      isToday: date === TODAY,
+    });
+  }
+  return days;
+}
+
+/** A brand-new user: five days of history and nothing before them. */
+export function newUserDays(): DaySummary[] {
+  const first = addDays(TODAY, -4);
+  return statsDays(13).map((day, index) =>
+    day.date < first
+      ? { ...day, hasPlan: false, pct: 0 }
+      : { ...day, hasPlan: true, pct: day.hasPlan ? day.pct : 40 + index * 7 },
+  );
+}
+
+export const NEW_USER_FIRST_USE: ISODate = addDays(TODAY, -4);
+
+/** Average weighted completion per weekday, Mon=1 … Sun=7. */
+export const WEEKDAY_VALUES: { weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7; pct: number | null }[] = [
+  { weekday: 1, pct: 73 },
+  { weekday: 2, pct: 77 },
+  { weekday: 3, pct: 72 },
+  { weekday: 4, pct: 72 },
+  { weekday: 5, pct: 66 },
+  { weekday: 6, pct: 60 },
+  { weekday: 7, pct: 56 },
+];
+
+export const WEEKDAY_EMPTY: { weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7; pct: number | null }[] =
+  WEEKDAY_VALUES.map((value) => ({ ...value, pct: null }));
+
+/** The month shown by the History gallery section. */
+export const HISTORY_MONTH = '2026-10';
+export const HISTORY_SELECTED: ISODate = '2026-10-02';
+
+/**
+ * Day summaries for October 2026 up to today. The first two days are pinned to
+ * the values the design screenshot shows, so the gallery can be compared to it.
+ */
+export function historyDays(): DaySummary[] {
+  const pinned: Record<string, number> = { '2026-10-01': 84, '2026-10-02': 100 };
+  return statsDays(26)
+    .filter((day) => day.date.startsWith(HISTORY_MONTH))
+    .map((day) =>
+      pinned[day.date] === undefined
+        ? day
+        : { ...day, hasPlan: true, pct: pinned[day.date] },
+    );
+}
+
+/** The plan of 2026-10-02 as History shows it: done, moved and dropped rows. */
+export function historyTasks(): Task[] {
+  const base: Partial<Task> = { planDate: HISTORY_SELECTED };
+  return [
+    task('h1', 'Học 1 chương Databricks', {
+      ...base,
+      important: true,
+      mit: true,
+      size: 'L',
+      status: 'dropped',
+      position: 0,
+    }),
+    task('h2', 'Đọc 20 trang sách', {
+      ...base,
+      important: true,
+      mit: true,
+      size: 'S',
+      status: 'done',
+      completedAt: '2026-10-02T13:00:00.000Z',
+      position: 1,
+    }),
+    task('h3', 'Gọi điện cho bố mẹ', {
+      ...base,
+      important: true,
+      mit: true,
+      size: 'S',
+      status: 'done',
+      completedAt: '2026-10-02T12:00:00.000Z',
+      position: 2,
+    }),
+    task('h4', 'Tối ưu truy vấn ClickHouse', {
+      ...base,
+      important: true,
+      size: 'M',
+      status: 'done',
+      completedAt: '2026-10-02T09:00:00.000Z',
+      position: 3,
+    }),
+    task('h5', 'Gửi báo cáo tuần', {
+      ...base,
+      urgent: true,
+      size: 'S',
+      status: 'done',
+      completedAt: '2026-10-02T04:00:00.000Z',
+      position: 4,
+    }),
+    task('h6', 'Dọn hộp thư', { ...base, size: 'S', status: 'dropped', position: 5 }),
+    task('h7', 'Chuẩn bị slide sprint review', {
+      ...base,
+      important: true,
+      size: 'M',
+      status: 'done',
+      completedAt: '2026-10-02T07:30:00.000Z',
+      position: 6,
+    }),
+    task('h8', 'Dọn bàn làm việc', {
+      ...base,
+      size: 'S',
+      status: 'done',
+      completedAt: '2026-10-02T11:00:00.000Z',
+      position: 7,
+    }),
+  ];
+}
+
+/** A day whose plan was written but whose ritual was skipped. */
+export function historyNoPlanTasks(): Task[] {
+  return [];
+}
+
+export const HISTORY_DAY_LOG: DayLog = {
+  planDate: HISTORY_SELECTED,
+  closedAt: '2026-10-02T15:00:00.000Z',
+  energy: 3,
+  good: 'Ngủ đủ 7 tiếng',
+  improve: 'Nghỉ 5 phút sau mỗi 50 phút',
+};
+
+/** Tomorrow already has one MIT before the ritual starts. */
+export function tomorrowExisting(): Task[] {
+  return [
+    task('tm1', 'Viết blog về tối ưu Spark', {
+      planDate: '2026-10-04',
+      important: true,
+      mit: true,
+      size: 'M',
+      createdAt: '2026-10-03T13:00:00.000Z',
+      position: 0,
+    }),
+  ];
+}
+
+/** 2026-10-05 is already full of MITs; 2026-10-10 is empty. */
+export function otherTargets(): Record<ISODate, Task[]> {
+  const day: ISODate = '2026-10-05';
+  return {
+    [day]: [
+      task('o1', 'Chuẩn bị báo cáo quý', {
+        planDate: day,
+        important: true,
+        mit: true,
+        size: 'L',
+        position: 0,
+      }),
+      task('o2', 'Phỏng vấn ứng viên data', {
+        planDate: day,
+        important: true,
+        mit: true,
+        size: 'M',
+        position: 1,
+      }),
+      task('o3', 'Review thiết kế kho dữ liệu', {
+        planDate: day,
+        important: true,
+        mit: true,
+        size: 'M',
+        position: 2,
+      }),
+    ],
+    '2026-10-10': [],
+  };
+}

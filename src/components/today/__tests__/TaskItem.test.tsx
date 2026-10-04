@@ -1,15 +1,16 @@
 // @vitest-environment jsdom
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { TASK_STATES, TODAY } from '@/dev/fixtures';
 import type { Task } from '@/domain';
+import { renderWithClock } from '@/test/render';
 import { TaskItem } from '../TaskItem';
 
 function renderItem(task: Task, overrides: { expanded?: boolean; onToggleDone?: () => void } = {}) {
   const onToggleDone = overrides.onToggleDone ?? vi.fn();
-  const { unmount } = render(
+  const { unmount } = renderWithClock(
     <TaskItem
       task={task}
       today={TODAY}

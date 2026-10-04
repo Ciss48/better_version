@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, isoWeekday, localParts } from '@/domain';
+import { isoWeekday, localParts } from '@/domain';
 import type { HHMM, ISODate } from '@/domain';
 import { t, tRaw } from '@/lib/copy';
 
@@ -77,10 +77,9 @@ export function formatClock(instant: Date | string, tz: string): HHMM {
 }
 
 /**
- * `formatClock` in the app's own timezone. Presentational components get no
- * `settings` prop, and they must not reach into `@/domain` themselves, so the
- * default zone is resolved here until Phase 4 threads real settings through.
+ * An 'HH:MM' hour without its leading zero: '03:00' → '3:00'. The design
+ * prints the day-end hour this way in the late-night pill.
  */
-export function formatClockLocal(instant: Date | string): HHMM {
-  return formatClock(instant, DEFAULT_SETTINGS.timezone);
+export function formatHourLoose(hhmm: HHMM): string {
+  return `${Number(hhmm.slice(0, 2))}:${hhmm.slice(3, 5)}`;
 }

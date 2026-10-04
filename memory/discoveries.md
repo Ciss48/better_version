@@ -126,3 +126,26 @@ hand-write the primitive over the Base UI part that matches and keep it in
 `src/components/ui/`. Check Base UI's bundled docs (`node_modules/@base-ui/react/docs/`)
 rather than guessing a Radix-shaped API.
 **Status:** resolved in Phase 3 — no plan.md change needed.
+
+## [Phase 4] The shadcn registry is reachable again — Tier: Moderate
+**Finding:** the Phase 3 discovery above no longer holds. `https://ui.shadcn.com/r/…` answers
+200 from this machine and `pnpm exec shadcn add select switch radio-group --yes` ran cleanly,
+creating `src/components/ui/{select,switch,radio-group}.tsx` and touching nothing else —
+`src/app/globals.css`, `src/styles/tokens.css`, `package.json` and `design/` all came out
+byte-identical.
+**Impact:** Part A of this phase and every later phase that wants a new primitive.
+**How it was handled:** the CLI output was kept as the structural starting point and then
+rewritten over the project's tokens. What it generates is **shadcn-styled, not token-styled**:
+an 8px-radius select trigger instead of the 46px pill, a 32×18px switch instead of 54×32, `cn`
+imported from `cn` instead of `@/lib/utils`, and — the important one — `focus:bg-accent` on
+select items, which is exactly the `--accent` name clash STATE.md warns about (shadcn's accent
+is a hover tint, the project's is terracotta). `radio-group.tsx` was reduced to an unstyled
+wrapper, because every radio group in this design is a chip, a card or a 52px circle, so only
+Base UI's roving focus and `aria-checked` wiring is shared.
+**Rule for later phases:** try the CLI first (it works), keep the CLAUDE.md pre-flight —
+`components.json → tailwind.css === "src/app/globals.css"` — and diff `design/handoff/tokens.css`
+against `src/styles/tokens.css` afterwards. Then **always rewrite the generated classes** to
+token classes before using the component, and never leave a `bg-accent` hover/highlight behind.
+If the registry times out again, fall back to hand-writing over the matching Base UI part, as
+Phase 3 did; the bundled docs at `node_modules/@base-ui/react/docs/` remain the API reference.
+**Status:** resolved in Phase 4 — no plan.md change needed.

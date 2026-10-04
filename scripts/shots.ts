@@ -29,6 +29,24 @@ const SECTIONS = [
   'empty-state',
   'toast',
   'playground',
+  // Phase 04
+  'stepper',
+  'review-row',
+  'ritual-footer',
+  'reflection',
+  'tomorrow-list',
+  'ritual-summary',
+  'ritual-playground',
+  'stat-card',
+  'heatmap',
+  'weekday-chart',
+  'insights',
+  'calendar-month',
+  'day-detail',
+  'settings-controls',
+  'plan-window-timeline',
+  'onboarding',
+  'phase2-notice',
 ];
 
 const THEMES = ['light', 'dark'] as const;
@@ -62,7 +80,7 @@ async function main(): Promise<void> {
         if (response === null || !response.ok()) {
           throw new Error(`${URL} responded ${response?.status() ?? 'nothing'}`);
         }
-        await page.waitForSelector('#playground');
+        await page.waitForSelector('#phase2-notice');
         // Let the web fonts settle before capturing type.
         await page.evaluate(() => document.fonts.ready);
 

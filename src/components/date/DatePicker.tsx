@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/drawer';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { ISODate } from '@/domain';
+import { useClock } from '@/lib/clock';
 import { t, tRaw } from '@/lib/copy';
 import { formatDateShort, formatMonth } from '@/lib/format';
 import { useIsDesktop } from '@/lib/hooks/use-media';
@@ -54,11 +55,14 @@ function PickerCalendar({
 }) {
   const minDate = toDate(min);
   const weekdays = tRaw<string[]>('date.weekdayShort');
+  // The "today" cell is the injected logical day, not the machine's clock.
+  const { today } = useClock();
 
   return (
     <Calendar
       mode="single"
       autoFocus
+      today={toDate(today)}
       selected={selected === undefined ? undefined : toDate(selected)}
       defaultMonth={toDate(selected ?? min)}
       startMonth={new Date(minDate.getFullYear(), minDate.getMonth(), 1)}
