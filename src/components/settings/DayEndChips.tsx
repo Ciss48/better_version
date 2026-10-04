@@ -8,6 +8,11 @@ import { cn } from '@/lib/utils';
 export interface DayEndChipsProps {
   value: HHMM;
   onChange(v: HHMM): void;
+  /**
+   * How 00:00 reads. Onboarding explains the idea, so it says "Nửa đêm";
+   * Settings lists times, so there it is just another time.
+   */
+  midnightLabel?: 'word' | 'time';
   className?: string;
 }
 
@@ -28,7 +33,12 @@ export function dayEndChipClasses(selected: boolean): string {
 }
 
 /** The day-end picker, shared by Settings and onboarding step 3. */
-export function DayEndChips({ value, onChange, className }: DayEndChipsProps) {
+export function DayEndChips({
+  value,
+  onChange,
+  midnightLabel = 'word',
+  className,
+}: DayEndChipsProps) {
   return (
     <RadioGroup
       aria-label={t('settings.dayEnd.title')}
@@ -44,7 +54,9 @@ export function DayEndChips({ value, onChange, className }: DayEndChipsProps) {
           value={option}
           className={dayEndChipClasses(option === value)}
         >
-          {option === '00:00' ? t('onboarding.step3.midnight') : option}
+          {option === '00:00' && midnightLabel === 'word'
+            ? t('onboarding.step3.midnight')
+            : option}
         </RadioItem>
       ))}
     </RadioGroup>

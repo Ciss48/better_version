@@ -2,7 +2,14 @@ import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 /** Seed names from src/dev/seeds.ts. */
-export type Seed = 'new' | 'demo' | 'empty' | 'missed' | 'complete' | 'latenight';
+export type Seed =
+  | 'new'
+  | 'demo'
+  | 'empty'
+  | 'missed'
+  | 'complete'
+  | 'latenight'
+  | 'sparse';
 
 /** 14:10 Saturday 2026-10-03 in Asia/Ho_Chi_Minh — the plan is locked. */
 export const LOCKED = '2026-10-03T07:10:00Z';

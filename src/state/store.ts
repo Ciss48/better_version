@@ -112,6 +112,8 @@ export interface AppState {
 
   init(): Promise<void>;
   ensureLoaded(dates: ISODate[]): Promise<void>;
+  /** Every date of a 'YYYY-MM' month, for History's older months. */
+  ensureMonthLoaded(month: string): Promise<void>;
   addTask(planDate: ISODate, p: ParsedTask, scope: 'today' | 'tomorrow'): Promise<void>;
   toggleDone(id: string): Promise<void>;
   patchTask(
@@ -405,6 +407,18 @@ export function createAppStore(repo?: Repository) {
           for (const log of gap.dayLogs) dayLogs[log.planDate] = log;
         }
         set({ tasks, dayLogs, loaded: { from, to } });
+      },
+
+      async ensureMonthLoaded(month) {
+        const year = Number(month.slice(0, 4));
+        const index = Number(month.slice(5, 7));
+        // Day 0 of the next month is the last day of this one.
+        const days = new Date(Date.UTC(year, index, 0)).getUTCDate();
+        const dates = Array.from(
+          { length: days },
+          (_, day) => `${month}-${String(day + 1).padStart(2, '0')}` as ISODate,
+        );
+        await get().ensureLoaded(dates);
       },
 
       async addTask(planDate, p, scope) {

@@ -1,13 +1,15 @@
 # State
 
-**Last updated:** 2026-10-04 — Phase 5 complete, committed as `phase-05: app core`
+**Last updated:** 2026-10-04 — Phase 6 complete, committed as `phase-06: stats & history`
 
 ## Where things stand
-Current phase: 6 — not started, **task file not written yet**.
-Phases 1–5 are done. The app is now a **working, clickable product on localStorage**: a user can
-onboard (or skip), plan, tick, move/drop/restore, use the matrix, run the whole evening ritual
-and close the day, change settings — and everything survives a reload. Still no Supabase, no
-auth, no stats module, and `/stats`, `/history`, `/goals`, `/weekly` are placeholders.
+Current phase: 7 — not started, **task file not written yet**.
+Phases 1–6 are done. **The MVP is feature-complete on localStorage**: every screen in
+`design/handoff/screens.md` exists and runs on real data. A user can onboard, plan, tick, move /
+drop / restore, use the matrix, run the whole evening ritual and close the day, read the Journey
+screen (six cards, 26-week heat map, weekday chart, four insights), walk back through History
+month by month, and change settings — and all of it survives a reload. Goals and Weekly are
+static Phase 2 previews. Still no Supabase, no auth, no network of any kind.
 
 ## Completed
 - **Phase 1 — Scaffold & design system** (`memory/phase_01_report.md`).
@@ -16,54 +18,80 @@ auth, no stats module, and `/stats`, `/history`, `/goals`, `/weekly` are placeho
 - **Phase 4 — Components B: ritual, stats, history, settings, onboarding**
   (`memory/phase_04_report.md`).
 - **Phase 5 — App core on a local repository** (`memory/phase_05_report.md`).
-  `src/data/` (Repository + Memory/Local implementations + a shared contract suite),
-  `src/state/` (clock source, zustand store, selectors, ritual draft, bridges),
-  `src/dev/` (6 seeds + `?seed=`/`?now=` handling), `src/features/` (Today, Ritual, Onboarding,
-  Settings, AppShellLive, ScreenState), `scripts/shots-screens.ts`, `playwright.config.ts` and
-  9 e2e specs. `pnpm lint`, `pnpm typecheck`, `pnpm test` (37 files, **363 tests**), `pnpm build`
-  and `pnpm e2e` (**9/9**) all exit 0; `pnpm test:coverage` → **100% lines** for `src/domain/**`
-  (domain untouched). `pnpm shots` → 128 PNGs, `pnpm shots:screens` → **48 PNGs**.
+- **Phase 6 — Stats & history** (`memory/phase_06_report.md`).
+  `src/stats/` (pure: `computeStats`, `monthSummary`, `planTimingOf` — no React/zustand/Next),
+  `statsView` + `historyDay` selectors, the store action `ensureMonthLoaded`, the Journey,
+  History, Goals and Weekly screens, `src/content/phase2-samples.vi.json`, the three allowed
+  Phase 5 component fixes, a rewritten `demo` seed plus a new `sparse` seed, and
+  `e2e/global-setup.ts`.
+  `pnpm lint`, `pnpm typecheck`, `pnpm test` (39 files, **423 tests**), `pnpm build` and
+  `pnpm e2e` (**14/14**, green from a deleted `.next`) all exit 0; `pnpm test:coverage` →
+  **100% lines** for both `src/domain/**` and `src/stats/**`. `pnpm shots` → 128 PNGs,
+  `pnpm shots:screens` → **72 PNGs**.
 
 ## Most important findings so far
 - Design handoff is at **`design/handoff/`** and is read-only. The prototype uses a custom
   Claude Design format, not React — reference only.
-- **`docs/plan.md` §3 still has the pre-renumbering phase list** (it calls Supabase "Phase 6").
-  The Phase 5 task file's numbering is the one in force: **6 = stats & history, 7 = Supabase,
-  8 = SQL analytics, 9 = ship**, and the code says so (`src/data/repository.ts`). Logged in
-  `memory/discoveries.md` for the user to reconcile.
+- **Where a task file and a handoff screenshot disagree on *appearance*, the screenshot wins**
+  (CLAUDE.md names it visual truth) and the deviation is logged in `memory/discoveries.md`.
+  Where they disagree on a *rule*, the task file wins. Two Phase 6 cases, both logged.
+- **Phase numbering in force: 6 stats & history, 7 Supabase, 8 ship (end of MVP),
+  9 SQL analytics (optional).** `docs/plan.md` §3 still carries the pre-renumbering list — for
+  the user and the planning session to reconcile.
+- **`src/stats/` is pure and knows nothing about storage.** It takes `{tasks, dayLogs, today,
+  settings}` and returns `StatsResult`. Every rule it needs comes from `src/domain`. If stats ever
+  move to SQL, this module is the executable spec and its 49 tests are the comparison harness.
+- **"Completed days" are the days strictly before today** everywhere in stats — today only counts
+  for the consistency score and the heat map. Too little data shows "—", never a zero.
 - **The store is the only place outside `src/app/dev/**` and tests that may call a mutating
   domain function.** Screens report intent; `src/state/store.ts` builds `Ctx`, calls the domain,
   applies optimistically, commits, and reverts on failure.
+- **Phase 7 must make `commit()` genuinely atomic** (one transaction/RPC): the store's rollback
+  cannot recover from a partial write, and `closeDay` writes tasks, events *and* a day log.
+  Full contract notes in `memory/phase_05_report.md` ("Input for the next phase").
 - **Time flows one way:** `src/state/clock-source.ts` → `ClockBridge` → `useClock()` → every
   component. `getNow()` is the only wall-clock read in the app. `?now=<ISO>` freezes it in
-  development (sessionStorage); `?now=off` clears it.
-- **`todayView` and friends cannot be zustand selectors** — they derive fresh objects. Screens
-  subscribe with `useStore()` (no selector) and derive with `useMemo`.
+  development; `?now=off` clears it.
+- **`todayView`, `statsView` and friends cannot be zustand selectors** — they derive fresh
+  objects. Screens subscribe with `useStore()` (no selector) and derive with `useMemo`.
+- **History keeps its state in the URL only** (`?date=`, `?month=`). eslint's
+  `react-hooks/set-state-in-effect` rules out mirroring search params into state, and
+  `useSearchParams` needs a `<Suspense>` boundary in the page.
 - **Dev-only code must be dynamically imported behind `NODE_ENV`, and dev-only *routes* must be
-  `page.dev.tsx`** (`next.config.ts` → `pageExtensions`). That is what keeps seeds, fixtures and
-  the `/dev` gallery out of a production build — verified by grepping `.next/static`.
-- **Screens expose `data-ready="true"`** on their root once the store is ready; the screenshot
-  script and every e2e spec wait on that instead of a timeout.
-- **Phase 7 must make `commit()` genuinely atomic** (one transaction/RPC): the store's rollback
-  cannot recover from a partial write. Full contract notes in `memory/phase_05_report.md`
-  ("Input for the next phase").
-- **Phase 1, four Moderate discoveries, all resolved** — see `memory/discoveries.md`. Plus the
-  shadcn CLI notes (Phase 3/4) and the production-build/dev-routes finding (Phase 5).
+  `page.dev.tsx`** (`next.config.ts` → `pageExtensions`). Verified again in Phase 6.
+- **`e2e/global-setup.ts` warms every route before the workers start.** Without it a cold
+  `next dev` fails the whole suite — lazy route compilation, not memory. **Add every new route to
+  that list.**
+- **Screens expose `data-ready="true"`** on their root once they have something real to show; the
+  screenshot script and every e2e spec wait on that instead of a timeout. The static Phase 2
+  previews set it directly.
+- **Seeds carry correlations, not just noise** — all four insights are comparisons, so `demo`
+  deliberately ties plan timing, MIT completion and energy to how a day went. Seeds are dev-only.
+- **Supabase is reachable from this machine** (`https://<project>.supabase.co` → HTTP/2 404 via
+  Cloudflare in 0.14s, the expected answer for the bare root). Risk R6 is clear.
+- **Phase 1, four Moderate discoveries, all resolved** — see `memory/discoveries.md`, plus the
+  shadcn CLI notes (Phase 3/4), the production-build/dev-routes finding (Phase 5) and the two
+  Phase 6 entries.
 - shadcn's `--accent` (hover tint) clashes with the token `--accent` (terracotta).
-  **tokens.css wins** — use `bg-hover` for hover tints; strip the clash from every generated
-  component.
+  **tokens.css wins** — use `bg-hover` for hover tints.
 - **Base UI is not Radix.** `Root → Trigger → Portal → Positioner → Popup`; `ToggleGroup`'s
   value is a `string[]`; composition is `render={<El/>}`; `RadioGroup` never reports a click on
   the already-selected item. Docs ship at `node_modules/@base-ui/react/docs/`.
 - **`aria-disabled` is not `disabled`** — Playwright needs `click({ force: true })` to deliver a
-  blocked click (the ritual gate relies on receiving it).
+  blocked click. Sonner's auto-dismiss timer does not fire reliably in a headless context.
 - **dnd-kit** needs an explicit `id` on `DndContext`, and its keyboard drag moves 25px per key —
   e2e uses a real pointer drag instead.
 - `@date-fns/tz`'s `TZDate.toISOString()` returns an offset string; convert to a plain `Date`.
-- Vitest runs with `maxWorkers: 4` and `testTimeout: 15_000`; the defaults made the two heaviest
-  jsdom suites flake.
+- Vitest runs with `maxWorkers: 4` and `testTimeout: 15_000`; coverage includes `src/domain/**`
+  and `src/stats/**`.
 - Toolchain: node 24.11.1, **pnpm 10.34.6**, zustand 5.
 
+## Known cosmetic gaps (deliberately out of Phase 6's scope)
+- `DayDetail`'s heading uses `formatDateLong` ("Thứ Sáu, 2 tháng 10"); the design shows
+  "Thứ Sáu, 2/10".
+- The ritual summary drops the ritual header that `ritual_summary` shows — `RitualScreen` returns
+  early at step 3.
+
 ## Next action
-Phase 06 task file to be written by the planning session — bring `memory/STATE.md`,
-`memory/phase_05_report.md` and `memory/discoveries.md` back to it.
+Phase 07 task file to be written by the planning session — bring `memory/STATE.md`,
+`memory/phase_06_report.md` and `memory/discoveries.md` back to it.

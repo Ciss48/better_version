@@ -268,6 +268,38 @@ describe('ensureLoaded', () => {
   });
 });
 
+describe('ensureMonthLoaded', () => {
+  it('loads a month older than the init window, to its first and last day', async () => {
+    const { store, repo } = await boot();
+    await repo.seed({
+      tasks: [
+        task('first', { planDate: '2025-02-01' }),
+        task('last', { planDate: '2025-02-28' }),
+      ],
+    });
+
+    await store.getState().ensureMonthLoaded('2025-02');
+    expect(store.getState().loaded.from <= '2025-02-01').toBe(true);
+    expect(store.getState().tasks.first).toBeDefined();
+    expect(store.getState().tasks.last).toBeDefined();
+  });
+
+  it('knows how long a leap February is', async () => {
+    const { store, repo } = await boot();
+    await repo.seed({ tasks: [task('leap', { planDate: '2024-02-29' })] });
+
+    await store.getState().ensureMonthLoaded('2024-02');
+    expect(store.getState().tasks.leap).toBeDefined();
+  });
+
+  it('reads nothing for a month already inside the window', async () => {
+    const { store, repo } = await boot();
+    const spy = vi.spyOn(repo, 'loadTasks');
+    await store.getState().ensureMonthLoaded(TODAY.slice(0, 7));
+    expect(spy).not.toHaveBeenCalled();
+  });
+});
+
 describe('addTask', () => {
   it('adds a planned task while the window is open', async () => {
     const { store, repo } = await boot({ now: OPEN_NOW });

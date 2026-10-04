@@ -321,7 +321,12 @@ export function historyDays(): DaySummary[] {
 
 /** The plan of 2026-10-02 as History shows it: done, moved and dropped rows. */
 export function historyTasks(): Task[] {
-  const base: Partial<Task> = { planDate: HISTORY_SELECTED };
+  // 07:59 local on the day itself — the "Plan lúc 07:59 sáng" line of the
+  // history_default screenshot.
+  const base: Partial<Task> = {
+    planDate: HISTORY_SELECTED,
+    createdAt: '2026-10-02T00:59:00.000Z',
+  };
   return [
     task('h1', 'Học 1 chương Databricks', {
       ...base,

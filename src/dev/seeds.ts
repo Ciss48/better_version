@@ -17,12 +17,24 @@ import { HISTORY_DAY_LOG, historyTasks, sampleTasks } from './fixtures';
  */
 
 export const SEED_ANCHOR: ISODate = '2026-10-03';
-/** How much history the `demo` family carries before the anchor. */
-const HISTORY_DAYS = 45;
+/**
+ * How much history the `demo` family carries before the anchor. It matches the
+ * store's own past window, so the 26-week heat map and the 26-week weekday
+ * chart are both full rather than half grey.
+ */
+const HISTORY_DAYS = 190;
 const HISTORY_FROM: ISODate = addDays(SEED_ANCHOR, -HISTORY_DAYS);
 const YESTERDAY: ISODate = addDays(SEED_ANCHOR, -1);
 
-export const SEED_NAMES = ['new', 'demo', 'empty', 'missed', 'complete', 'latenight'] as const;
+export const SEED_NAMES = [
+  'new',
+  'demo',
+  'empty',
+  'missed',
+  'complete',
+  'latenight',
+  'sparse',
+] as const;
 export type SeedName = (typeof SEED_NAMES)[number];
 
 export function isSeedName(value: string): value is SeedName {
@@ -68,7 +80,17 @@ const IMPROVE_LINES = [
   '',
 ];
 
+const ADHOC_TITLES = [
+  'Sửa lỗi dashboard doanh thu cho chị Hạnh',
+  'Họp đột xuất với team data',
+  'Mua quà sinh nhật Minh',
+];
+
 const SIZES = ['S', 'M', 'L'] as const;
+
+function pad2(n: number): string {
+  return String(n).padStart(2, '0');
+}
 
 /** The onboarded user the `demo` family describes. */
 function onboardedSettings(patch: Partial<Settings> = {}): Settings {
@@ -79,45 +101,105 @@ function onboardedSettings(patch: Partial<Settings> = {}): Settings {
   };
 }
 
-/** A day written the evening before, as the evening habit does. */
-function plannedAt(date: ISODate): string {
+/** 20:00 local on the day before — the evening habit. */
+function eveningPlannedAt(date: ISODate): string {
   return `${addDays(date, -1)}T13:00:00.000Z`;
 }
 
+/** Between 08:00 and 09:59 local on the day itself, before the 10:00 lock. */
+function morningPlannedAt(date: ISODate, seed: number): string {
+  const hour = 1 + Math.floor(noise(seed) * 2);
+  const minute = Math.floor(noise(seed + 1) * 60);
+  return `${date}T${pad2(hour)}:${pad2(minute)}:00.000Z`;
+}
+
 /**
- * One historical day: 4–6 planned tasks, the first two of them MITs, and a
- * deterministic share of them done; the rest were dropped in that evening's
- * ritual. Returns no tasks at all for a day with no plan.
+ * One historical day.
  *
- * Deliberately no `moved` tasks: a move creates a copy on another day, which
- * would give a day that is supposed to have no plan one anyway. The anchor day
- * and the ritual flow exercise moving instead.
+ * The numbers are deterministic noise, but they are not independent noise: the
+ * Journey screen's four insights are all *comparisons*, so the seed has to
+ * carry the correlations they look for, or `?seed=demo` would show an empty
+ * insight card.
+ *
+ * - two days in three are planned the evening before, and those days go better
+ *   → the "evening" insight;
+ * - the two MITs of a day are likelier to get done than the rest → "mit";
+ * - the day log's energy tracks how the day went → "energy";
+ * - the weekday insight falls out of the first one on its own.
+ *
+ * Unfinished work is spread over moved / dropped / untouched rather than all
+ * being dropped: a day where everything was dropped reads as 100%, which would
+ * make every historical day look perfect.
+ *
+ * A `moved` task here does **not** get a copy on its target day — a seed is a
+ * picture of the past, and the copy would hand a day that is supposed to have
+ * no plan one anyway. Moving for real is exercised on the anchor day.
  */
-function historyDay(date: ISODate): { tasks: Task[]; dayLog: DayLog | null } {
+function historyDay(
+  date: ISODate,
+  options: { force?: boolean } = {},
+): { tasks: Task[]; dayLog: DayLog | null } {
   const seed = dateSeed(date);
-  if (noise(seed) <= 0.14) return { tasks: [], dayLog: null };
+  if (options.force !== true && noise(seed) <= 0.17) return { tasks: [], dayLog: null };
+
+  const eveningPlan = noise(seed + 11) > 0.35;
+  const target = (eveningPlan ? 0.52 : 0.38) + noise(seed + 2) * 0.34;
+  const createdAt = eveningPlan
+    ? eveningPlannedAt(date)
+    : morningPlannedAt(date, seed + 17);
 
   const count = 4 + Math.floor(noise(seed + 1) * 3);
-  const target = 0.3 + noise(seed + 2) * 0.68;
   const tasks: Task[] = [];
 
   for (let i = 0; i < count; i += 1) {
     const r = noise(seed * 13 + i);
-    const done = noise(seed * 29 + i * 7) < target;
+    const mit = i < 2;
+    const done = noise(seed * 29 + i * 7) < (mit ? Math.min(0.97, target + 0.14) : target);
+    const fate = noise(seed * 37 + i * 3);
+    const status: Task['status'] = done
+      ? 'done'
+      : fate < 0.5
+        ? 'moved'
+        : fate < 0.75
+          ? 'dropped'
+          : 'todo';
+
     tasks.push({
       id: `s-${date}-${i}`,
       planDate: date,
       title: HISTORY_TITLES[(seed + i * 5) % HISTORY_TITLES.length],
       important: r > 0.35,
       urgent: noise(seed * 7 + i) > 0.65,
-      mit: i < 2,
+      mit,
       size: SIZES[Math.floor(r * 3)],
-      status: done ? 'done' : 'dropped',
+      status,
       postponedCount: 0,
       adhoc: false,
       position: i,
-      createdAt: plannedAt(date),
+      createdAt,
       completedAt: done ? `${date}T05:00:00.000Z` : null,
+      movedTo: status === 'moved' ? addDays(date, 1) : null,
+      originTaskId: null,
+    });
+  }
+
+  // Roughly every third day, something lands after the lock.
+  if (noise(seed + 23) > 0.66) {
+    const adhocDone = noise(seed + 29) > 0.3;
+    tasks.push({
+      id: `s-${date}-adhoc`,
+      planDate: date,
+      title: ADHOC_TITLES[seed % ADHOC_TITLES.length],
+      important: false,
+      urgent: true,
+      mit: false,
+      size: 'M',
+      status: adhocDone ? 'done' : 'todo',
+      postponedCount: 0,
+      adhoc: true,
+      position: count,
+      createdAt: `${date}T07:30:00.000Z`,
+      completedAt: adhocDone ? `${date}T09:00:00.000Z` : null,
       movedTo: null,
       originTaskId: null,
     });
@@ -126,7 +208,7 @@ function historyDay(date: ISODate): { tasks: Task[]; dayLog: DayLog | null } {
   const dayLog: DayLog = {
     planDate: date,
     closedAt: `${date}T14:30:00.000Z`,
-    energy: (1 + Math.floor(noise(seed + 3) * 5)) as DayLog['energy'],
+    energy: (target > 0.74 ? 5 : target > 0.64 ? 4 : target > 0.52 ? 3 : target > 0.44 ? 2 : 1) as DayLog['energy'],
     good: GOOD_LINES[Math.floor(noise(seed + 4) * GOOD_LINES.length)],
     improve: IMPROVE_LINES[Math.floor(noise(seed + 5) * IMPROVE_LINES.length)],
   };
@@ -134,7 +216,7 @@ function historyDay(date: ISODate): { tasks: Task[]; dayLog: DayLog | null } {
   return { tasks, dayLog };
 }
 
-/** Everything before the anchor: 45 days, a few of them without a plan. */
+/** Everything before the anchor: 190 days, a few of them without a plan. */
 function history(options: { includeYesterday: boolean }): { tasks: Task[]; dayLogs: DayLog[] } {
   const tasks: Task[] = [];
   const dayLogs: DayLog[] = [];
@@ -155,6 +237,19 @@ function history(options: { includeYesterday: boolean }): { tasks: Task[]; dayLo
   return { tasks, dayLogs };
 }
 
+/** The `sparse` user: four planned days in a row, the last one yesterday. */
+function sparseHistory(): { tasks: Task[]; dayLogs: DayLog[] } {
+  const tasks: Task[] = [];
+  const dayLogs: DayLog[] = [];
+
+  for (let ago = 4; ago >= 1; ago -= 1) {
+    const day = historyDay(addDays(SEED_ANCHOR, -ago), { force: true });
+    tasks.push(...day.tasks);
+    if (day.dayLog !== null) dayLogs.push(day.dayLog);
+  }
+  return { tasks, dayLogs };
+}
+
 /** The anchor day's plan, straight from the Today playground fixtures. */
 function todayTasks(): Task[] {
   return sampleTasks();
@@ -171,6 +266,17 @@ function allDone(tasks: Task[]): Task[] {
 export function buildSeed(name: SeedName): SeedData {
   if (name === 'new') {
     return { settings: null, tasks: [], dayLogs: [] };
+  }
+
+  if (name === 'sparse') {
+    const past = sparseHistory();
+    return {
+      settings: onboardedSettings({
+        onboardedAt: `${addDays(SEED_ANCHOR, -4)}T13:00:00.000Z`,
+      }),
+      tasks: past.tasks,
+      dayLogs: past.dayLogs,
+    };
   }
 
   const past = history({ includeYesterday: name !== 'missed' });

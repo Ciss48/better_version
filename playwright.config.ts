@@ -10,6 +10,8 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './e2e',
+  // Compiles every route once before the workers start — see e2e/global-setup.ts.
+  globalSetup: './e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: process.env.CI !== undefined,
   retries: process.env.CI !== undefined ? 1 : 0,

@@ -3,7 +3,7 @@
 import type { ISODate, Reflection } from '@/domain';
 import { t } from '@/lib/copy';
 import type { CopyKey } from '@/lib/copy';
-import { formatDateLong } from '@/lib/format';
+import { formatWeekdayDayMonth } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 export interface RitualSummaryProps {
@@ -79,7 +79,7 @@ export function RitualSummary({
       />
 
       <span className="text-label font-semibold uppercase tracking-[0.08em] text-success-ink">
-        {t('ritual.summary.kicker', { date: formatDateLong(date) })}
+        {t('ritual.summary.kicker', { date: formatWeekdayDayMonth(date) })}
       </span>
 
       <div className="font-num text-[84px] leading-[0.85] app:text-num-xl">

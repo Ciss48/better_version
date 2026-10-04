@@ -9,7 +9,9 @@ import {
   selectBanners,
   summarizeDay,
 } from '@/domain';
-import type { DaySummary, ISODate, Task } from '@/domain';
+import type { DayLog, DaySummary, HHMM, ISODate, Task } from '@/domain';
+import { computeStats, planTimingOf } from '@/stats';
+import type { StatsResult } from '@/stats';
 import type { TomorrowItem } from '@/components/ritual/TomorrowPlanList';
 import type { ClockValue } from '@/lib/clock';
 import type { RitualDraft } from './ritual-draft';
@@ -126,6 +128,39 @@ export function ritualTomorrowItems(
       removable: true,
     })),
   ];
+}
+
+/**
+ * Everything the Journey screen shows. The rules live in `src/stats`, which is
+ * pure: this only hands it the snapshot. Derive it with `useMemo` in the
+ * screen — like `todayView`, it builds fresh objects and cannot be a zustand
+ * selector.
+ */
+export function statsView(s: AppState, clock: ClockValue): StatsResult {
+  return computeStats({
+    tasks: Object.values(s.tasks),
+    dayLogs: Object.values(s.dayLogs),
+    today: clock.today,
+    settings: clock.settings,
+  });
+}
+
+export interface HistoryDayView {
+  tasks: Task[];
+  dayLog: DayLog | null;
+  planTiming: { kind: 'evening' | 'morning'; time: HHMM } | null;
+  mode: 'past' | 'today';
+}
+
+/** One day as History reads it, read-only. */
+export function historyDay(s: AppState, date: ISODate, clock: ClockValue): HistoryDayView {
+  const tasks = tasksOn(s.tasks, date);
+  return {
+    tasks,
+    dayLog: s.dayLogs[date] ?? null,
+    planTiming: planTimingOf(tasks, date, clock.settings),
+    mode: date === clock.today ? 'today' : 'past',
+  };
 }
 
 /** Tasks ritual step 1 reviews: still tickable, MITs first, then plan order. */

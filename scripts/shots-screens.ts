@@ -12,7 +12,7 @@
  */
 import { mkdir, rm } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
-import type { Browser } from '@playwright/test';
+import type { Browser, Page } from '@playwright/test';
 
 const BASE = process.env.SHOTS_BASE ?? 'http://localhost:3000';
 const OUT = 'artifacts/screens';
@@ -25,6 +25,43 @@ interface Row {
   now: string;
   /** Preset localStorage keys, applied before the first paint. */
   storage?: Record<string, string>;
+  /**
+   * Drives the UI before the shot. The ritual summary only exists after a real
+   * close — it lives in the store, so no seed can produce it.
+   */
+  prepare?: (page: Page) => Promise<void>;
+}
+
+/**
+ * Runs the whole evening ritual the way the `ritual_summary` screenshot was
+ * taken: three tasks to tomorrow, one dropped, energy 4, one line of
+ * reflection, and one new MIT for tomorrow.
+ */
+async function closeTheDay(page: Page): Promise<void> {
+  const row = (title: string) => page.locator('[data-decided]').filter({ hasText: title });
+
+  await row('Hoàn thiện slide demo').getByRole('radio', { name: 'Mai' }).click();
+  await row('Đặt lịch khám răng').getByRole('radio', { name: 'Mai' }).click();
+  await row('Atomic Habits').getByRole('radio', { name: 'Mai' }).click();
+  await row('Mua quà sinh nhật Minh').getByRole('radio', { name: 'Bỏ' }).click();
+  await page.getByRole('button', { name: 'Tiếp tục' }).click();
+
+  await page.getByRole('radio', { name: 'Khá tốt' }).click();
+  await page.getByRole('textbox').first().fill('Vẫn chạy bộ dù trời mưa');
+  await page.getByRole('button', { name: 'Tiếp tục' }).click();
+
+  const tomorrow = page.getByRole('textbox').last();
+  await tomorrow.fill('Viết blog về tối ưu Spark *');
+  await tomorrow.press('Enter');
+
+  await page.getByRole('button', { name: 'Hoàn tất & đóng ngày' }).click();
+  await page.getByText(/Đã khép lại/).waitFor({ timeout: 20_000 });
+
+  // Reload rather than wait out the "Đã đóng ngày" toast: the closed day is
+  // persisted, so the summary comes back identically — without the toast on
+  // top of it. (Sonner's timer does not run reliably in a headless context.)
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('[data-ready="true"]', { timeout: 20_000 });
 }
 
 const ROWS: Row[] = [
@@ -48,6 +85,18 @@ const ROWS: Row[] = [
   { name: 'ritual_step1-review', path: '/ritual', seed: 'demo', now: '2026-10-03T14:30:00Z' },
   { name: 'settings_default', path: '/settings', seed: 'demo', now: '2026-10-03T07:10:00Z' },
   { name: 'onboarding_step1', path: '/onboarding', seed: 'new', now: '2026-10-03T01:15:00Z' },
+  {
+    name: 'ritual_summary',
+    path: '/ritual',
+    seed: 'demo',
+    now: '2026-10-03T14:30:00Z',
+    prepare: closeTheDay,
+  },
+  { name: 'stats_default', path: '/stats', seed: 'demo', now: '2026-10-03T07:10:00Z' },
+  { name: 'stats_not-enough-data', path: '/stats', seed: 'sparse', now: '2026-10-03T07:10:00Z' },
+  { name: 'history_default', path: '/history', seed: 'demo', now: '2026-10-03T07:10:00Z' },
+  { name: 'goals_phase2', path: '/goals', seed: 'demo', now: '2026-10-03T07:10:00Z' },
+  { name: 'weekly_phase2', path: '/weekly', seed: 'demo', now: '2026-10-03T07:10:00Z' },
 ];
 
 const THEMES = ['light', 'dark'] as const;
@@ -86,6 +135,7 @@ async function shoot(
   }
 
   await page.waitForSelector('[data-ready="true"]', { timeout: 20_000 });
+  if (row.prepare !== undefined) await row.prepare(page);
   await page.evaluate(() => document.fonts.ready);
   // The progress fill and the stepper bars transition over 600ms / 300ms.
   await page.waitForTimeout(700);

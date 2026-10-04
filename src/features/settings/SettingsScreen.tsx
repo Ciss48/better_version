@@ -135,6 +135,7 @@ function SettingsBody() {
       <SettingsSection title={t('settings.dayEnd.title')} description={t('settings.dayEnd.body')}>
         <DayEndChips
           value={settings.dayEnd}
+          midnightLabel="time"
           onChange={(dayEnd) => void updateSettings({ dayEnd })}
         />
       </SettingsSection>

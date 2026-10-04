@@ -1,11 +1,15 @@
-import { PageContainer } from '@/components/app-shell/PageContainer';
-import { t } from '@/lib/copy';
+import { Suspense } from 'react';
+import { HistoryScreen } from '@/features/history/HistoryScreen';
 
+/**
+ * `HistoryScreen` reads `?date=` / `?month=` with `useSearchParams`, which Next
+ * requires a Suspense boundary around. The screen draws its own skeleton once
+ * the store is loading, so the fallback here is deliberately nothing.
+ */
 export default function HistoryPage() {
   return (
-    <PageContainer>
-      <p className="text-label font-semibold uppercase text-ink-3">{t('history.kicker')}</p>
-      <h1 className="mt-3 text-display-md app:text-display-xl">{t('nav.history')}</h1>
-    </PageContainer>
+    <Suspense fallback={null}>
+      <HistoryScreen />
+    </Suspense>
   );
 }

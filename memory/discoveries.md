@@ -182,3 +182,45 @@ Phase 6 as "Supabase persistence & auth", 7 as "Stats in SQL" and 8 as "Ship", w
 model (CLAUDE.md). The task file was treated as authoritative: `src/data/repository.ts` names
 **Phase 7** as the Supabase implementer, and stats/History are deferred to **Phase 6**.
 **Status:** open — for the user/planning session to reconcile in `docs/plan.md`.
+
+## [Phase 6] Two presentational details in the Phase 06 contract disagree with the handoff screenshots — Tier: Moderate
+**Finding:** `tasks/phase_06_stats_history.md` §1 and §3 specify two things that
+`design/handoff/screenshots/` plainly contradicts.
+1. **Insight tone.** The contract says `tone: 'success' | 'accent'` with "weekday → accent,
+   others → success". `desktop/stats_default_light.png` shows the four dots as green, orange,
+   green, orange — i.e. evening → success, mit → accent, weekday → success, energy → accent
+   (which is also what `prototype/StatsView.dc.html` computes).
+2. **The range line's date.** The contract says `formatDateLong(today)` → "Thứ Bảy, 3 tháng 10".
+   Both `desktop/stats_default_*.png` and `mobile/stats_default_*.png` read
+   "… · tính đến Thứ Bảy, **3/10**" — `formatWeekdayDayMonth`. The same task file's §4.2 corrects
+   `RitualSummary` in exactly this direction ("as in `ritual_summary`"), so the short form is the
+   house style wherever a weekday sits next to other text.
+**Impact:** presentation only. No type, no contract field, no business rule changes — `Insight`
+still carries `tone: 'success' | 'accent'`, only which kind gets which value differs.
+**How it was handled:** both implemented as the screenshots show, because CLAUDE.md's
+source-of-truth map names `design/screenshots/` as **visual truth** for "how it looks", while the
+task file is the source of truth for *what to build*. Recorded in the shot-comparison table of
+`memory/phase_06_report.md` so the verdicts read "match" honestly.
+**Rule for later phases:** where a task file's wording and a handoff screenshot disagree on
+appearance, the screenshot wins and the deviation gets logged here. Where they disagree on a
+*rule* (as `monthSummary`'s "today counts" does), the task file wins — it is the more carefully
+defined of the two, and the prototype's behaviour is often an accident of its sample data.
+**Status:** resolved in Phase 6 — no plan.md change needed.
+
+## [Phase 6] `pnpm e2e` failed from a cold `next dev`, for reasons unrelated to any test — Tier: Moderate
+**Finding:** against a cold dev server the whole suite failed — all 14 specs timed out waiting for
+`[data-ready="true"]` — while `--workers=1`, or a second run against the now-warm server, passed
+everything in seconds. `next dev` compiles a route the first time it is requested and its client
+bundle only when a browser fetches it; with the default four workers that cost lands on four
+*parallel* first navigations and exhausts the 20s readiness timeout on all of them. Phase 6 added
+three routes' worth of real screens and a 4× bigger `demo` seed, which tipped it over. It looks
+exactly like a memory or seed-size problem and is neither.
+**Impact:** `pnpm e2e` is a Definition-of-Done item in every phase; a fresh clone would have hit
+this on its first run.
+**How it was handled:** `e2e/global-setup.ts` walks all nine routes in one browser before the
+workers start, so compilation happens once, serially. A cold run (`rm -rf .next`) now passes 14/14
+in 12.4s. No worker cap was needed — verified at both the default and `--workers=4`.
+**Rule for later phases:** when the e2e suite fails everywhere at once but passes serially, warm
+the routes before blaming memory, the seed or the store. Add every new route to the list in
+`e2e/global-setup.ts`.
+**Status:** resolved in Phase 6 — no plan.md change needed.

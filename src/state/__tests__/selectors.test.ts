@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_SETTINGS } from '@/domain';
+import { addDays, DEFAULT_SETTINGS } from '@/domain';
 import type { DayLog, ISODate, Settings, Task } from '@/domain';
 import type { ClockValue } from '@/lib/clock';
 import { emptyDraft } from '../ritual-draft';
 import type { RitualDraft } from '../ritual-draft';
 import {
   consistencyView,
+  historyDay,
   ritualReviewTasks,
   ritualTomorrowItems,
+  statsView,
   tasksOn,
   todayView,
 } from '../selectors';
@@ -290,5 +292,82 @@ describe('ritualTomorrowItems', () => {
       TODAY,
     );
     expect(items).toEqual([]);
+  });
+});
+
+describe('statsView', () => {
+  /** Nine planned days ending yesterday, every task done — enough to leave sparse. */
+  function week(): Task[] {
+    const tasks: Task[] = [];
+    for (let index = 1; index <= 9; index += 1) {
+      const date = addDays(TODAY, -index);
+      tasks.push(
+        task(`s${index}`, { planDate: date, status: 'done', size: 'S', completedAt: `${date}T05:00:00.000Z` }),
+      );
+    }
+    return tasks;
+  }
+
+  it('hands the whole snapshot to the stats module', () => {
+    const view = statsView(state({ tasks: week() }), clock(LOCKED));
+
+    expect(view.daysWithPlan).toBe(9);
+    expect(view.sparse).toBe(false);
+    expect(view.cards.avg7.value).toBe(100);
+    expect(view.cards.consistency.planned).toBe(9);
+    expect(view.heatmap.at(-1)?.date).toBe(TODAY);
+    expect(view.firstUseDate).toBe(addDays(TODAY, -9));
+  });
+
+  it('reads today from the clock, not from the data', () => {
+    const view = statsView(state({ tasks: week() }), clock(LOCKED, DEFAULT_SETTINGS, TOMORROW));
+    // One day later, the oldest of the nine falls out of the 7-day window.
+    expect(view.heatmap.at(-1)?.date).toBe(TOMORROW);
+  });
+
+  it('is sparse with fewer than seven planned days', () => {
+    const view = statsView(state({ tasks: [task('a', { planDate: addDays(TODAY, -1) })] }), clock(LOCKED));
+    expect(view.sparse).toBe(true);
+    expect(view.cards.avg7.value).toBeNull();
+  });
+});
+
+describe('historyDay', () => {
+  const yesterday = addDays(TODAY, -1);
+  const log: DayLog = {
+    planDate: yesterday,
+    closedAt: `${yesterday}T15:00:00.000Z`,
+    energy: 4,
+    good: 'Ngủ đủ',
+    improve: '',
+  };
+
+  it('returns the day in plan order with its log and plan timing', () => {
+    const s = state({
+      tasks: [
+        task('b', { planDate: yesterday, position: 1, createdAt: `${yesterday}T02:00:00.000Z` }),
+        task('a', { planDate: yesterday, position: 0, createdAt: '2026-10-01T13:00:00.000Z' }),
+      ],
+      dayLogs: [log],
+    });
+    const view = historyDay(s, yesterday, clock(LOCKED));
+
+    expect(view.tasks.map((t) => t.id)).toEqual(['a', 'b']);
+    expect(view.dayLog).toEqual(log);
+    // 2026-10-01T13:00Z is 20:00 local, before the day end of 10-02.
+    expect(view.planTiming).toEqual({ kind: 'evening', time: '20:00' });
+    expect(view.mode).toBe('past');
+  });
+
+  it('marks today as today and reports a missing log as null', () => {
+    const view = historyDay(state({ tasks: [task('t')] }), TODAY, clock(LOCKED));
+    expect(view.mode).toBe('today');
+    expect(view.dayLog).toBeNull();
+  });
+
+  it('has no plan timing for a day with no plan', () => {
+    const view = historyDay(state({ tasks: [] }), yesterday, clock(LOCKED));
+    expect(view.tasks).toEqual([]);
+    expect(view.planTiming).toBeNull();
   });
 });

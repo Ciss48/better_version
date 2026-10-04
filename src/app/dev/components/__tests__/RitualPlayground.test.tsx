@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import { TODAY } from '@/dev/fixtures';
 import { t } from '@/lib/copy';
-import { formatDateLong } from '@/lib/format';
+import { formatDateLong, formatWeekdayDayMonth } from '@/lib/format';
 import { RitualPlayground } from '../RitualPlayground';
 
 /**
@@ -41,7 +41,7 @@ describe('RitualPlayground', () => {
     await user.click(screen.getByRole('button', { name: t('ritual.step3.cta') }));
 
     expect(
-      screen.getByText(t('ritual.summary.kicker', { date: formatDateLong(TODAY) })),
+      screen.getByText(t('ritual.summary.kicker', { date: formatWeekdayDayMonth(TODAY) })),
     ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: t('ritual.summary.cta') })).toBeInTheDocument();
   });

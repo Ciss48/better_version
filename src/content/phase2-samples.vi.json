@@ -1,0 +1,53 @@
+{
+  "goals": [
+    {
+      "tone": "success",
+      "horizon": "9 tháng",
+      "title": "Chuyển sang Data Engineer trước 6/2027",
+      "metric": "Lộ trình 12 module",
+      "pct": 42,
+      "focus": "Hoàn thành chương 5–6 Databricks",
+      "linked": 18,
+      "linkedDone": 14,
+      "next": "Ví dụ: Làm project pipeline đầu tiên"
+    },
+    {
+      "tone": "accent",
+      "horizon": "10 tuần",
+      "title": "Chạy half marathon tháng 12",
+      "metric": "Quãng chạy dài nhất 12/21km",
+      "pct": 57,
+      "focus": "3 buổi chạy, 1 buổi dài 12km",
+      "linked": 9,
+      "linkedDone": 8,
+      "next": "Ví dụ: Buổi dài 14km Chủ Nhật"
+    },
+    {
+      "tone": "heat",
+      "horizon": "Đến 31/12",
+      "title": "Đọc 24 cuốn sách năm 2026",
+      "metric": "17/24 cuốn",
+      "pct": 71,
+      "focus": "Đọc xong “Atomic Habits”",
+      "linked": 21,
+      "linkedDone": 19,
+      "next": "Ví dụ: 20 trang mỗi tối"
+    }
+  ],
+  "weekly": {
+    "from": "28/9",
+    "to": "4/10",
+    "avg": "79%",
+    "planned": "6/7",
+    "mit": "11/14",
+    "days": [
+      { "weekday": 7, "pct": null },
+      { "weekday": 1, "pct": 62 },
+      { "weekday": 2, "pct": 60 },
+      { "weekday": 3, "pct": 70 },
+      { "weekday": 4, "pct": 78 },
+      { "weekday": 5, "pct": 88 },
+      { "weekday": 6, "pct": 72 }
+    ]
+  }
+}

@@ -25,8 +25,8 @@ export default defineConfig({
     setupFiles: ['./src/test/setup-dom.ts'],
     coverage: {
       provider: 'v8',
-      include: ['src/domain/**'],
-      exclude: ['src/domain/__tests__/**'],
+      include: ['src/domain/**', 'src/stats/**'],
+      exclude: ['src/domain/__tests__/**', 'src/stats/__tests__/**'],
       reporter: ['text', 'json-summary'],
     },
   },
