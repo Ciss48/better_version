@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:24px">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Lịch sử</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Những trang đã viết</h1>
+  </header>
+  <div style="display:grid;grid-template-columns:{{cols}};gap:16px;align-items:start">
+    <section style="display:flex;flex-direction:column;gap:14px;padding:18px;border-radius:30px;background:var(--surface)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <button onClick="{{prevMonth}}" aria-label="Tháng trước" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--paper);display:grid;place-items:center;cursor:pointer;opacity:{{prevOpacity}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">{{monthTitle}}</span>
+          <span style="font-size:12.5px;color:var(--ink-3)">{{monthSummary}}</span>
+        </div>
+        <button onClick="{{nextMonth}}" aria-label="Tháng sau" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--paper);display:grid;place-items:center;cursor:pointer;opacity:{{nextOpacity}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+        <sc-for list="{{dowLabels}}" as="l" hint-placeholder-count="7"><span style="text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-3)">{{l}}</span></sc-for>
+        <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+          <button onClick="{{c.onClick}}" title="{{c.title}}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;height:{{cellH}};padding:0;border-radius:18px;border:{{c.border}};background:{{c.bg}};color:{{c.color}};box-shadow:{{c.ring}};opacity:{{c.opacity}};cursor:{{c.cursor}};transition:box-shadow .15s">
+            <span style="font-size:14px;font-weight:600;line-height:1">{{c.label}}</span>
+            <sc-if value="{{c.showSub}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;line-height:1;opacity:.85">{{c.sub}}</span></sc-if>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:30px;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line-2)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:24px;line-height:1.15">{{sel.label}}</span>
+          <span style="font-size:13px;color:var(--ink-3)">{{sel.meta}}</span>
+        </div>
+        <span style="flex:none;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">Chỉ đọc</span>
+      </div>
+
+      <sc-if value="{{sel.isToday}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:22px;background:var(--surface)">
+          <span style="color:var(--ink-2)">Ngày này vẫn đang diễn ra.</span>
+          <button onClick="{{openToday}}" style="height:40px;padding:0 18px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">Mở Hôm nay</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{sel.noPlan}}" hint-placeholder-val="{{false}}">
+        <div style="padding:18px 20px;border-radius:22px;border:2px dashed var(--line);color:var(--ink-2);text-wrap:pretty">Ngày này không có plan. Không sao cả — điều quan trọng là bạn đã quay lại ngay hôm sau.</div>
+      </sc-if>
+      <sc-if value="{{sel.hasData}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <span style="font-family:var(--font-num);font-size:48px;line-height:.9">{{sel.pct}}<span style="font-size:.45em;color:var(--ink-3)">%</span></span>
+            <div style="flex:1;height:10px;border-radius:999px;background:var(--line-2);overflow:hidden"><div style="height:100%;width:{{sel.pctW}};border-radius:999px;background:var(--sage)"></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{sel.tasks}}" as="t" hint-placeholder-count="6">
+              <div style="display:flex;align-items:flex-start;gap:12px;padding:8px 4px">
+                <span style="flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:{{t.iconBg}};color:{{t.iconColor}};box-shadow:inset 0 0 0 2px {{t.iconRing}};font-size:12px;font-weight:700;line-height:1">{{t.icon}}</span>
+                <div style="flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px">
+                  <span style="font-size:15px;line-height:1.4;color:{{t.color}}">{{t.title}}</span>
+                  <sc-if value="{{t.mit}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">MIT</span></sc-if>
+                  <sc-if value="{{t.adhoc}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">Phát sinh</span></sc-if>
+                  <sc-if value="{{t.note}}" hint-placeholder-val="{{false}}"><span style="font-size:12px;color:var(--ink-3);font-style:italic">{{t.note}}</span></sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;padding:16px 18px;border-radius:22px;background:var(--surface)">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+              <b style="font-weight:600">Phản tỉnh</b>
+              <span style="font-size:13px;color:var(--ink-2)">Năng lượng <b style="font-family:var(--font-num);font-weight:400">{{sel.energy}}</b>/5</span>
+            </div>
+            <sc-if value="{{sel.hasReflection}}" hint-placeholder-val="{{true}}">
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:14.5px;line-height:1.45">
+                <div><span style="color:var(--sage-ink);font-weight:600">Làm tốt · </span>{{sel.good}}</div>
+                <div><span style="color:var(--accent-ink);font-weight:600">Cải thiện · </span>{{sel.improve}}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{sel.noReflection}}" hint-placeholder-val="{{false}}"><span style="font-size:14px;color:var(--ink-3)">Hôm đó bạn bỏ qua phần viết — cũng được.</span></sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1000,&quot;height&quot;:900},&quot;days&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Day[]&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;selectKey&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;string&quot;},&quot;onOpenToday&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;()=&gt;void&quot;}}">
+class Component extends DCLogic {
+  state = { y: 2026, m: 9, sel: null };
+  componentDidUpdate(prev) {
+    if (prev.selectKey !== this.props.selectKey && this.props.selectKey) {
+      const [y, m] = this.props.selectKey.split('-').map(Number);
+      this.setState({ y, m: m - 1, sel: this.props.selectKey });
+    }
+  }
+  componentDidMount() {
+    if (this.props.selectKey) { const [y, m] = this.props.selectKey.split('-').map(Number); this.setState({ y, m: m - 1, sel: this.props.selectKey }); }
+  }
+  renderVals() {
+    const days = this.props.days || [], compact = !!this.props.compact, s = this.state;
+    const map = {}; days.forEach(d => { map[d.key] = d; });
+    const first = days[0], minY = first ? first.y : 2026, minM = first ? first.m - 1 : 9;
+    const atMin = s.y < minY || (s.y === minY && s.m <= minM), atMax = s.y === 2026 && s.m >= 9;
+    const pad = n => String(n).padStart(2, '0');
+    const offset = (new Date(s.y, s.m, 1).getDay() + 6) % 7, nd = new Date(s.y, s.m + 1, 0).getDate();
+    const fallback = days.length > 1 ? days[days.length - 2].key : (days[0] && days[0].key);
+    const selKey = s.sel && map[s.sel] ? s.sel : fallback;
+    const lv = p => p < 40 ? 1 : p < 60 ? 2 : p < 80 ? 3 : 4;
+    const cells = [];
+    for (let i = 0; i < offset; i++) cells.push({ label: '', sub: '', showSub: false, bg: 'transparent', border: '0', color: 'transparent', ring: 'none', opacity: 1, cursor: 'default', title: '', onClick: () => {} });
+    for (let d = 1; d <= nd; d++) {
+      const k = s.y + '-' + pad(s.m + 1) + '-' + pad(d), x = map[k], sel = k === selKey;
+      const future = new Date(s.y, s.m, d) > new Date(2026, 9, 3);
+      let bg = 'transparent', border = '0', color = 'var(--ink-3)', sub = '';
+      if (x && x.hasPlan) { const l = lv(x.pct); bg = 'var(--heat-' + l + ')'; color = l >= 3 ? 'var(--on-accent)' : 'var(--ink)'; sub = x.isToday ? 'nay' : x.pct + '%'; }
+      else if (x) { border = '1.5px dashed var(--ink-3)'; sub = '—'; }
+      cells.push({ label: d, sub, showSub: !compact && !!sub, bg, border, color, opacity: future ? 0.35 : 1, cursor: x ? 'pointer' : 'default', title: x ? x.label : '',
+        ring: sel ? 'inset 0 0 0 3px var(--ink)' : x && x.isToday ? 'inset 0 0 0 2.5px var(--accent)' : 'none',
+        onClick: () => { if (x) this.setState({ sel: k }); } });
+    }
+    const inMonth = days.filter(d => d.y === s.y && d.m === s.m + 1 && !d.isToday), pl = inMonth.filter(d => d.hasPlan);
+    const avg = pl.length ? Math.round(pl.reduce((a, d) => a + d.pct, 0) / pl.length) : 0;
+    const x = map[selKey] || {};
+    const icon = t => t.status === 'done' ? { icon: '✓', iconBg: 'var(--sage)', iconColor: 'var(--on-accent)', iconRing: 'transparent', color: 'var(--ink)', note: '' }
+      : t.status === 'moved' ? { icon: '→', iconBg: 'transparent', iconColor: 'var(--ink-2)', iconRing: 'var(--line)', color: 'var(--ink-2)', note: 'dời sang ' + t.movedTo }
+      : t.status === 'dropped' ? { icon: '×', iconBg: 'transparent', iconColor: 'var(--ink-3)', iconRing: 'var(--line)', color: 'var(--ink-3)', note: 'đã bỏ' }
+      : { icon: '', iconBg: 'transparent', iconColor: 'var(--ink-3)', iconRing: 'var(--ink-3)', color: 'var(--ink)', note: '' };
+    const tasks = (x.tasks || []).slice().sort((a, b) => (b.mit - a.mit) || (a.adhoc - b.adhoc)).map(t => ({ ...t, ...icon(t) }));
+    const sel = {
+      label: x.label || '', isToday: !!x.isToday, noPlan: !!x.key && !x.hasPlan, hasData: !!x.hasPlan && !x.isToday,
+      meta: x.hasPlan ? (x.eveningPlan ? 'Plan lúc ' + x.planAt + ' tối hôm trước' : 'Plan lúc ' + x.planAt + ' sáng') + ' · ' + (x.tasks || []).filter(t => !t.adhoc).length + ' việc đã định' : '',
+      pct: x.pct || 0, pctW: (x.pct || 0) + '%', tasks, energy: x.energy || '—',
+      good: x.good || '', improve: x.improve || '', hasReflection: !!(x.good || x.improve), noReflection: !!x.hasPlan && !(x.good || x.improve)
+    };
+    return {
+      h1Size: compact ? '30px' : '44px', cols: compact ? '1fr' : 'minmax(0,1.15fr) minmax(0,1fr)', cellH: compact ? '46px' : '62px',
+      monthTitle: 'Tháng ' + (s.m + 1) + ', ' + s.y,
+      monthSummary: inMonth.length ? pl.length + '/' + inMonth.length + ' ngày có plan · TB ' + avg + '%' : 'Chưa có dữ liệu',
+      dowLabels: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'], cells,
+      prevOpacity: atMin ? 0.35 : 1, nextOpacity: atMax ? 0.35 : 1,
+      prevMonth: () => { if (!atMin) this.setState(st => st.m === 0 ? { y: st.y - 1, m: 11 } : { m: st.m - 1 }); },
+      nextMonth: () => { if (!atMax) this.setState(st => st.m === 11 ? { y: st.y + 1, m: 0 } : { m: st.m + 1 }); },
+      sel, openToday: () => this.props.onOpenToday && this.props.onOpenToday()
+    };
+  }
+}
+</script>
+</body>
+</html>

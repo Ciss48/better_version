@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="position:relative;display:flex;flex-direction:column;gap:28px;max-width:600px;min-height:{{minH}}">
+  <span style="position:absolute;right:-40px;top:-30px;width:170px;height:170px;border-radius:50%;background:var(--sage);opacity:.18;pointer-events:none"></span>
+  <span style="position:absolute;right:110px;top:90px;width:56px;height:56px;border-radius:50%;background:var(--accent);opacity:.22;pointer-events:none"></span>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <div style="display:flex;gap:6px">
+      <sc-for list="{{dots}}" as="d" hint-placeholder-count="3"><span style="width:{{d.w}};height:10px;border-radius:999px;background:{{d.bg}};transition:all .3s"></span></sc-for>
+    </div>
+    <sc-if value="{{showSkip}}" hint-placeholder-val="{{true}}"><button onClick="{{skip}}" style="height:38px;padding:0 14px;border-radius:999px;border:0;background:transparent;color:var(--ink-3);font-size:13.5px;cursor:pointer" style-hover="background:var(--hover)">Bỏ qua, dùng mặc định</button></sc-if>
+  </div>
+
+  <sc-if value="{{s0}}" hint-placeholder-val="{{true}}">
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Bước 1/3</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.1;letter-spacing:-.02em">Bạn thường lập plan lúc nào?</h1>
+        <p style="margin:0;color:var(--ink-2)">Cả hai đều ổn — app hỗ trợ cả hai, bạn đổi được sau.</p>
+      </div>
+      <sc-for list="{{habitCards}}" as="o" hint-placeholder-count="2">
+        <button onClick="{{o.onClick}}" style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:28px;border:0;background:{{o.bg}};box-shadow:inset 0 0 0 2px {{o.ring}};text-align:left;cursor:pointer;transition:all .2s">
+          <span style="flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:{{o.iconBg}};color:{{o.iconColor}}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{o.d}}"></path></svg></span>
+          <span style="display:flex;flex-direction:column;gap:4px">
+            <b style="font-size:17px;font-weight:600">{{o.title}}</b>
+            <span style="font-size:14px;color:var(--ink-2);line-height:1.45">{{o.desc}}</span>
+            <span style="font-size:12.5px;color:var(--ink-3)">{{o.window}}</span>
+          </span>
+        </button>
+      </sc-for>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{s1}}" hint-placeholder-val="{{false}}">
+    <section style="display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Bước 2/3</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.1;letter-spacing:-.02em">Khi nào nên nhắc bạn?</h1>
+        <p style="margin:0;color:var(--ink-2)">Chỉ hai lời nhắc nhẹ mỗi ngày, không hơn.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:14px;font-weight:600">Nhắc lập plan</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{planChips}}" as="o" hint-placeholder-count="4"><button onClick="{{o.onClick}}" style="height:44px;padding:0 18px;border-radius:999px;border:2px solid {{o.border}};background:{{o.bg}};color:{{o.color}};font-size:14.5px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:14px;font-weight:600">Nhắc nghi thức buổi tối</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ritualChips}}" as="o" hint-placeholder-count="4"><button onClick="{{o.onClick}}" style="height:44px;padding:0 18px;border-radius:999px;border:2px solid {{o.border}};background:{{o.bg}};color:{{o.color}};font-size:14.5px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for></div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+    <section style="display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Bước 3/3</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.1;letter-spacing:-.02em">Một ngày của bạn kết thúc lúc mấy giờ?</h1>
+        <p style="margin:0;color:var(--ink-2)">Thức khuya cũng không sao — ngày chỉ khép lại khi bạn đi ngủ.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{endChips}}" as="o" hint-placeholder-count="5"><button onClick="{{o.onClick}}" style="height:44px;padding:0 18px;border-radius:999px;border:2px solid {{o.border}};background:{{o.bg}};color:{{o.color}};font-size:14.5px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for></div>
+      <div style="padding:16px 18px;border-radius:22px;background:var(--sage-soft);color:var(--sage-ink);font-size:14.5px;line-height:1.5;text-wrap:pretty">{{endExample}}</div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{s3}}" hint-placeholder-val="{{false}}">
+    <section style="display:flex;flex-direction:column;gap:20px">
+      <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.1;letter-spacing:-.02em">Sẵn sàng rồi.</h1>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{summary}}" as="r" hint-placeholder-count="4">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:14px 18px;border-radius:20px;background:var(--surface)"><span style="color:var(--ink-2)">{{r.k}}</span><b style="font-weight:600;text-align:right">{{r.v}}</b></div>
+        </sc-for>
+      </div>
+      <p style="margin:0;color:var(--ink-2);text-wrap:pretty">Mẹo nhỏ: bắt đầu với 3 việc thôi. Một ngày làm đủ 3 việc tốt hơn một ngày định 10 việc.</p>
+    </section>
+  </sc-if>
+
+  <div style="flex:1"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+    <sc-if value="{{showBack}}" hint-placeholder-val="{{false}}"><button onClick="{{back}}" style="height:48px;padding:0 18px;border-radius:999px;border:0;background:transparent;color:var(--ink-2);font-size:14.5px;cursor:pointer" style-hover="background:var(--hover)">Quay lại</button></sc-if>
+    <span style="flex:1"></span>
+    <button onClick="{{next}}" style="display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 24px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:15px;cursor:pointer" style-hover="background:var(--accent-hover)">{{nextLabel}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:800,&quot;height&quot;:800},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onFinish&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(settings|null)=&gt;void&quot;}}">
+class Component extends DCLogic {
+  state = { step: 0, habit: 'evening', remindPlan: '21:30', remindRitual: '21:00', dayEnd: '00:00' };
+  renderVals() {
+    const s = this.state, compact = !!this.props.compact;
+    const chip = (cur, v, key, label) => ({ label: label || v, onClick: () => this.setState({ [key]: v }), bg: cur === v ? 'var(--ink)' : 'transparent', color: cur === v ? 'var(--bg)' : 'var(--ink-2)', border: cur === v ? 'var(--ink)' : 'var(--line)' });
+    const card = (v, title, desc, win, d) => ({ title, desc, window: win, d, onClick: () => this.setState({ habit: v, remindPlan: v === 'evening' ? '21:30' : '07:00' }), bg: s.habit === v ? 'var(--surface)' : 'transparent', ring: s.habit === v ? 'var(--accent)' : 'var(--line)', iconBg: s.habit === v ? 'var(--accent)' : 'var(--line-2)', iconColor: s.habit === v ? 'var(--on-accent)' : 'var(--ink-2)' });
+    const planTimes = s.habit === 'evening' ? ['20:30', '21:00', '21:30', '22:00'] : ['06:30', '07:00', '07:30', '08:00'];
+    const endEx = { '00:00': 'Ngày khép lại lúc nửa đêm. Việc tick sau 00:00 sẽ tính cho ngày mới.', '01:00': 'Tick việc lúc 00:40 vẫn được tính cho hôm trước.', '02:00': 'Tick việc lúc 01:30 sáng vẫn được tính cho hôm trước.', '03:00': 'Tick việc lúc 02:30 sáng vẫn được tính cho hôm trước — hợp với cú đêm.', '04:00': 'Tick việc lúc 03:30 sáng vẫn được tính cho hôm trước.' }[s.dayEnd];
+    const finish = () => this.props.onFinish && this.props.onFinish({ habit: s.habit, start: s.habit === 'evening' ? '18|prev' : '6|same', lock: '10:00', dayEnd: s.dayEnd, remindOn: true, remindPlan: s.remindPlan, remindRitual: s.remindRitual });
+    return {
+      minH: compact ? 'calc(100% - 0px)' : '640px', h1Size: compact ? '28px' : '38px',
+      dots: [0, 1, 2].map(i => ({ w: i === s.step ? '34px' : '10px', bg: i <= s.step || s.step === 3 ? 'var(--accent)' : 'var(--line)' })),
+      s0: s.step === 0, s1: s.step === 1, s2: s.step === 2, s3: s.step === 3, showSkip: s.step < 3, showBack: s.step > 0,
+      habitCards: [
+        card('evening', 'Tối hôm trước', 'Viết plan cho ngày mai trong nghi thức buổi tối. Sáng dậy là biết ngay việc đầu tiên.', 'Cửa sổ: 18:00 hôm trước → 10:00', 'M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z'),
+        card('morning', 'Đầu ngày', 'Ngồi xuống với ly cà phê, viết plan trước khi mở email.', 'Cửa sổ: 06:00 → 10:00 cùng ngày', 'M12 8a4 4 0 1 0 0 8 4 4 0 1 0 0-8M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41')
+      ],
+      planChips: planTimes.map(v => chip(s.remindPlan, v, 'remindPlan')),
+      ritualChips: ['20:30', '21:00', '21:30', '22:00'].map(v => chip(s.remindRitual, v, 'remindRitual')),
+      endChips: ['00:00', '01:00', '02:00', '03:00', '04:00'].map(v => chip(s.dayEnd, v, 'dayEnd', v === '00:00' ? 'Nửa đêm' : v)),
+      endExample: endEx,
+      summary: [
+        { k: 'Thói quen', v: s.habit === 'evening' ? 'Plan tối hôm trước' : 'Plan đầu ngày' },
+        { k: 'Khóa plan', v: '10:00 mỗi sáng' },
+        { k: 'Nhắc nhở', v: s.remindPlan + ' · ' + s.remindRitual },
+        { k: 'Kết thúc ngày', v: s.dayEnd === '00:00' ? 'Nửa đêm' : s.dayEnd + ' sáng' }
+      ],
+      nextLabel: s.step === 3 ? 'Viết plan đầu tiên' : 'Tiếp tục',
+      next: () => s.step === 3 ? finish() : this.setState({ step: s.step + 1 }),
+      back: () => this.setState({ step: Math.max(0, s.step - 1) }),
+      skip: () => this.props.onFinish && this.props.onFinish(null)
+    };
+  }
+}
+</script>
+</body>
+</html>

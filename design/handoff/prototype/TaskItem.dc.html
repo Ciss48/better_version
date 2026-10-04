@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;border-radius:18px;background:{{task.rowBg}};transition:background .18s ease" style-hover="background:var(--hover)">
+  <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 12px">
+    <button onClick="{{task.onToggle}}" aria-label="Đánh dấu hoàn thành" style="flex:none;width:24px;height:24px;margin-top:0;padding:0;border-radius:50%;border:2px solid {{task.checkBorder}};background:{{task.checkBg}};display:grid;place-items:center;cursor:{{task.checkCursor}};transform:scale({{task.checkScale}});transition:transform .28s cubic-bezier(.34,1.8,.5,1),background .2s ease,border-color .2s ease">
+      <svg width="13" height="13" viewBox="0 0 24 24" style="display:block"><path d="M20 6 9 17l-5-5" fill="none" stroke="var(--on-accent)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="{{task.checkDash}}" style="transition:stroke-dashoffset .32s ease .06s"></path></svg>
+    </button>
+    <div onClick="{{task.onExpand}}" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;cursor:pointer">
+      <div style="font-size:15.5px;line-height:1.45;color:{{task.titleColor}};text-decoration:line-through;text-decoration-color:{{task.decoColor}};text-decoration-thickness:1.5px;transition:color .3s ease,text-decoration-color .3s ease;text-wrap:pretty">{{task.title}}</div>
+      <sc-if value="{{task.hasMeta}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;line-height:1">
+          <sc-if value="{{task.important}}" hint-placeholder-val="{{false}}"><span style="padding:4px 9px;border-radius:999px;border:1.5px solid var(--line);color:var(--ink-2)">Quan trọng</span></sc-if>
+          <sc-if value="{{task.urgent}}" hint-placeholder-val="{{false}}"><span style="padding:4px 9px;border-radius:999px;border:1.5px dashed var(--ink-3);color:var(--ink-2)">Gấp</span></sc-if>
+          <sc-if value="{{task.showAdded}}" hint-placeholder-val="{{false}}"><span style="color:var(--ink-3)">thêm lúc {{task.addedAt}}</span></sc-if>
+          <sc-if value="{{task.showPostponed}}" hint-placeholder-val="{{false}}"><span style="color:var(--ink-3)">đã dời {{task.postponed}} lần</span></sc-if>
+          <sc-if value="{{task.warn}}" hint-placeholder-val="{{false}}"><span style="padding:4px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">Dời {{task.postponed}} lần · chia nhỏ hoặc cân nhắc bỏ?</span></sc-if>
+          <sc-if value="{{task.showStatus}}" hint-placeholder-val="{{false}}"><span style="color:var(--ink-3);font-style:italic">{{task.statusText}}</span></sc-if>
+        </div>
+      </sc-if>
+    </div>
+    <sc-if value="{{task.showSize}}" hint-placeholder-val="{{false}}">
+      <span title="Độ lớn" style="flex:none;width:24px;height:24px;border-radius:50%;background:var(--line-2);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--ink-3)">{{task.size}}</span>
+    </sc-if>
+  </div>
+  <sc-if value="{{task.isOpen}}" hint-placeholder-val="{{false}}">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:0 12px 14px 48px">
+      <sc-for list="{{task.toggles}}" as="b" hint-placeholder-count="3">
+        <button onClick="{{b.onClick}}" style="height:32px;padding:0 12px;border-radius:999px;border:1.5px solid {{b.border}};background:{{b.bg}};color:{{b.color}};font-size:12.5px;font-weight:500;cursor:pointer">{{b.label}}</button>
+      </sc-for>
+      <div style="display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden">
+        <sc-for list="{{task.sizes}}" as="z" hint-placeholder-count="3">
+          <button onClick="{{z.onClick}}" title="Độ lớn" style="width:32px;height:29px;border:0;background:{{z.bg}};color:{{z.color}};font-size:12px;font-weight:700;cursor:pointer">{{z.label}}</button>
+        </sc-for>
+      </div>
+      <sc-for list="{{task.actions}}" as="a" hint-placeholder-count="2">
+        <button onClick="{{a.onClick}}" style="height:32px;padding:0 12px;border-radius:999px;border:0;background:transparent;color:var(--ink-2);font-size:12.5px;font-weight:500;cursor:pointer" style-hover="background:var(--line-2)">{{a.label}}</button>
+      </sc-for>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:640,&quot;height&quot;:120},&quot;task&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;}}"></script>
+</body>
+</html>

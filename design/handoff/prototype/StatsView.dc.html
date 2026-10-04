@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:28px">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Hành trình phát triển</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Tiến bộ 1% mỗi ngày</h1>
+    <p style="margin:0;color:var(--ink-2)">{{rangeText}}</p>
+  </header>
+
+  <sc-if value="{{sparse}}" hint-placeholder-val="{{false}}">
+    <div style="display:flex;flex-direction:column;gap:14px;padding:22px 24px;border-radius:28px;background:var(--accent-soft)">
+      <div style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px;line-height:1.25">Hành trình mới bắt đầu.</div>
+      <p style="margin:0;color:var(--ink-2);max-width:520px;text-wrap:pretty">Thống kê bắt đầu có ý nghĩa sau 7 ngày có plan. Bạn đã có {{plannedCount}}/7 — cứ tiếp tục, con số sẽ tự kể câu chuyện.</p>
+      <div style="display:flex;gap:8px">
+        <sc-for list="{{sparseDots}}" as="d" hint-placeholder-count="7"><span style="width:26px;height:26px;border-radius:50%;background:{{d.bg}};box-shadow:inset 0 0 0 2px {{d.ring}}"></span></sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax({{cardMin}},1fr));gap:12px">
+    <sc-for list="{{cards}}" as="c" hint-placeholder-count="6">
+      <div style="display:flex;flex-direction:column;gap:8px;padding:18px 20px;border-radius:26px;background:var(--surface)">
+        <span style="font-size:13px;color:var(--ink-2);line-height:1.35">{{c.label}}</span>
+        <span style="font-family:var(--font-num);font-size:34px;line-height:1">{{c.value}}<span style="font-size:.5em;color:var(--ink-3)">{{c.unit}}</span></span>
+        <sc-if value="{{c.delta}}" hint-placeholder-val="{{false}}"><span style="align-self:flex-start;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:{{c.deltaBg}};color:{{c.deltaColor}}">{{c.delta}}</span></sc-if>
+        <sc-if value="{{c.note}}" hint-placeholder-val="{{false}}"><span style="font-size:12px;color:var(--ink-3);line-height:1.4">{{c.note}}</span></sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:16px;padding:22px 22px 18px;border-radius:30px;background:var(--surface)">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px">{{heatTitle}}</h2>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3)">
+        <span style="width:13px;height:13px;border-radius:50%;border:1.5px dashed var(--ink-3)"></span><span style="margin-right:8px">Không plan</span>
+        <span>Thấp</span><span style="width:13px;height:13px;border-radius:50%;background:var(--heat-1)"></span><span style="width:13px;height:13px;border-radius:50%;background:var(--heat-2)"></span><span style="width:13px;height:13px;border-radius:50%;background:var(--heat-3)"></span><span style="width:13px;height:13px;border-radius:50%;background:var(--heat-4)"></span><span>Cao</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px">
+      <div style="display:flex;flex-direction:column;gap:{{gap}};padding-top:22px;font-size:10.5px;color:var(--ink-3)">
+        <sc-for list="{{rowLabels}}" as="l" hint-placeholder-count="7"><span style="height:{{cell}};line-height:{{cell}}">{{l}}</span></sc-for>
+      </div>
+      <div style="display:flex;gap:{{gap}}">
+        <sc-for list="{{weeks}}" as="w" hint-placeholder-count="26">
+          <div style="display:flex;flex-direction:column;gap:{{gap}}">
+            <span style="height:18px;font-size:10.5px;color:var(--ink-3);white-space:nowrap;width:{{cell}}">{{w.month}}</span>
+            <sc-for list="{{w.cells}}" as="c" hint-placeholder-count="7">
+              <button onClick="{{c.onClick}}" title="{{c.title}}" style="width:{{cell}};height:{{cell}};padding:0;border-radius:50%;border:{{c.border}};background:{{c.bg}};outline:{{c.outline}};outline-offset:1px;cursor:{{c.cursor}};opacity:{{c.opacity}}"></button>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <span style="font-size:12px;color:var(--ink-3)">Bấm vào một ngày để xem lại trong Lịch sử.</span>
+  </section>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax({{twoMin}},1fr));gap:12px">
+    <section style="display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:30px;background:var(--surface)">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px">Theo thứ trong tuần</h2>
+        <span style="font-size:13px;color:var(--ink-3)">% hoàn thành trung bình có trọng số</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:200px">
+        <sc-for list="{{weekday}}" as="b" hint-placeholder-count="7">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+            <span style="font-size:12px;font-weight:600;color:{{b.valColor}}">{{b.val}}</span>
+            <span style="width:100%;max-width:44px;height:{{b.h}};border-radius:999px;background:{{b.bg}};transition:height .5s"></span>
+            <span style="font-size:12px;color:var(--ink-3)">{{b.label}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;background:var(--surface)">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px">Điều dữ liệu nói với bạn</h2>
+      <sc-for list="{{insights}}" as="i" hint-placeholder-count="4">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="flex:none;width:10px;height:10px;margin-top:7px;border-radius:50%;background:{{i.dot}}"></span>
+          <p style="margin:0;font-size:15px;line-height:1.5;text-wrap:pretty">{{i.text}}</p>
+        </div>
+      </sc-for>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:1200},&quot;days&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Day[]&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onOpenDay&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(key:string)=&gt;void&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const days = this.props.days || [], compact = !!this.props.compact;
+    const past = days.filter(d => !d.isToday), N = past.length;
+    const plannedPast = past.filter(d => d.hasPlan), sparse = plannedPast.length < 7;
+    const avg = a => a.length ? Math.round(a.reduce((s, d) => s + d.pct, 0) / a.length) : 0;
+    const win = (a, b) => past.slice(Math.max(0, N - b), Math.max(0, N - a)).filter(d => d.hasPlan);
+    const avg7 = avg(win(0, 7)), prev7 = avg(win(7, 14)), avg30 = avg(win(0, 30)), prev30 = avg(win(30, 60));
+    const cons = days.slice(-30).filter(d => d.hasPlan).length;
+    const t30 = win(0, 30).flatMap(d => d.tasks), tc = t30.length || 1;
+    const pctOf = f => Math.round(t30.filter(f).length / tc * 100);
+    const delta = (a, b) => { const d = a - b; return sparse ? null : { text: (d >= 0 ? '+' : '−') + Math.abs(d) + ' điểm so với kỳ trước', up: d >= 0 }; };
+    const dl7 = delta(avg7, prev7), dl30 = delta(avg30, prev30);
+    const dash = v => sparse ? '—' : v;
+    const mk = (label, value, unit, dl, note) => ({ label, value, unit: sparse ? '' : unit, delta: dl ? dl.text : '', deltaBg: dl && dl.up ? 'var(--sage-soft)' : 'var(--line-2)', deltaColor: dl && dl.up ? 'var(--sage-ink)' : 'var(--ink-2)', note: note || '' });
+    const cards = [
+      mk('Hoàn thành TB · 7 ngày', dash(avg7), '%', dl7),
+      mk('Hoàn thành TB · 30 ngày', dash(avg30), '%', dl30),
+      mk('Điểm nhất quán', cons + '/30', '', null, 'Số ngày có plan — không reset khi lỡ một ngày'),
+      mk('Quan trọng nhưng không gấp', dash(pctOf(t => t.important && !t.urgent)), '%', null, 'Vùng của tiến bộ dài hạn'),
+      mk('Việc phát sinh', dash(pctOf(t => t.adhoc)), '%', null, 'Thêm sau giờ khóa plan'),
+      mk('Việc bị dời', dash(pctOf(t => t.status === 'moved')), '%', null, 'Trên tổng số việc 30 ngày')
+    ];
+    // heatmap
+    const W = compact ? 13 : 26, cell = compact ? 20 : 17, gap = compact ? 4 : 5;
+    const map = {}; days.forEach(d => { map[d.key] = d; });
+    const today = days.length ? days[days.length - 1] : null;
+    const tDate = new Date(2026, 9, 3), dow = (tDate.getDay() + 6) % 7;
+    const start = new Date(2026, 9, 3 - dow - (W - 1) * 7);
+    const key = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    const lv = p => p < 40 ? 1 : p < 60 ? 2 : p < 80 ? 3 : 4;
+    const weeks = [];
+    for (let w = 0; w < W; w++) {
+      const cells = []; let month = '';
+      for (let r = 0; r < 7; r++) {
+        const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + w * 7 + r), k = key(d), x = map[k];
+        if (r === 0 && d.getDate() <= 7) month = 'thg ' + (d.getMonth() + 1);
+        const future = d > tDate;
+        let bg = 'transparent', border = '0', title = '';
+        if (future) bg = 'transparent';
+        else if (!x) { bg = 'var(--line-2)'; title = 'Chưa dùng app'; }
+        else if (!x.hasPlan) { border = '1.5px dashed var(--ink-3)'; title = x.label + ' · không có plan'; }
+        else { bg = 'var(--heat-' + lv(x.pct) + ')'; title = x.label + ' · ' + x.pct + '%'; }
+        cells.push({ bg, border, title, outline: x && x.isToday ? '2px solid var(--accent)' : 'none', cursor: x ? 'pointer' : 'default', opacity: future ? 0 : 1, onClick: () => { if (x && this.props.onOpenDay) this.props.onOpenDay(x.key); } });
+      }
+      weeks.push({ month, cells });
+    }
+    // weekday
+    const labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+    const wd = labels.map((l, i) => avg(plannedPast.filter(d => d.dow === i)));
+    const best = Math.max(...wd), worst = Math.min(...wd);
+    const weekday = labels.map((label, i) => ({ label, val: sparse ? '—' : wd[i] + '%', h: (sparse ? 8 : Math.max(8, wd[i] * 1.5)) + 'px', bg: !sparse && wd[i] === best ? 'var(--sage)' : 'var(--heat-2)', valColor: !sparse && wd[i] === best ? 'var(--sage-ink)' : 'var(--ink-3)' }));
+    const dayName = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
+    const ev = avg(plannedPast.filter(d => d.eveningPlan)), mo = avg(plannedPast.filter(d => !d.eveningPlan));
+    const mits = t30.filter(t => t.mit), oth = t30.filter(t => !t.mit && !t.adhoc);
+    const mitR = Math.round(mits.filter(t => t.status === 'done').length / (mits.length || 1) * 100), othR = Math.round(oth.filter(t => t.status === 'done').length / (oth.length || 1) * 100);
+    const hiE = avg(plannedPast.filter(d => d.energy >= 4)), loE = avg(plannedPast.filter(d => d.energy && d.energy <= 2));
+    const insights = sparse ? [{ text: 'Insight sẽ xuất hiện sau khoảng hai tuần dữ liệu. Hiện tại, chỉ cần giữ nhịp viết plan mỗi ngày.', dot: 'var(--ink-3)' }] : [
+      { text: 'Những ngày bạn plan từ tối hôm trước, tỉ lệ hoàn thành cao hơn ' + (ev - mo) + '% so với plan buổi sáng.', dot: 'var(--sage)' },
+      { text: 'Bạn hoàn thành ' + mitR + '% việc MIT, so với ' + othR + '% việc thường — chọn MIT đang có tác dụng.', dot: 'var(--accent)' },
+      { text: dayName[wd.indexOf(best)] + ' là ngày bạn làm tốt nhất (' + best + '%). ' + dayName[wd.indexOf(worst)] + ' nhẹ hơn (' + worst + '%) — thử đặt ít việc hơn vào ngày này.', dot: 'var(--sage)' },
+      { text: 'Ngày năng lượng 4–5, bạn hoàn thành ' + hiE + '%; ngày mệt chỉ ' + loE + '%. Giấc ngủ có thể là MIT ẩn.', dot: 'var(--accent)' }
+    ];
+    return {
+      h1Size: compact ? '30px' : '44px', cardMin: compact ? '150px' : '200px', twoMin: compact ? '260px' : '340px',
+      rangeText: sparse ? (N ? 'Bạn mới bắt đầu ' + N + ' ngày trước.' : 'Hành trình của bạn bắt đầu từ hôm nay.') : (W === 26 ? '6 tháng' : '3 tháng') + ' gần đây · tính đến Thứ Bảy, 3/10',
+      sparse, plannedCount: plannedPast.length,
+      sparseDots: Array.from({ length: 7 }, (_, i) => ({ bg: i < plannedPast.length ? 'var(--sage)' : 'transparent', ring: i < plannedPast.length ? 'transparent' : 'var(--line)' })),
+      cards, heatTitle: W === 26 ? 'Bản đồ 26 tuần' : 'Bản đồ 13 tuần', weeks, cell: cell + 'px', gap: gap + 'px',
+      rowLabels: ['T2', '', 'T4', '', 'T6', '', 'CN'], weekday, insights
+    };
+  }
+}
+</script>
+</body>
+</html>

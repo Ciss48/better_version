@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../styles/tokens.css";
+
+/* ── shadcn aliases that tokens.css does not define ──────────────────────────
+   Every value maps to an existing design token — never a raw colour.
+   Note the name clash: shadcn uses --accent for a hover tint, tokens.css uses it
+   for terracotta. tokens.css wins; shadcn's `bg-accent` hovers are replaced with
+   `bg-hover` wherever a shadcn component is added. */
+:root {
+  --accent-foreground: var(--on-accent);
+  --chart-1: var(--accent);
+  --chart-2: var(--success);
+  --chart-3: var(--heat-3);
+  --chart-4: var(--heat-2);
+  --chart-5: var(--heat-4);
+  --sidebar: var(--bg);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--accent);
+  --sidebar-primary-foreground: var(--on-accent);
+  --sidebar-accent: var(--hover);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--accent);
+}
+
+@theme inline {
+  /* Fonts: point the token families at the next/font CSS variables. */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-be-vietnam), system-ui, sans-serif;
+  --font-num: var(--font-caprasimo), Georgia, serif;
+  --font-heading: var(--font-display);
+
+  /* shadcn colour aliases added above */
+  --color-accent-foreground: var(--accent-foreground);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* shadcn's t-shirt radii, derived from the token scale */
+  --radius-md: var(--radius-row);
+  --radius-lg: var(--radius-item);
+  --radius-xl: var(--radius-tile);
+  --radius-2xl: var(--radius-card);
+  --radius-3xl: var(--radius-panel);
+}
+
+@layer base {
+  /* Tailwind v4 defaults `border` to currentColor; shadcn components expect the
+     token border. */
+  *,
+  ::after,
+  ::before {
+    border-color: var(--color-border);
+  }
+
+  body {
+    @apply bg-bg text-ink font-sans;
+  }
+
+  .font-display,
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variation-settings: "SOFT" 100;
+  }
+}

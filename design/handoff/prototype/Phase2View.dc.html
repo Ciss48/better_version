@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:24px;max-width:860px">
+  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-radius:24px;border:2px dashed var(--accent)">
+    <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:999px;background:var(--accent);color:var(--on-accent)">Phase 2</span>
+    <span style="font-size:13.5px;color:var(--ink-2)">Thiết kế sơ bộ — không thuộc MVP, chưa phát triển thêm. Dữ liệu và ô nhập chỉ để minh họa.</span>
+  </div>
+
+  <sc-if value="{{isGoals}}" hint-placeholder-val="{{true}}">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <header style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Mục tiêu</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Việc hôm nay nối về đâu?</h1>
+        <p style="margin:0;color:var(--ink-2);max-width:560px;text-wrap:pretty">Mục tiêu dài hạn → trọng tâm tuần → task mỗi ngày. Khi thêm việc, gõ <b style="font-family:ui-monospace,Menlo,monospace">@tên-mục-tiêu</b> để gắn.</p>
+      </header>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
+        <sc-for list="{{goals}}" as="g" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;background:var(--surface)">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="width:14px;height:14px;border-radius:50%;background:{{g.color}}"></span>
+              <span style="font-size:12.5px;color:var(--ink-3)">{{g.horizon}}</span>
+            </div>
+            <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px;line-height:1.2">{{g.title}}</span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-3)"><span>{{g.metric}}</span><span>{{g.pct}}%</span></div>
+              <div style="height:8px;border-radius:999px;background:var(--line-2);overflow:hidden"><div style="height:100%;width:{{g.pctW}};border-radius:999px;background:{{g.color}}"></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:18px;background:var(--paper)">
+              <span style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Trọng tâm tuần này</span>
+              <span style="font-size:14.5px">{{g.focus}}</span>
+            </div>
+            <span style="font-size:12.5px;color:var(--ink-3)">{{g.linked}}</span>
+          </div>
+        </sc-for>
+        <div style="display:flex;align-items:center;justify-content:center;min-height:200px;border-radius:30px;border:2px dashed var(--line);color:var(--ink-3);font-size:14px">+ Thêm mục tiêu</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isWeekly}}" hint-placeholder-val="{{false}}">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <header style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Tổng kết tuần · Chủ Nhật</span>
+        <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Tuần 28/9 – 4/10</h1>
+      </header>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+        <sc-for list="{{weekStats}}" as="k" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:4px;padding:18px 20px;border-radius:26px;background:var(--surface)"><span style="font-family:var(--font-num);font-size:30px;line-height:1">{{k.v}}</span><span style="font-size:13px;color:var(--ink-2)">{{k.l}}</span></div>
+        </sc-for>
+      </div>
+      <section style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;background:var(--surface)">
+        <span style="font-weight:600">7 ngày qua</span>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;align-items:end;height:140px">
+          <sc-for list="{{week}}" as="b" hint-placeholder-count="7">
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%">
+              <span style="width:100%;max-width:40px;height:{{b.h}};border-radius:999px;background:{{b.bg}};border:{{b.border}}"></span>
+              <span style="font-size:12px;color:var(--ink-3)">{{b.l}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+      <section style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;border:2px solid var(--line)">
+        <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Trọng tâm cho tuần tới</span>
+        <sc-for list="{{goals}}" as="g" hint-placeholder-count="3">
+          <label style="display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600"><span style="width:10px;height:10px;border-radius:50%;background:{{g.color}}"></span>{{g.title}}</span>
+            <input placeholder="{{g.next}}" style="height:46px;padding:0 18px;border-radius:999px;border:2px solid var(--line);background:var(--paper);font-size:14.5px;outline:0">
+          </label>
+        </sc-for>
+      </section>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:900,&quot;height&quot;:900},&quot;which&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;goals&quot;,&quot;weekly&quot;],&quot;default&quot;:&quot;goals&quot;,&quot;tsType&quot;:&quot;'goals'|'weekly'&quot;},&quot;days&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Day[]&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const days = (this.props.days || []).slice(-7), compact = !!this.props.compact;
+    const goals = [
+      { title: 'Chuyển sang Data Engineer trước 6/2027', horizon: '9 tháng', metric: 'Lộ trình 12 module', pct: 42, color: 'var(--sage)', focus: 'Hoàn thành chương 5–6 Databricks', linked: '18 việc đã gắn · 14 xong', next: 'Ví dụ: Làm project pipeline đầu tiên' },
+      { title: 'Chạy half marathon tháng 12', horizon: '10 tuần', metric: 'Quãng chạy dài nhất 12/21km', pct: 57, color: 'var(--accent)', focus: '3 buổi chạy, 1 buổi dài 12km', linked: '9 việc đã gắn · 8 xong', next: 'Ví dụ: Buổi dài 14km Chủ Nhật' },
+      { title: 'Đọc 24 cuốn sách năm 2026', horizon: 'Đến 31/12', metric: '17/24 cuốn', pct: 71, color: 'var(--heat-4)', focus: 'Đọc xong “Atomic Habits”', linked: '21 việc đã gắn · 19 xong', next: 'Ví dụ: 20 trang mỗi tối' }
+    ].map(g => ({ ...g, pctW: g.pct + '%' }));
+    const pl = days.filter(d => d.hasPlan && !d.isToday);
+    const avg = pl.length ? Math.round(pl.reduce((a, d) => a + d.pct, 0) / pl.length) : 0;
+    const lb = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+    return {
+      isGoals: this.props.which !== 'weekly', isWeekly: this.props.which === 'weekly', h1Size: compact ? '30px' : '44px', goals,
+      weekStats: [{ v: avg + '%', l: 'hoàn thành TB' }, { v: days.filter(d => d.hasPlan).length + '/7', l: 'ngày có plan' }, { v: '11/14', l: 'MIT hoàn thành' }],
+      week: days.map(d => ({ l: lb[d.dow], h: d.hasPlan ? Math.max(8, d.pct * 1.1) + 'px' : '12px', bg: d.hasPlan ? (d.isToday ? 'var(--accent)' : 'var(--sage)') : 'transparent', border: d.hasPlan ? '0' : '1.5px dashed var(--ink-3)' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

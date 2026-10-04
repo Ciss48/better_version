@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:10px;font-family:var(--font-ui);color:var(--ink)">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <button onClick="{{prev}}" aria-label="Tháng trước" style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer;opacity:{{prevOp}}" style-hover="background:var(--hover)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg></button>
+    <span style="font-size:14.5px;font-weight:600">{{title}}</span>
+    <button onClick="{{next}}" aria-label="Tháng sau" style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer" style-hover="background:var(--hover)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></button>
+  </div>
+  <div role="grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px">
+    <sc-for list="{{dows}}" as="w" hint-placeholder-count="7"><span style="height:28px;display:grid;place-items:center;font-size:12px;color:var(--ink-3)">{{w}}</span></sc-for>
+    <sc-for list="{{cells}}" as="c" hint-placeholder-count="35">
+      <button role="gridcell" aria-selected="{{c.sel}}" aria-disabled="{{c.disabled}}" onClick="{{c.onClick}}" style="height:40px;border-radius:999px;border:0;background:{{c.bg}};color:{{c.color}};font-size:14px;font-weight:{{c.weight}};opacity:{{c.op}};cursor:{{c.cursor}};box-shadow:{{c.ring}};transition:background .12s" style-hover="{{c.hover}}">{{c.d}}</button>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:340,&quot;height&quot;:340},&quot;selected&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;min&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;2026-10-04&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onSelect&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(key:string)=&gt;void&quot;}}">
+class Component extends DCLogic {
+  state = { y: 2026, m: 9 };
+  componentDidMount() { const k = this.props.selected; if (k) { const [y, m] = k.split('-').map(Number); this.setState({ y, m: m - 1 }); } }
+  renderVals() {
+    const s = this.state, sel = this.props.selected || '', today = '2026-10-03', min = this.props.min || '2026-10-04';
+    const pad = n => String(n).padStart(2, '0'), key = (y, m, d) => y + '-' + pad(m + 1) + '-' + pad(d);
+    const first = new Date(s.y, s.m, 1), off = (first.getDay() + 6) % 7, nd = new Date(s.y, s.m + 1, 0).getDate();
+    const cells = [];
+    const total = Math.ceil((off + nd) / 7) * 7;
+    for (let i = 0; i < total; i++) {
+      const dt = new Date(s.y, s.m, 1 - off + i), k = key(dt.getFullYear(), dt.getMonth(), dt.getDate());
+      const outside = dt.getMonth() !== s.m, disabled = k < min, isSel = k === sel, isToday = k === today;
+      cells.push({ d: dt.getDate(), sel: isSel ? 'true' : 'false', disabled: disabled ? 'true' : 'false',
+        bg: isSel ? 'var(--accent)' : isToday ? 'var(--accent-soft)' : 'transparent',
+        color: isSel ? 'var(--on-accent)' : outside ? 'var(--ink-3)' : 'var(--ink)', weight: isSel || isToday ? 600 : 400,
+        op: disabled ? 0.35 : outside ? 0.6 : 1, cursor: disabled ? 'not-allowed' : 'pointer', ring: 'none',
+        hover: disabled || isSel ? '' : 'background:var(--hover)',
+        onClick: () => { if (!disabled && this.props.onSelect) this.props.onSelect(k); } });
+    }
+    const atMin = s.y === 2026 && s.m <= 9;
+    return {
+      title: 'Tháng ' + (s.m + 1) + ', ' + s.y, dows: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'], cells, prevOp: atMin ? 0.35 : 1,
+      prev: () => { if (!atMin) this.setState(st => st.m === 0 ? { y: st.y - 1, m: 11 } : { m: st.m - 1 }); },
+      next: () => this.setState(st => st.m === 11 ? { y: st.y + 1, m: 0 } : { m: st.m + 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

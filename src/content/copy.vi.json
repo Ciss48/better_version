@@ -1,0 +1,264 @@
+{
+  "app": { "name": "Better Every Day", "tagline": "Tiến bộ 1% mỗi ngày" },
+  "nav": {
+    "today": "Hôm nay", "ritual": "Nghi thức tối", "stats": "Hành trình", "history": "Lịch sử",
+    "goals": "Mục tiêu", "weekly": "Tổng kết tuần", "settings": "Cài đặt", "more": "Thêm",
+    "tabs": { "today": "Hôm nay", "ritual": "Buổi tối", "stats": "Hành trình", "history": "Lịch sử", "more": "Thêm" },
+    "tag": { "phase2": "Phase 2" },
+    "theme": { "toDark": "Giao diện tối", "toLight": "Giao diện sáng", "aria": "Đổi giao diện" },
+    "consistency": { "kicker": "Nhất quán · 30 ngày", "unit": "ngày có plan", "dayPlanned": "{date} · {pct}%", "dayNoPlan": "{date} · không có plan" },
+    "shortcuts": { "add": "Thêm", "matrix": "Ma trận", "ritual": "Buổi tối", "theme": "Giao diện" }
+  },
+  "common": {
+    "continue": "Tiếp tục", "back": "Quay lại", "skip": "Bỏ qua", "later": "Để sau", "cancel": "Hủy",
+    "readOnly": "Chỉ đọc", "mit": "MIT", "important": "Quan trọng", "urgent": "Gấp", "adhoc": "Phát sinh",
+    "size": "Độ lớn", "done": "Hoàn thành", "escHint": "Esc"
+  },
+  "date": {
+    "weekdayShort": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
+    "weekdayLong": ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"],
+    "longFormat": "{weekday}, {d} tháng {m}",
+    "shortFormat": "{weekdayShort} {d}/{m}",
+    "month": "Tháng {m}, {y}",
+    "monthShort": "thg {m}"
+  },
+  "today": {
+    "kicker": "Hôm nay · {time}",
+    "kickerLateNight": "Vẫn là hôm nay · {time} sáng {weekdayLong}",
+    "lateNightPill": "Ngày của bạn kết thúc lúc {dayEnd}",
+    "planStatus": {
+      "locked": "Plan đã khóa lúc {lockAt}",
+      "lockedHint": "Việc thêm mới sẽ vào nhóm Phát sinh",
+      "open": "Đang mở · khóa lúc {lockAt}",
+      "openHint": "còn {timeLeft} để chỉnh plan"
+    },
+    "progress": { "count": "{done}/{total} việc đã định", "weighted": "có trọng số", "tooltip": "Có trọng số: MIT ×2 · L=3, M=2, S=1. Việc phát sinh không tính vào tỉ lệ." },
+    "ritualBanner": { "title": "Ngày sắp khép lại", "body": "5 phút nhìn lại hôm nay và chuẩn bị cho ngày mai nhé?", "cta": "Bắt đầu nghi thức tối" },
+    "planReminder": { "title": "Chưa có plan cho {tomorrow}", "body": "Cửa sổ lập plan đang mở đến {lockAt} {weekdayLong}. Ba phút là đủ.", "cta": "Lập plan ngày mai", "dismiss": "Để sau" },
+    "missed": { "title": "Lỡ một ngày không sao. Đừng lỡ hai ngày liền.", "body": "Hôm qua trang sổ còn trống — chuyện bình thường của ai cũng vậy. Bắt đầu lại thật nhỏ: một việc cho hôm nay là đủ." },
+    "complete": { "title": "Trọn vẹn 100%.", "body": "Mọi việc đã định hôm nay đều xong. Nghỉ ngơi xứng đáng — rồi khép ngày bằng vài dòng phản tỉnh." },
+    "welcome": {
+      "title": "Chào bạn — đây là trang đầu tiên.",
+      "body": "Better Every Day đo khoảng cách giữa điều bạn định làm và điều bạn thực sự làm. Mỗi ngày gần hơn một chút là đủ.",
+      "steps": [
+        { "title": "Viết plan", "body": "Tối hôm trước, hoặc trước 10:00 sáng" },
+        { "title": "Làm và tick", "body": "Ưu tiên 1–3 việc MIT" },
+        { "title": "Nhìn lại buổi tối", "body": "5 phút, rồi chuẩn bị ngày mai" }
+      ],
+      "cta": "Thiết lập trong 1 phút",
+      "ctaHint": "hoặc gõ việc đầu tiên ngay bên dưới"
+    },
+    "input": {
+      "placeholder": "Thêm việc… rồi nhấn Enter",
+      "addAria": "Thêm",
+      "syntax": { "mit": "MIT", "important": "Quan trọng", "urgent": "Gấp", "size": "Độ lớn" },
+      "lockedHint": "· việc mới sẽ vào Phát sinh",
+      "previewSize": "Độ lớn {size}"
+    },
+    "view": { "list": "Danh sách", "matrix": "Ma trận" },
+    "empty": { "title": "Hôm nay vẫn là một trang trắng.", "body": "Chọn 1–3 việc quan trọng nhất trước {lockAt}. Gõ một dòng ở trên, thêm dấu * để đánh dấu MIT." },
+    "mit": { "title": "Việc quan trọng nhất", "count": "{n}/3 MIT", "empty": "Chưa có MIT. Bấm vào một việc rồi chọn ★ MIT — tối đa 3 việc." },
+    "others": { "title": "Các việc khác" },
+    "adhoc": { "tag": "Phát sinh", "note": "Thêm sau giờ khóa · {done}/{total} xong · không tính vào tỉ lệ" },
+    "task": {
+      "checkAria": "Đánh dấu hoàn thành",
+      "addedAt": "thêm lúc {time}",
+      "postponed": "đã dời {n} lần",
+      "postponedWarn": "Dời {n} lần · chia nhỏ hoặc cân nhắc bỏ?",
+      "movedTo": "Đã dời → {date}",
+      "dropped": "Đã bỏ",
+      "toolbar": { "mit": "★ MIT", "important": "Quan trọng", "urgent": "Gấp", "moveTomorrow": "Dời sang mai", "moveOther": "Ngày khác…", "drop": "Bỏ", "restore": "Khôi phục" }
+    },
+    "matrix": {
+      "hintDesktop": "Kéo thả việc giữa các ô để đổi cờ Quan trọng / Gấp.",
+      "hintMobile": "Chạm vào một việc để chuyển sang ô khác.",
+      "dropHere": "Kéo việc vào đây",
+      "q1": { "title": "Làm ngay", "sub": "Quan trọng · Gấp" },
+      "q2": { "title": "Lên lịch", "sub": "Quan trọng · Không gấp", "note": "Vùng của tiến bộ dài hạn" },
+      "q3": { "title": "Làm nhanh hoặc nhờ", "sub": "Không quan trọng · Gấp" },
+      "q4": { "title": "Cân nhắc bỏ", "sub": "Không quan trọng · Không gấp" },
+      "adhocTag": "phát sinh",
+      "sheet": { "title": "Chuyển sang ô…", "current": "Đang ở đây", "cancel": "Hủy" }
+    },
+    "toast": {
+      "addedAdhoc": "Đã thêm vào nhóm Phát sinh",
+      "mitFullOnAdd": "Đã có đủ 3 MIT — việc này thêm như việc thường",
+      "mitMax": "Tối đa 3 MIT — bỏ bớt một việc trước nhé",
+      "complete": "Trọn vẹn 100% kế hoạch hôm nay. Làm tốt lắm!",
+      "movedTo": "Đã dời sang {date}",
+      "quadrantMoved": "Đã chuyển sang “{quadrant}”",
+      "dayClosed": "Đã đóng ngày. Hẹn gặp lại sáng mai!",
+      "onboarded": "Bắt đầu thôi — viết việc đầu tiên nhé"
+    }
+  },
+  "datePicker": {
+    "chips": { "tomorrow": "Mai", "nextMonday": "Thứ 2 tới", "weekend": "Cuối tuần", "nextWeek": "+1 tuần", "pick": "Chọn ngày…", "drop": "Bỏ" },
+    "chipWithDate": "{label} · {d}/{m}",
+    "prevMonth": "Tháng trước", "nextMonth": "Tháng sau",
+    "sheet": { "title": "Dời sang ngày khác", "confirm": "Dời sang {date}", "confirmEmpty": "Chọn một ngày", "cancel": "Hủy" }
+  },
+  "ritual": {
+    "kicker": "Nghi thức buổi tối",
+    "meta": "{date} · {time}",
+    "later": "Để sau",
+    "steps": ["Nhìn lại hôm nay", "Phản tỉnh", "Plan ngày mai"],
+    "step1": {
+      "title": "Hôm nay đã diễn ra thế nào?",
+      "body": "Tick những gì đã xong. Với việc còn dang dở, chọn dời hoặc bỏ — không có lựa chọn nào sai cả.",
+      "nudge": "Việc này đã dời {n} lần. Thử thu nhỏ thành một bước 15 phút cho ngày mai — hoặc bỏ hẳn, đó cũng là một quyết định tốt.",
+      "remaining": "Còn {n} việc cần quyết định",
+      "allHandled": "Đã xử lý hết — sẵn sàng khép ngày",
+      "cta": "Tiếp tục",
+      "blocked": "Còn việc chưa xử lý — dời hoặc bỏ nhé"
+    },
+    "step2": {
+      "title": "Một chút phản tỉnh",
+      "body": "Cả ba đều tùy chọn — một dòng là đủ.",
+      "energy": "Năng lượng hôm nay",
+      "energyLevels": ["Cạn kiệt", "Hơi mệt", "Bình thường", "Khá tốt", "Tràn đầy"],
+      "good": { "label": "Hôm nay bạn làm tốt điều gì?", "placeholder": "Ví dụ: Vẫn chạy bộ dù trời mưa" },
+      "improve": { "label": "Ngày mai muốn cải thiện điều gì?", "placeholder": "Ví dụ: Làm việc khó nhất trước 9 giờ" },
+      "ctaEmpty": "Bỏ qua", "cta": "Tiếp tục"
+    },
+    "step3": {
+      "title": "Plan cho {tomorrow}",
+      "body": "Cửa sổ lập plan đang mở đến {lockAt} sáng mai — bạn có thể quay lại chỉnh bất cứ lúc nào.",
+      "count": "{n} việc · bấm ★ để chọn MIT",
+      "mitCount": "{n}/3 MIT",
+      "carried": "Dời từ hôm nay",
+      "carriedWarn": "dời {n} lần · thử chia nhỏ?",
+      "empty": "Chưa có việc nào cho ngày mai. Bắt đầu bằng một việc nhỏ nhé.",
+      "placeholder": "Việc cho ngày mai… Enter  (* = MIT)",
+      "mitMax": "Tối đa 3 MIT cho ngày mai",
+      "mitFullOnAdd": "Đã đủ 3 MIT cho ngày mai",
+      "cta": "Hoàn tất & đóng ngày"
+    },
+    "summary": {
+      "kicker": "Đã khép lại {date}",
+      "headline": { "p100": "Một ngày trọn vẹn.", "p75": "Một ngày vững vàng.", "p50": "Tiến thêm một bước — đều đặn là đủ.", "low": "Có những ngày như vậy. Mai bắt đầu lại, nhẹ nhàng thôi." },
+      "body": "Bạn hoàn thành {done}/{total} việc đã định{adhocPart}.",
+      "bodyAdhocPart": ", cùng {n} việc phát sinh",
+      "bodyDropped": "Bỏ đi một việc không còn cần cũng là kỷ luật.",
+      "bodyNoDrop": "Những gì dang dở đã có chỗ của nó.",
+      "stats": { "done": "việc đã định hoàn thành", "moved": "việc được dời", "dropped": "việc được bỏ", "energy": "năng lượng" },
+      "tomorrow": "Ngày mai đã sẵn sàng · {n} việc, {mit} MIT",
+      "consistency": "Bạn đã có plan {n}/30 ngày gần đây. Nhất quán quan trọng hơn hoàn hảo.",
+      "cta": "Về trang Hôm nay"
+    }
+  },
+  "stats": {
+    "kicker": "Hành trình phát triển",
+    "title": "Tiến bộ 1% mỗi ngày",
+    "range": "{period} gần đây · tính đến {date}",
+    "period": { "w26": "6 tháng", "w13": "3 tháng" },
+    "rangeNew": "Bạn mới bắt đầu {n} ngày trước.",
+    "rangeToday": "Hành trình của bạn bắt đầu từ hôm nay.",
+    "sparse": { "title": "Hành trình mới bắt đầu.", "body": "Thống kê bắt đầu có ý nghĩa sau 7 ngày có plan. Bạn đã có {n}/7 — cứ tiếp tục, con số sẽ tự kể câu chuyện." },
+    "cards": {
+      "avg7": "Hoàn thành TB · 7 ngày",
+      "avg30": "Hoàn thành TB · 30 ngày",
+      "consistency": { "label": "Điểm nhất quán", "note": "Số ngày có plan — không reset khi lỡ một ngày" },
+      "q2": { "label": "Quan trọng nhưng không gấp", "note": "Vùng của tiến bộ dài hạn" },
+      "adhoc": { "label": "Việc phát sinh", "note": "Thêm sau giờ khóa plan" },
+      "moved": { "label": "Việc bị dời", "note": "Trên tổng số việc 30 ngày" },
+      "deltaUp": "+{n} điểm so với kỳ trước",
+      "deltaDown": "−{n} điểm so với kỳ trước",
+      "empty": "—"
+    },
+    "heatmap": { "title26": "Bản đồ 26 tuần", "title13": "Bản đồ 13 tuần", "legendNone": "Không plan", "legendLow": "Thấp", "legendHigh": "Cao", "hint": "Bấm vào một ngày để xem lại trong Lịch sử.", "cellPlanned": "{date} · {pct}%", "cellNoPlan": "{date} · không có plan", "cellBefore": "Chưa dùng app", "rows": ["T2", "", "T4", "", "T6", "", "CN"] },
+    "weekday": { "title": "Theo thứ trong tuần", "sub": "% hoàn thành trung bình có trọng số" },
+    "insights": {
+      "title": "Điều dữ liệu nói với bạn",
+      "evening": "Những ngày bạn plan từ tối hôm trước, tỉ lệ hoàn thành cao hơn {n}% so với plan buổi sáng.",
+      "mit": "Bạn hoàn thành {mit}% việc MIT, so với {other}% việc thường — chọn MIT đang có tác dụng.",
+      "weekday": "{best} là ngày bạn làm tốt nhất ({bestPct}%). {worst} nhẹ hơn ({worstPct}%) — thử đặt ít việc hơn vào ngày này.",
+      "energy": "Ngày năng lượng 4–5, bạn hoàn thành {high}%; ngày mệt chỉ {low}%. Giấc ngủ có thể là MIT ẩn.",
+      "empty": "Insight sẽ xuất hiện sau khoảng hai tuần dữ liệu. Hiện tại, chỉ cần giữ nhịp viết plan mỗi ngày."
+    }
+  },
+  "history": {
+    "kicker": "Lịch sử",
+    "title": "Những trang đã viết",
+    "monthSummary": "{planned}/{total} ngày có plan · TB {avg}%",
+    "monthEmpty": "Chưa có dữ liệu",
+    "readOnly": "Chỉ đọc",
+    "planAtEvening": "Plan lúc {time} tối hôm trước",
+    "planAtMorning": "Plan lúc {time} sáng",
+    "plannedCount": "{n} việc đã định",
+    "today": "Ngày này vẫn đang diễn ra.",
+    "todayCta": "Mở Hôm nay",
+    "noPlan": "Ngày này không có plan. Không sao cả — điều quan trọng là bạn đã quay lại ngay hôm sau.",
+    "movedTo": "dời sang {date}",
+    "dropped": "đã bỏ",
+    "reflection": { "title": "Phản tỉnh", "energy": "Năng lượng {n}/5", "good": "Làm tốt · ", "improve": "Cải thiện · " },
+    "noReflection": "Hôm đó bạn bỏ qua phần viết — cũng được.",
+    "todayCell": "nay"
+  },
+  "settings": {
+    "kicker": "Cài đặt",
+    "title": "Nhịp ngày của bạn",
+    "window": {
+      "title": "Cửa sổ lập plan",
+      "body": "Plan cho ngày D được viết trong khoảng này. Sau giờ khóa, việc thêm mới sẽ vào nhóm Phát sinh.",
+      "habit": "Thói quen", "habitEvening": "Tối hôm trước", "habitMorning": "Đầu ngày",
+      "start": "Mở cửa sổ", "lock": "Khóa plan lúc", "lockOption": "{time} ngày D",
+      "startOptionPrev": "{time} hôm trước", "startOptionSame": "{time} cùng ngày",
+      "timelineStart": "12:00 hôm trước", "timelineMid": "00:00", "timelineEnd": "12:00 ngày D",
+      "sentence": "Plan cho ngày D mở từ {start} đến {lock} (vạch cam: {dayEnd} — hôm trước kết thúc)."
+    },
+    "dayEnd": { "title": "Giờ kết thúc một ngày", "body": "Cho người thức khuya: tick việc trước giờ này vẫn được tính cho hôm trước." },
+    "reminders": { "title": "Nhắc nhở", "toggleAria": "Bật/tắt nhắc nhở", "plan": "Nhắc lập plan", "ritual": "Nhắc nghi thức buổi tối" },
+    "theme": { "title": "Giao diện", "light": "Sáng", "dark": "Tối", "system": "Theo hệ thống" },
+    "weights": { "title": "Cách tính tỉ lệ hoàn thành", "body": "Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT. Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.", "onboarding": "Xem lại hướng dẫn bắt đầu" }
+  },
+  "onboarding": {
+    "skip": "Bỏ qua, dùng mặc định",
+    "stepLabel": "Bước {n}/3",
+    "step1": {
+      "title": "Bạn thường lập plan lúc nào?",
+      "body": "Cả hai đều ổn — app hỗ trợ cả hai, bạn đổi được sau.",
+      "evening": { "title": "Tối hôm trước", "body": "Viết plan cho ngày mai trong nghi thức buổi tối. Sáng dậy là biết ngay việc đầu tiên.", "window": "Cửa sổ: 18:00 hôm trước → 10:00" },
+      "morning": { "title": "Đầu ngày", "body": "Ngồi xuống với ly cà phê, viết plan trước khi mở email.", "window": "Cửa sổ: 06:00 → 10:00 cùng ngày" }
+    },
+    "step2": { "title": "Khi nào nên nhắc bạn?", "body": "Chỉ hai lời nhắc nhẹ mỗi ngày, không hơn.", "plan": "Nhắc lập plan", "ritual": "Nhắc nghi thức buổi tối" },
+    "step3": {
+      "title": "Một ngày của bạn kết thúc lúc mấy giờ?",
+      "body": "Thức khuya cũng không sao — ngày chỉ khép lại khi bạn đi ngủ.",
+      "midnight": "Nửa đêm",
+      "example": {
+        "00:00": "Ngày khép lại lúc nửa đêm. Việc tick sau 00:00 sẽ tính cho ngày mới.",
+        "01:00": "Tick việc lúc 00:40 vẫn được tính cho hôm trước.",
+        "02:00": "Tick việc lúc 01:30 sáng vẫn được tính cho hôm trước.",
+        "03:00": "Tick việc lúc 02:30 sáng vẫn được tính cho hôm trước — hợp với cú đêm.",
+        "04:00": "Tick việc lúc 03:30 sáng vẫn được tính cho hôm trước."
+      }
+    },
+    "done": {
+      "title": "Sẵn sàng rồi.",
+      "rows": { "habit": "Thói quen", "lock": "Khóa plan", "reminders": "Nhắc nhở", "dayEnd": "Kết thúc ngày" },
+      "habitEvening": "Plan tối hôm trước", "habitMorning": "Plan đầu ngày", "lockValue": "{time} mỗi sáng", "dayEndValue": "{time} sáng",
+      "tip": "Mẹo nhỏ: bắt đầu với 3 việc thôi. Một ngày làm đủ 3 việc tốt hơn một ngày định 10 việc.",
+      "cta": "Viết plan đầu tiên"
+    }
+  },
+  "more": { "title": "Thêm" },
+  "phase2": {
+    "tag": "Phase 2",
+    "notice": "Thiết kế sơ bộ — không thuộc MVP, chưa phát triển thêm. Dữ liệu và ô nhập chỉ để minh họa.",
+    "goals": {
+      "kicker": "Mục tiêu",
+      "title": "Việc hôm nay nối về đâu?",
+      "body": "Mục tiêu dài hạn → trọng tâm tuần → task mỗi ngày. Khi thêm việc, gõ @tên-mục-tiêu để gắn.",
+      "focus": "Trọng tâm tuần này",
+      "linked": "{n} việc đã gắn · {done} xong",
+      "add": "+ Thêm mục tiêu"
+    },
+    "weekly": {
+      "kicker": "Tổng kết tuần · Chủ Nhật",
+      "title": "Tuần {from} – {to}",
+      "stats": { "avg": "hoàn thành TB", "planned": "ngày có plan", "mit": "MIT hoàn thành" },
+      "chart": "7 ngày qua",
+      "nextFocus": "Trọng tâm cho tuần tới"
+    }
+  }
+}

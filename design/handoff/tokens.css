@@ -1,0 +1,227 @@
+/* Better Every Day — design tokens
+   Tailwind CSS v4 + shadcn/ui. Import once in your global CSS after `@import "tailwindcss";`
+   Theme switch: add class `dark` OR attribute data-theme="dark" on <html>.
+   Base palette derives from the "Organic" design system (cream / terracotta / sage).
+   Fonts: Fraunces (display, SOFT 100), Be Vietnam Pro (UI), Caprasimo (numerals + logo only — no Vietnamese glyphs). */
+
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  /* ── Surfaces ── */
+  --bg: #f5ead8;            /* app background, sidebar */
+  --paper: #f9f4ed;         /* main page sheet, inputs, popovers */
+  --surface: #ebddc5;       /* cards: MIT section, matrix quadrants, review rows, stat cards */
+  /* ── Text ── */
+  --ink: #201e1d;           /* primary text */
+  --ink-2: #474238;         /* secondary text */
+  --ink-3: #645c50;         /* muted / meta / placeholder (≥4.5:1 on paper) */
+  /* ── Lines & states ── */
+  --line: color-mix(in srgb, #201e1d 16%, transparent);    /* borders, dashed "Phát sinh" group */
+  --line-2: color-mix(in srgb, #201e1d 7%, transparent);   /* progress track, neutral chips */
+  --hover: color-mix(in srgb, #201e1d 5%, transparent);    /* hover fill for rows / ghost buttons */
+  /* ── Accent (terracotta) — primary action, MIT ── */
+  --accent: #c67139;
+  --accent-hover: #b2622d;
+  --accent-pressed: #8c491a;
+  --accent-soft: #fff2eb;   /* tinted fill: MIT tag, gentle warnings, reminder banner */
+  --accent-ink: #8c491a;    /* text on accent-soft */
+  --on-accent: #f9f4ed;     /* text/icon on accent or success fill */
+  /* ── Success (sage) — done, progress ── */
+  --success: #7a8a5e;
+  --success-soft: #f0fae1;
+  --success-ink: #56633f;
+  /* ── Warning (= accent-soft family, never red: non-punitive) ── */
+  --warning-soft: #fff2eb;
+  --warning-ink: #8c491a;
+  /* ── Matrix quadrants ── */
+  --matrix-q1: #ebddc5;     /* Làm ngay — quan trọng & gấp */
+  --matrix-q2: #ebddc5;     /* Lên lịch — quan trọng, không gấp (badge uses success-soft) */
+  --matrix-q3: #ebddc5;     /* Làm nhanh hoặc nhờ */
+  --matrix-q4: #ebddc5;     /* Cân nhắc bỏ */
+  --matrix-drop: #f0fae1;   /* drop-target fill */
+  --matrix-drop-ring: #7a8a5e;
+  --matrix-current: #fff2eb;/* mobile sheet: current quadrant */
+  /* ── Heatmap (completion %) ── */
+  --heat-empty: color-mix(in srgb, #201e1d 7%, transparent); /* before first use */
+  --heat-none-ring: #645c50;  /* day with no plan → 1.5px dashed ring, transparent fill */
+  --heat-1: #e1eecc;        /* < 40% */
+  --heat-2: #ccdbb2;        /* 40–59% */
+  --heat-3: #8fa073;        /* 60–79% */
+  --heat-4: #56633f;        /* ≥ 80% */
+  /* ── Scrim ── */
+  --scrim: color-mix(in srgb, #201e1d 38%, transparent);
+
+  /* ── shadcn/ui aliases ── */
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: var(--on-accent);
+  --secondary: var(--line-2);
+  --secondary-foreground: var(--ink);
+  --muted: var(--line-2);
+  --muted-foreground: var(--ink-3);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--accent);
+  --destructive: var(--accent-pressed); /* "Bỏ" is never red */
+  --radius: 1rem;
+}
+
+.dark, [data-theme="dark"] {
+  --bg: #1c1a17;
+  --paper: #24211d;
+  --surface: #2e2b25;
+  --ink: #f5ead8;
+  --ink-2: #dcd3c4;
+  --ink-3: #b5ab9a;
+  --line: color-mix(in srgb, #f5ead8 16%, transparent);
+  --line-2: color-mix(in srgb, #f5ead8 8%, transparent);
+  --hover: color-mix(in srgb, #f5ead8 6%, transparent);
+  --accent: #f6a06b;
+  --accent-hover: #ffc6a5;
+  --accent-pressed: #d67f48;
+  --accent-soft: color-mix(in srgb, #d67f48 22%, transparent);
+  --accent-ink: #ffc6a5;
+  --on-accent: #1c1a17;
+  --success: #aebf92;
+  --success-soft: color-mix(in srgb, #8fa073 22%, transparent);
+  --success-ink: #ccdbb2;
+  --warning-soft: color-mix(in srgb, #d67f48 22%, transparent);
+  --warning-ink: #ffc6a5;
+  --matrix-q1: #2e2b25; --matrix-q2: #2e2b25; --matrix-q3: #2e2b25; --matrix-q4: #2e2b25;
+  --matrix-drop: color-mix(in srgb, #8fa073 22%, transparent);
+  --matrix-drop-ring: #aebf92;
+  --matrix-current: color-mix(in srgb, #d67f48 22%, transparent);
+  --heat-empty: color-mix(in srgb, #f5ead8 8%, transparent);
+  --heat-none-ring: #b5ab9a;
+  --heat-1: #3d472b; --heat-2: #56633f; --heat-3: #8fa073; --heat-4: #ccdbb2;
+  --scrim: color-mix(in srgb, #000 50%, transparent);
+}
+
+@theme inline {
+  /* Colors → bg-paper, text-ink-3, border-line, bg-heat-3 … */
+  --color-bg: var(--bg);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-hover: var(--hover);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-pressed: var(--accent-pressed);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-ink: var(--success-ink);
+  --color-warning-soft: var(--warning-soft);
+  --color-warning-ink: var(--warning-ink);
+  --color-matrix-q1: var(--matrix-q1);
+  --color-matrix-q2: var(--matrix-q2);
+  --color-matrix-q3: var(--matrix-q3);
+  --color-matrix-q4: var(--matrix-q4);
+  --color-matrix-drop: var(--matrix-drop);
+  --color-matrix-drop-ring: var(--matrix-drop-ring);
+  --color-matrix-current: var(--matrix-current);
+  --color-heat-empty: var(--heat-empty);
+  --color-heat-none: var(--heat-none-ring);
+  --color-heat-1: var(--heat-1);
+  --color-heat-2: var(--heat-2);
+  --color-heat-3: var(--heat-3);
+  --color-heat-4: var(--heat-4);
+  --color-scrim: var(--scrim);
+  /* shadcn */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  /* Typography */
+  --font-display: "Fraunces", Georgia, serif;           /* always with font-variation-settings: "SOFT" 100; weight 600 */
+  --font-sans: "Be Vietnam Pro", system-ui, sans-serif;  /* UI + body */
+  --font-num: "Caprasimo", Georgia, serif;              /* numerals, %, logo. Never for Vietnamese text */
+  --font-mono: ui-monospace, Menlo, monospace;          /* kbd, quick-add syntax */
+
+  --text-display-xl: 2.75rem;   --text-display-xl--line-height: 1.05; --text-display-xl--letter-spacing: -0.02em;   /* 44 · page H1 desktop */
+  --text-display-lg: 2.125rem;  --text-display-lg--line-height: 1.1;  --text-display-lg--letter-spacing: -0.015em;  /* 34 · ritual step title desktop */
+  --text-display-md: 1.875rem;  --text-display-md--line-height: 1.05; /* 30 · page H1 mobile */
+  --text-display-sm: 1.3125rem; --text-display-sm--line-height: 1.2;  /* 21 · section / card title */
+  --text-display-xs: 1.1875rem; --text-display-xs--line-height: 1.2;  /* 19 · quadrant / sheet title */
+  --text-num-xl: 7rem;          --text-num-xl--line-height: 0.85;     /* 112 · summary % (mobile 84) */
+  --text-num-lg: 2.75rem;       --text-num-lg--line-height: 0.9;      /* 44 · today progress % */
+  --text-num-md: 2.125rem;      --text-num-md--line-height: 1;        /* 34 · stat card value */
+  --text-num-sm: 1.625rem;      --text-num-sm--line-height: 1;        /* 26 · summary stat */
+  --text-body-lg: 0.96875rem;   --text-body-lg--line-height: 1.45;    /* 15.5 · task title, inputs */
+  --text-body: 0.9375rem;       --text-body--line-height: 1.55;       /* 15 · default */
+  --text-body-sm: 0.875rem;     --text-body-sm--line-height: 1.5;     /* 14 · descriptions */
+  --text-caption: 0.8125rem;    --text-caption--line-height: 1.4;     /* 13 · meta */
+  --text-label: 0.75rem;        --text-label--line-height: 1.2; --text-label--letter-spacing: 0.08em; /* 12 · 600 uppercase kicker */
+  --text-micro: 0.6875rem;      --text-micro--line-height: 1;         /* 11 · tags, badges */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing: Tailwind 4px grid (p-1 = 4px). Used steps: 1,1.5,2,2.5,3,3.5,4,5,6,7,11 */
+  --spacing: 0.25rem;
+
+  /* Radius */
+  --radius-sm: 0.5rem;      /* 8  · kbd */
+  --radius-row: 1rem;       /* 16 · matrix chip, small rows */
+  --radius-item: 1.125rem;  /* 18 · TaskItem hover */
+  --radius-tile: 1.375rem;  /* 22 · review rows, summary stats */
+  --radius-card: 1.75rem;   /* 28 · banners, quadrants */
+  --radius-panel: 1.875rem; /* 30 · MIT section, main paper sheet, bottom sheet top corners */
+  --radius-pill: 999px;     /* every button, input, tag, segmented control */
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2e2b25 14%, transparent);   /* draggable chip, active segment */
+  --shadow-md: 0 3px 10px color-mix(in srgb, #2e2b25 16%, transparent);
+  --shadow-lg: 0 12px 32px color-mix(in srgb, #2e2b25 22%, transparent);  /* popover, sheet, toast */
+
+  /* Motion — see motion.md */
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.8, 0.5, 1);
+  --ease-spring-soft: cubic-bezier(0.34, 1.6, 0.5, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-check: 280ms;
+  --duration-sheet: 280ms;
+  --duration-bar: 300ms;
+  --duration-progress: 600ms;
+
+  /* Breakpoint: compact layout when the APP CONTAINER is < 720px (sidebar → bottom tabs) */
+  --breakpoint-app: 45rem;
+}
+
+/* Focus ring (Organic): never browser blue */
+:where(button, a, input, select, textarea, [role="gridcell"]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}

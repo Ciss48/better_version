@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:24px;max-width:760px">
+  <header style="display:flex;flex-direction:column;gap:10px">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Cài đặt</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Nhịp ngày của bạn</h1>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:18px;padding:22px;border-radius:30px;background:var(--surface)">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Cửa sổ lập plan</h2>
+      <span style="font-size:14px;color:var(--ink-2);text-wrap:pretty">Plan cho ngày D được viết trong khoảng này. Sau giờ khóa, việc thêm mới sẽ vào nhóm Phát sinh.</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <span style="font-size:13px;font-weight:600">Thói quen</span>
+      <div style="display:flex;flex-wrap:wrap;padding:4px;gap:2px;border-radius:999px;background:var(--line-2);align-self:flex-start">
+        <sc-for list="{{habitOpts}}" as="o" hint-placeholder-count="2"><button onClick="{{o.onClick}}" style="height:40px;padding:0 16px;border-radius:999px;border:0;background:{{o.bg}};color:{{o.color}};box-shadow:{{o.shadow}};font-size:13.5px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Mở cửa sổ</span>
+        <select value="{{settings.start}}" onChange="{{onStart}}" style="height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:14.5px;cursor:pointer">
+          <sc-for list="{{startOpts}}" as="o" hint-placeholder-count="6"><option value="{{o.v}}">{{o.l}}</option></sc-for>
+        </select>
+      </label>
+      <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Khóa plan lúc</span>
+        <select value="{{settings.lock}}" onChange="{{onLock}}" style="height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:14.5px;cursor:pointer">
+          <sc-for list="{{lockOpts}}" as="o" hint-placeholder-count="5"><option value="{{o}}">{{o}} ngày D</option></sc-for>
+        </select>
+      </label>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;padding:16px 16px 12px;border-radius:22px;background:var(--paper)">
+      <div style="position:relative;height:16px;border-radius:999px;background:var(--line-2)">
+        <span style="position:absolute;top:0;bottom:0;left:{{winLeft}};width:{{winWidth}};border-radius:999px;background:var(--sage);transition:all .3s"></span>
+        <span style="position:absolute;top:-5px;bottom:-5px;left:{{endLeft}};width:3px;border-radius:999px;background:var(--accent)"></span>
+      </div>
+      <div style="position:relative;height:18px;font-size:11.5px;color:var(--ink-3)">
+        <span style="position:absolute;left:0">12:00 hôm trước</span>
+        <span style="position:absolute;left:50%;transform:translateX(-50%)">00:00</span>
+        <span style="position:absolute;right:0">12:00 ngày D</span>
+      </div>
+      <span style="font-size:13.5px;color:var(--ink-2)">{{winSentence}}</span>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:16px;padding:22px;border-radius:30px;background:var(--surface)">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Giờ kết thúc một ngày</h2>
+      <span style="font-size:14px;color:var(--ink-2);text-wrap:pretty">Cho người thức khuya: tick việc trước giờ này vẫn được tính cho hôm trước.</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      <sc-for list="{{endOpts}}" as="o" hint-placeholder-count="6"><button onClick="{{o.onClick}}" style="height:40px;padding:0 16px;border-radius:999px;border:2px solid {{o.border}};background:{{o.bg}};color:{{o.color}};font-size:14px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;background:var(--surface)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Nhắc nhở</h2>
+      <button onClick="{{toggleRemind}}" aria-label="Bật/tắt nhắc nhở" style="flex:none;width:54px;height:32px;padding:3px;border-radius:999px;border:0;background:{{swBg}};cursor:pointer;display:flex;justify-content:{{swJustify}};transition:background .2s"><span style="width:26px;height:26px;border-radius:50%;background:var(--paper);box-shadow:var(--shadow-sm)"></span></button>
+    </div>
+    <sc-if value="{{settings.remindOn}}" hint-placeholder-val="{{true}}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+        <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Nhắc lập plan</span>
+          <select value="{{settings.remindPlan}}" onChange="{{onRemindPlan}}" style="height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:14.5px;cursor:pointer">
+            <sc-for list="{{planRemOpts}}" as="o" hint-placeholder-count="6"><option value="{{o}}">{{o}}</option></sc-for>
+          </select>
+        </label>
+        <label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:600">Nhắc nghi thức buổi tối</span>
+          <select value="{{settings.remindRitual}}" onChange="{{onRemindRitual}}" style="height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-family:var(--font-ui);font-size:14.5px;cursor:pointer">
+            <sc-for list="{{ritualRemOpts}}" as="o" hint-placeholder-count="5"><option value="{{o}}">{{o}}</option></sc-for>
+          </select>
+        </label>
+      </div>
+    </sc-if>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:14px;padding:22px;border-radius:30px;background:var(--surface)">
+    <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Giao diện</h2>
+    <div style="display:flex;flex-wrap:wrap;padding:4px;gap:2px;border-radius:999px;background:var(--line-2);align-self:flex-start">
+      <sc-for list="{{themeOpts}}" as="o" hint-placeholder-count="3"><button onClick="{{o.onClick}}" style="height:40px;padding:0 16px;border-radius:999px;border:0;background:{{o.bg}};color:{{o.color}};box-shadow:{{o.shadow}};font-size:13.5px;font-weight:500;cursor:pointer">{{o.label}}</button></sc-for>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px;padding:22px;border-radius:30px;border:2px solid var(--line)">
+    <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:20px">Cách tính tỉ lệ hoàn thành</h2>
+    <p style="margin:0;font-size:14px;color:var(--ink-2);line-height:1.55;text-wrap:pretty">Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT. Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.</p>
+    <div><button onClick="{{openOnboarding}}" style="height:42px;padding:0 18px;border-radius:999px;border:2px solid var(--line);background:transparent;font-size:14px;font-weight:500;cursor:pointer" style-hover="background:var(--hover)">Xem lại hướng dẫn bắt đầu</button></div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:800,&quot;height&quot;:1100},&quot;settings&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;Settings&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(patch)=&gt;void&quot;},&quot;themeChoice&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;,&quot;system&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onTheme&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v)=&gt;void&quot;},&quot;onOnboarding&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;()=&gt;void&quot;},&quot;compact&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.props.settings || { habit: 'evening', start: '18|prev', lock: '10:00', dayEnd: '03:00', remindOn: true, remindPlan: '21:30', remindRitual: '21:00' };
+    const set = o => this.props.onChange && this.props.onChange(o);
+    const theme = this.props.themeChoice || 'light';
+    const seg = (cur, list, fn) => list.map(([v, label]) => ({ label, onClick: () => fn(v), bg: cur === v ? 'var(--paper)' : 'transparent', color: cur === v ? 'var(--ink)' : 'var(--ink-3)', shadow: cur === v ? 'var(--shadow-sm)' : 'none' }));
+    const startOpts = [['17|prev', '17:00 hôm trước'], ['18|prev', '18:00 hôm trước'], ['19|prev', '19:00 hôm trước'], ['20|prev', '20:00 hôm trước'], ['5|same', '05:00 cùng ngày'], ['6|same', '06:00 cùng ngày']].map(([v, l]) => ({ v, l }));
+    const [sh, sd] = st.start.split('|'), lockH = parseInt(st.lock), endH = parseInt(st.dayEnd);
+    const sPos = sd === 'prev' ? (+sh - 12) / 24 : (+sh + 12) / 24, lPos = (lockH + 12) / 24, ePos = (endH + 12) / 24;
+    const startLabel = startOpts.find(o => o.v === st.start).l;
+    return {
+      h1Size: this.props.compact ? '30px' : '44px', settings: st,
+      habitOpts: seg(st.habit, [['evening', 'Tối hôm trước'], ['morning', 'Đầu ngày']], v => set({ habit: v, start: v === 'evening' ? '18|prev' : '6|same' })),
+      startOpts, lockOpts: ['08:00', '09:00', '10:00', '11:00', '12:00'],
+      onStart: e => set({ start: e.target.value }), onLock: e => set({ lock: e.target.value }),
+      winLeft: (sPos * 100) + '%', winWidth: Math.max(2, (lPos - sPos) * 100) + '%', endLeft: (ePos * 100) + '%',
+      winSentence: 'Plan cho ngày D mở từ ' + startLabel + ' đến ' + st.lock + ' (vạch cam: ' + st.dayEnd + ' — hôm trước kết thúc).',
+      endOpts: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00'].map(v => ({ label: v, onClick: () => set({ dayEnd: v }), bg: st.dayEnd === v ? 'var(--ink)' : 'transparent', color: st.dayEnd === v ? 'var(--bg)' : 'var(--ink-2)', border: st.dayEnd === v ? 'var(--ink)' : 'var(--line)' })),
+      toggleRemind: () => set({ remindOn: !st.remindOn }), swBg: st.remindOn ? 'var(--sage)' : 'var(--line)', swJustify: st.remindOn ? 'flex-end' : 'flex-start',
+      planRemOpts: ['06:30', '07:00', '07:30', '20:30', '21:00', '21:30', '22:00'], ritualRemOpts: ['20:00', '20:30', '21:00', '21:30', '22:00'],
+      onRemindPlan: e => set({ remindPlan: e.target.value }), onRemindRitual: e => set({ remindRitual: e.target.value }),
+      themeOpts: seg(theme, [['light', 'Sáng'], ['dark', 'Tối'], ['system', 'Theo hệ thống']], v => this.props.onTheme && this.props.onTheme(v)),
+      openOnboarding: () => this.props.onOnboarding && this.props.onOnboarding()
+    };
+  }
+}
+</script>
+</body>
+</html>

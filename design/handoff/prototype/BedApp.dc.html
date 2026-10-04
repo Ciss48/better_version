@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Caprasimo&display=swap">
+<style>
+:root,[data-theme="light"]{--bg:var(--color-bg);--paper:var(--color-neutral-100);--surface:var(--color-surface);--ink:var(--color-text);--ink-2:var(--color-neutral-800);--ink-3:var(--color-neutral-700);--line:var(--color-divider);--line-2:color-mix(in srgb,var(--color-text) 7%,transparent);--hover:color-mix(in srgb,var(--color-text) 5%,transparent);--accent:var(--color-accent);--accent-hover:var(--color-accent-600);--accent-soft:var(--color-accent-100);--accent-ink:var(--color-accent-700);--sage:var(--color-accent-2);--sage-soft:var(--color-accent-2-100);--sage-ink:var(--color-accent-2-700);--on-accent:var(--color-neutral-100);--heat-1:var(--color-accent-2-200);--heat-2:var(--color-accent-2-300);--heat-3:var(--color-accent-2-500);--heat-4:var(--color-accent-2-700);--font-display:"Fraunces",Georgia,serif;--font-ui:"Be Vietnam Pro",system-ui,sans-serif;--font-num:"Caprasimo",Georgia,serif}
+[data-theme="dark"]{--bg:#1c1a17;--paper:#24211d;--surface:#2e2b25;--ink:#f5ead8;--ink-2:#dcd3c4;--ink-3:#b5ab9a;--line:color-mix(in srgb,#f5ead8 16%,transparent);--line-2:color-mix(in srgb,#f5ead8 8%,transparent);--hover:color-mix(in srgb,#f5ead8 6%,transparent);--accent:#f6a06b;--accent-hover:#ffc6a5;--accent-soft:color-mix(in srgb,#d67f48 22%,transparent);--accent-ink:#ffc6a5;--sage:#aebf92;--sage-soft:color-mix(in srgb,#8fa073 22%,transparent);--sage-ink:#ccdbb2;--on-accent:#1c1a17;--heat-1:#3d472b;--heat-2:#56633f;--heat-3:#8fa073;--heat-4:#ccdbb2}
+html,body{margin:0;height:100%}
+*{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+button,input,textarea{font-family:inherit;color:inherit}
+input::placeholder{color:var(--ink-3);opacity:.8}
+a{color:var(--accent-ink)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div ref="{{rootRef}}" data-theme="{{theme}}" onPointerDown="{{activate}}" style="position:relative;width:100%;height:{{rootH}};display:flex;background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.55;overflow:hidden">
+
+  <sc-if value="{{showSidebar}}" hint-placeholder-val="{{true}}">
+    <aside style="flex:none;width:248px;display:flex;flex-direction:column;gap:20px;padding:26px 16px 18px 20px;overflow-y:auto">
+      <div style="display:flex;align-items:center;gap:10px;padding-left:6px">
+        <span style="position:relative;width:30px;height:30px;flex:none"><span style="position:absolute;left:0;top:4px;width:22px;height:22px;border-radius:50%;background:var(--sage)"></span><span style="position:absolute;right:0;top:0;width:14px;height:14px;border-radius:50%;background:var(--accent)"></span></span>
+        <span style="font-family:var(--font-num);font-size:19px;line-height:1.1">Better Every Day</span>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{navItems}}" as="n" hint-placeholder-count="7">
+          <button onClick="{{n.onClick}}" style="display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:999px;border:0;background:{{n.bg}};color:{{n.color}};font-size:14.5px;font-weight:{{n.weight}};text-align:left;cursor:pointer" style-hover="background:var(--hover)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="{{n.d}}"></path></svg>
+            <span style="flex:1">{{n.label}}</span>
+            <sc-if value="{{n.tag}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">{{n.tag}}</span></sc-if>
+          </button>
+        </sc-for>
+      </nav>
+      <div style="flex:1"></div>
+      <div style="display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:24px;background:var(--surface)">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Nhất quán · 30 ngày</div>
+        <div style="display:flex;align-items:baseline;gap:6px"><span style="font-family:var(--font-num);font-size:28px;line-height:1">{{consText}}</span><span style="font-size:13px;color:var(--ink-2)">ngày có plan</span></div>
+        <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:4px">
+          <sc-for list="{{consistency}}" as="d" hint-placeholder-count="30">
+            <span title="{{d.title}}" style="aspect-ratio:1;border-radius:50%;background:{{d.bg}};box-shadow:inset 0 0 0 1.5px {{d.ring}}"></span>
+          </sc-for>
+        </div>
+      </div>
+      <div title="Phím tắt" style="display:flex;flex-wrap:wrap;gap:6px 12px;padding:0 6px;font-size:12px;color:var(--ink-3)"><span style="display:inline-flex;align-items:center;gap:5px"><kbd style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;padding:2px 6px;border-radius:6px;background:var(--surface);color:var(--ink-2)">N</kbd>Thêm</span><span style="display:inline-flex;align-items:center;gap:5px"><kbd style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;padding:2px 6px;border-radius:6px;background:var(--surface);color:var(--ink-2)">M</kbd>Ma trận</span><span style="display:inline-flex;align-items:center;gap:5px"><kbd style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;padding:2px 6px;border-radius:6px;background:var(--surface);color:var(--ink-2)">E</kbd>Buổi tối</span><span style="display:inline-flex;align-items:center;gap:5px"><kbd style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;padding:2px 6px;border-radius:6px;background:var(--surface);color:var(--ink-2)">T</kbd>Giao diện</span></div>
+      <button onClick="{{toggleTheme}}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;font-size:13.5px;cursor:pointer" style-hover="background:var(--hover)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{themeIcon}}"></path></svg>{{themeLabel}}
+      </button>
+    </aside>
+  </sc-if>
+
+  <main ref="{{scrollRef}}" style="flex:1;min-width:0;overflow-y:auto;background:var(--paper);border-radius:{{mainRadius}};margin:{{mainMargin}};position:relative">
+    <sc-if value="{{compactHeader}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px 0">
+        <div style="display:flex;align-items:center;gap:8px"><span style="position:relative;width:24px;height:24px;flex:none"><span style="position:absolute;left:0;top:3px;width:18px;height:18px;border-radius:50%;background:var(--sage)"></span><span style="position:absolute;right:0;top:0;width:11px;height:11px;border-radius:50%;background:var(--accent)"></span></span><span style="font-family:var(--font-num);font-size:16px">Better Every Day</span></div>
+        <button onClick="{{toggleTheme}}" aria-label="Đổi giao diện" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--line-2);display:grid;place-items:center;cursor:pointer"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{themeIcon}}"></path></svg></button>
+      </div>
+    </sc-if>
+    <div style="max-width:{{maxW}};margin:0 auto;padding:{{pad}}">
+
+      <sc-if value="{{isToday}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:28px">
+          <header style="display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between">
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+              <div style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">{{kicker}}</div>
+              <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h1Size}};line-height:1.05;letter-spacing:-.02em">Thứ Bảy, 3 tháng 10</h1>
+              <sc-if value="{{isLateNight}}" hint-placeholder-val="{{false}}">
+                <span style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 12px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);font-size:13px;font-weight:600"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>Ngày của bạn kết thúc lúc {{dayEndLabel}}</span>
+              </sc-if>
+              <sc-if value="{{locked}}" hint-placeholder-val="{{true}}">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px">
+                  <span style="display:inline-flex;align-items:center;gap:7px;height:28px;padding:0 12px;border-radius:999px;background:var(--line-2);color:var(--ink-2);font-weight:500"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V7a5 5 0 0 1 10 0v4M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"></path></svg>Plan đã khóa lúc {{lockAt}}</span>
+                  <span style="color:var(--ink-3)">Việc thêm mới sẽ vào nhóm Phát sinh</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{windowOpen}}" hint-placeholder-val="{{false}}">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px">
+                  <span style="display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 12px;border-radius:999px;background:var(--sage-soft);color:var(--sage-ink);font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage)"></span>Đang mở · khóa lúc {{lockAt}}</span>
+                  <span style="color:var(--ink-3)">còn {{windowLeft}} để chỉnh plan</span>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{hasPlanned}}" hint-placeholder-val="{{true}}">
+              <div title="Có trọng số: MIT ×2 · L=3, M=2, S=1. Việc phát sinh không tính vào tỉ lệ." style="flex:1 1 220px;max-width:280px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <span style="font-family:var(--font-num);font-size:44px;line-height:.9">{{pct}}<span style="font-size:22px;color:var(--ink-3)">%</span></span>
+                  <span style="font-size:12.5px;color:var(--ink-3);text-align:right;line-height:1.35">{{doneCount}}/{{totalCount}} việc đã định<br>có trọng số</span>
+                </div>
+                <div style="height:10px;border-radius:999px;background:var(--line-2);overflow:hidden"><div style="height:100%;width:{{pctW}};border-radius:999px;background:var(--sage);transition:width .6s cubic-bezier(.2,.8,.2,1)"></div></div>
+              </div>
+            </sc-if>
+          </header>
+
+          <sc-if value="{{showMissed}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:22px 24px;border-radius:28px;background:var(--accent-soft)">
+              <div style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px;line-height:1.25;color:var(--ink)">Lỡ một ngày không sao. Đừng lỡ hai ngày liền.</div>
+              <p style="margin:0;color:var(--ink-2);text-wrap:pretty">Hôm qua trang sổ còn trống — chuyện bình thường của ai cũng vậy. Bắt đầu lại thật nhỏ: một việc cho hôm nay là đủ.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{showWelcome}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:18px;padding:24px;border-radius:28px;background:var(--surface)">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <div style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:23px;line-height:1.2">Chào bạn — đây là trang đầu tiên.</div>
+                <p style="margin:0;color:var(--ink-2);text-wrap:pretty">Better Every Day đo khoảng cách giữa điều bạn định làm và điều bạn thực sự làm. Mỗi ngày gần hơn một chút là đủ.</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+                <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:20px;background:var(--paper)"><span style="font-family:var(--font-num);font-size:22px;color:var(--accent)">1</span><b style="font-weight:600">Viết plan</b><span style="font-size:13px;color:var(--ink-3)">Tối hôm trước, hoặc trước 10:00 sáng</span></div>
+                <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:20px;background:var(--paper)"><span style="font-family:var(--font-num);font-size:22px;color:var(--accent)">2</span><b style="font-weight:600">Làm và tick</b><span style="font-size:13px;color:var(--ink-3)">Ưu tiên 1–3 việc MIT</span></div>
+                <div style="display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:20px;background:var(--paper)"><span style="font-family:var(--font-num);font-size:22px;color:var(--accent)">3</span><b style="font-weight:600">Nhìn lại buổi tối</b><span style="font-size:13px;color:var(--ink-3)">5 phút, rồi chuẩn bị ngày mai</span></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px"><button onClick="{{goOnboarding}}" style="height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:var(--accent-hover)">Thiết lập trong 1 phút</button><span style="font-size:13px;color:var(--ink-3)">hoặc gõ việc đầu tiên ngay bên dưới</span></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{showPerfect}}" hint-placeholder-val="{{false}}">
+            <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;padding:24px 26px;border-radius:28px;background:var(--sage-soft)">
+              <span style="position:absolute;right:-30px;top:-40px;width:140px;height:140px;border-radius:50%;background:var(--sage);opacity:.25"></span>
+              <span style="position:absolute;right:70px;bottom:-26px;width:60px;height:60px;border-radius:50%;background:var(--accent);opacity:.25"></span>
+              <div style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:23px;color:var(--sage-ink)">Trọn vẹn 100%.</div>
+              <p style="margin:0;max-width:460px;color:var(--ink-2);text-wrap:pretty">Mọi việc đã định hôm nay đều xong. Nghỉ ngơi xứng đáng — rồi khép ngày bằng vài dòng phản tỉnh.</p>
+            </div>
+          </sc-if>
+          <sc-if value="{{showPlanReminder}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 20px;padding:18px 18px 18px 24px;border-radius:28px;background:var(--accent-soft)">
+              <div style="display:flex;gap:14px;align-items:flex-start;min-width:0;flex:1 1 260px">
+                <span style="flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--on-accent)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg></span>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                  <b style="font-weight:600;color:var(--ink)">Chưa có plan cho Chủ Nhật, 4/10</b>
+                  <span style="font-size:14px;color:var(--ink-2)">Cửa sổ lập plan đang mở đến {{lockAt}} Chủ Nhật. Ba phút là đủ.</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button onClick="{{dismissReminder}}" style="height:44px;padding:0 14px;border-radius:999px;border:0;background:transparent;color:var(--ink-2);font-size:14px;cursor:pointer" style-hover="background:var(--hover)">Để sau</button>
+                <button onClick="{{openRitual}}" style="height:44px;padding:0 20px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:var(--accent-hover)">Lập plan ngày mai</button>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{showEvening}}" hint-placeholder-val="{{true}}">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 20px;padding:18px 18px 18px 24px;border-radius:28px;background:var(--surface)">
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 240px">
+                <b style="font-weight:600">Ngày sắp khép lại</b>
+                <span style="font-size:14px;color:var(--ink-2)">5 phút nhìn lại hôm nay và chuẩn bị cho ngày mai nhé?</span>
+              </div>
+              <button onClick="{{openRitual}}" style="display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 10px 0 20px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;cursor:pointer" style-hover="background:var(--accent-hover)">Bắt đầu nghi thức tối<kbd style="font-family:ui-monospace,Menlo,monospace;font-size:11px;padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--on-accent) 22%,transparent)">E</kbd></button>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start">
+            <div style="flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:10px;min-height:54px;padding:6px 7px 6px 18px;border-radius:999px;background:var(--bg);border:2px solid {{addBorder}};transition:border-color .2s">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2.75" stroke-linecap="round" style="flex:none"><path d="M5 12h14M12 5v14"></path></svg>
+                <input ref="{{inputRef}}" value="{{input}}" onChange="{{onInput}}" onKeyDown="{{onInputKey}}" onFocus="{{onAddFocus}}" onBlur="{{onAddBlur}}" placeholder="Thêm việc… rồi nhấn Enter" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:15.5px;padding:8px 0">
+                <sc-for list="{{previewChips}}" as="c" hint-placeholder-count="0">
+                  <span style="flex:none;font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">{{c}}</span>
+                </sc-for>
+                <button onClick="{{addTask}}" aria-label="Thêm" style="flex:none;width:40px;height:40px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;cursor:pointer"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4v7a4 4 0 0 1-4 4H4M9 10l-5 5 5 5"></path></svg></button>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px 14px;padding-left:18px;font-size:12px;color:var(--ink-3)">
+                <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-2)">*</b> MIT</span>
+                <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-2)">!</b> Quan trọng</span>
+                <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-2)">^</b> Gấp</span>
+                <span><b style="font-family:ui-monospace,Menlo,monospace;color:var(--ink-2)">~S ~M ~L</b> Độ lớn</span>
+                <sc-if value="{{locked}}" hint-placeholder-val="{{true}}"><span style="color:var(--accent-ink)">· việc mới sẽ vào Phát sinh</span></sc-if>
+              </div>
+            </div>
+            <div style="display:flex;padding:4px;border-radius:999px;background:var(--line-2);gap:2px">
+              <button onClick="{{showList}}" style="display:flex;align-items:center;gap:7px;height:42px;padding:0 14px;border-radius:999px;border:0;background:{{listBg}};color:{{listColor}};font-size:13.5px;font-weight:500;cursor:pointer;box-shadow:{{listShadow}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M3 6h.01M3 12h.01M3 18h.01M8 6h13M8 12h13M8 18h13"></path></svg>Danh sách</button>
+              <button onClick="{{showMatrix}}" style="display:flex;align-items:center;gap:7px;height:42px;padding:0 14px;border-radius:999px;border:0;background:{{matBg}};color:{{matColor}};font-size:13.5px;font-weight:500;cursor:pointer;box-shadow:{{matShadow}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM3 12h18M12 3v18"></path></svg>Ma trận</button>
+            </div>
+          </div>
+
+          <sc-if value="{{showEmpty}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:6px;padding:32px 28px;border-radius:28px;border:2px dashed var(--line)">
+              <div style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:22px">Hôm nay vẫn là một trang trắng.</div>
+              <p style="margin:0;color:var(--ink-2);max-width:460px;text-wrap:pretty">Chọn 1–3 việc quan trọng nhất trước 10:00. Gõ một dòng ở trên, thêm dấu <b style="font-family:ui-monospace,Menlo,monospace">*</b> để đánh dấu MIT.</p>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showListView}}" hint-placeholder-val="{{true}}">
+            <div style="display:flex;flex-direction:column;gap:24px">
+              <section style="display:flex;flex-direction:column;gap:2px;padding:20px 10px 10px;border-radius:30px;background:var(--surface)">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 14px 10px">
+                  <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:21px;letter-spacing:-.01em">Việc quan trọng nhất</h2>
+                  <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">{{mitCount}}/3 MIT</span>
+                </div>
+                <sc-for list="{{mitTasks}}" as="t" hint-placeholder-count="3">
+                  <dc-import name="TaskItem" task="{{t}}" hint-size="100%,56px"></dc-import>
+                </sc-for>
+                <sc-if value="{{mitEmpty}}" hint-placeholder-val="{{false}}"><div style="padding:6px 14px 12px;font-size:14px;color:var(--ink-3)">Chưa có MIT. Bấm vào một việc rồi chọn ★ MIT — tối đa 3 việc.</div></sc-if>
+              </section>
+              <sc-if value="{{hasOther}}" hint-placeholder-val="{{true}}">
+                <section style="display:flex;flex-direction:column;gap:2px">
+                  <div style="display:flex;align-items:baseline;gap:10px;padding:0 12px 8px"><h3 style="margin:0;font-family:var(--font-ui);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Các việc khác</h3><span style="font-size:13px;color:var(--ink-3)">{{otherCount}}</span></div>
+                  <sc-for list="{{otherTasks}}" as="t" hint-placeholder-count="5">
+                    <dc-import name="TaskItem" task="{{t}}" hint-size="100%,52px"></dc-import>
+                  </sc-for>
+                </section>
+              </sc-if>
+              <sc-if value="{{hasAdhoc}}" hint-placeholder-val="{{true}}">
+                <section style="display:flex;flex-direction:column;gap:2px;padding:16px 10px 8px;border-radius:30px;border:2px dashed var(--line)">
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:0 14px 8px">
+                    <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--line-2);color:var(--ink-2)">Phát sinh</span>
+                    <span style="font-size:13px;color:var(--ink-3)">Thêm sau giờ khóa · {{adhocDone}}/{{adhocTotal}} xong · không tính vào tỉ lệ</span>
+                  </div>
+                  <sc-for list="{{adhocTasks}}" as="t" hint-placeholder-count="2">
+                    <dc-import name="TaskItem" task="{{t}}" hint-size="100%,56px"></dc-import>
+                  </sc-for>
+                </section>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showMatrixView}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-size:13px;color:var(--ink-3)">{{matrixHint}}</div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+                <sc-for list="{{quadrants}}" as="q" hint-placeholder-count="4">
+                  <div onDragOver="{{q.onDragOver}}" onDragLeave="{{q.onDragLeave}}" onDrop="{{q.onDrop}}" style="display:flex;flex-direction:column;gap:10px;min-height:210px;padding:18px 14px 14px;border-radius:28px;background:{{q.bg}};box-shadow:inset 0 0 0 2px {{q.ring}};transition:background .15s,box-shadow .15s">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:0 6px">
+                      <div style="display:flex;flex-direction:column;gap:2px">
+                        <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:19px;line-height:1.2">{{q.title}}</span>
+                        <span style="font-size:12.5px;color:var(--ink-3)">{{q.sub}}</span>
+                      </div>
+                      <span style="font-family:var(--font-num);font-size:22px;line-height:1;color:var(--ink-3)">{{q.count}}</span>
+                    </div>
+                    <sc-if value="{{q.note}}" hint-placeholder-val="{{false}}"><span style="align-self:flex-start;margin-left:6px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--sage-soft);color:var(--sage-ink)">{{q.note}}</span></sc-if>
+                    <div style="display:flex;flex-direction:column;gap:6px">
+                      <sc-for list="{{q.chips}}" as="c" hint-placeholder-count="2">
+                        <div draggable="{{c.draggable}}" onClick="{{c.onTap}}" onDragStart="{{c.onDragStart}}" onDragEnd="{{c.onDragEnd}}" style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:16px;background:var(--paper);opacity:{{c.opacity}};cursor:{{c.cursor}};box-shadow:var(--shadow-sm)">
+                          <button onClick="{{c.onToggle}}" aria-label="Hoàn thành" style="flex:none;width:18px;height:18px;padding:0;border-radius:50%;border:2px solid {{c.checkBorder}};background:{{c.checkBg}};cursor:pointer"></button>
+                          <span style="flex:1;min-width:0;font-size:14px;line-height:1.35;color:{{c.color}};text-decoration:{{c.deco}}">{{c.title}}</span>
+                          <sc-if value="{{c.isMit}}" hint-placeholder-val="{{false}}"><span style="flex:none;font-size:10.5px;font-weight:700;color:var(--accent-ink)">MIT</span></sc-if>
+                          <sc-if value="{{c.adhoc}}" hint-placeholder-val="{{false}}"><span style="flex:none;font-size:10.5px;font-weight:600;color:var(--ink-3)">phát sinh</span></sc-if>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{q.empty}}" hint-placeholder-val="{{false}}"><div style="padding:14px 8px;font-size:13px;color:var(--ink-3);text-align:center;border-radius:16px;border:1.5px dashed var(--line)">Kéo việc vào đây</div></sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isRitual}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:28px;max-width:680px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Nghi thức buổi tối</span>
+              <span style="font-size:14px;color:var(--ink-2)">Thứ Bảy, 3/10 · {{now}}</span>
+            </div>
+            <button onClick="{{closeRitual}}" style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;font-size:13.5px;cursor:pointer" style-hover="background:var(--hover)">Để sau<kbd style="font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink-3)">Esc</kbd></button>
+          </div>
+
+          <sc-if value="{{showStepper}}" hint-placeholder-val="{{true}}">
+            <ol style="display:flex;gap:8px;list-style:none;margin:0;padding:0">
+              <sc-for list="{{steps}}" as="st" hint-placeholder-count="3">
+                <li onClick="{{st.onClick}}" style="flex:1;display:flex;flex-direction:column;gap:8px;cursor:{{st.cursor}}">
+                  <span style="height:6px;border-radius:999px;background:{{st.bar}};transition:background .3s"></span>
+                  <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:{{st.color}}"><span style="font-family:var(--font-num)">{{st.num}}</span>{{st.label}}</span>
+                </li>
+              </sc-for>
+            </ol>
+          </sc-if>
+
+          <sc-if value="{{showB1}}" hint-placeholder-val="{{true}}">
+            <section ref="{{b1Ref}}" style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h2Size}};line-height:1.1;letter-spacing:-.015em">Hôm nay đã diễn ra thế nào?</h1>
+                <p style="margin:0;color:var(--ink-2);text-wrap:pretty">Tick những gì đã xong. Với việc còn dang dở, chọn dời hoặc bỏ — không có lựa chọn nào sai cả.</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{reviewRows}}" as="r" hint-placeholder-count="6">
+                  <div style="display:flex;flex-direction:column;gap:10px;padding:12px 14px;border-radius:22px;background:{{r.bg}};transition:background .2s">
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px">
+                      <button onClick="{{r.onToggle}}" aria-label="Hoàn thành" style="flex:none;width:24px;height:24px;padding:0;border-radius:50%;border:2px solid {{r.checkBorder}};background:{{r.checkBg}};display:grid;place-items:center;cursor:pointer;transform:scale({{r.checkScale}});transition:transform .28s cubic-bezier(.34,1.8,.5,1),background .2s"><svg width="13" height="13" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="var(--on-accent)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="24" stroke-dashoffset="{{r.checkDash}}" style="transition:stroke-dashoffset .32s ease .06s"></path></svg></button>
+                      <div style="flex:1 1 200px;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px">
+                        <span style="font-size:15.5px;line-height:1.4;color:{{r.titleColor}}">{{r.title}}</span>
+                        <sc-if value="{{r.isMit}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">MIT</span></sc-if>
+                        <sc-if value="{{r.adhoc}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">Phát sinh</span></sc-if>
+                      </div>
+                      <sc-if value="{{r.needsDecision}}" hint-placeholder-val="{{false}}">
+                        <div style="display:flex;flex-wrap:wrap;gap:6px">
+                          <sc-for list="{{r.btns}}" as="b" hint-placeholder-count="3">
+                            <button data-pick="{{b.pick}}" onClick="{{b.onClick}}" style="height:34px;padding:0 13px;border-radius:999px;border:1.5px solid {{b.border}};background:{{b.bg}};color:{{b.color}};font-size:13px;font-weight:500;cursor:pointer;transition:background .15s">{{b.label}}</button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                    </div>
+                    <sc-if value="{{r.warn}}" hint-placeholder-val="{{false}}">
+                      <div style="margin-left:36px;padding:10px 14px;border-radius:16px;background:var(--accent-soft);color:var(--accent-ink);font-size:13.5px;line-height:1.45;text-wrap:pretty">Việc này đã dời {{r.postponed}} lần. Thử thu nhỏ thành một bước 15 phút cho ngày mai — hoặc bỏ hẳn, đó cũng là một quyết định tốt.</div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{showStepper}}" hint-placeholder-val="{{true}}">
+                <div style="position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 6px;background:var(--paper)">
+                  <span style="font-size:13.5px;color:{{remainColor}}">{{remainText}}</span>
+                  <button onClick="{{next}}" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;opacity:{{gateOpacity}};cursor:{{gateCursor}}">Tiếp tục<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
+                </div>
+              </sc-if>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{showB2}}" hint-placeholder-val="{{false}}">
+            <section ref="{{b2Ref}}" style="display:flex;flex-direction:column;gap:22px;padding-top:{{blockGap}}">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h2Size}};line-height:1.1;letter-spacing:-.015em">Một chút phản tỉnh</h1>
+                <p style="margin:0;color:var(--ink-2)">Cả ba đều tùy chọn — một dòng là đủ.</p>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <span style="font-size:14px;font-weight:600">Năng lượng hôm nay</span>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <sc-for list="{{energyOpts}}" as="e" hint-placeholder-count="5">
+                    <button onClick="{{e.onClick}}" style="display:flex;flex-direction:column;align-items:center;gap:6px;width:72px;padding:0;border:0;background:transparent;cursor:pointer">
+                      <span style="width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-num);font-size:20px;background:{{e.bg}};color:{{e.color}};box-shadow:inset 0 0 0 2px {{e.ring}};transform:scale({{e.scale}});transition:all .22s cubic-bezier(.34,1.6,.5,1)">{{e.n}}</span>
+                      <span style="font-size:12px;color:{{e.labelColor}}">{{e.label}}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+              <label style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:14px;font-weight:600">Hôm nay bạn làm tốt điều gì?</span>
+                <input value="{{good}}" onChange="{{onGood}}" placeholder="Ví dụ: Vẫn chạy bộ dù trời mưa" style="height:50px;padding:0 20px;border-radius:999px;border:2px solid var(--line);background:var(--bg);font-size:15px;outline:0">
+              </label>
+              <label style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:14px;font-weight:600">Ngày mai muốn cải thiện điều gì?</span>
+                <input value="{{improve}}" onChange="{{onImprove}}" placeholder="Ví dụ: Làm việc khó nhất trước 9 giờ" style="height:50px;padding:0 20px;border-radius:999px;border:2px solid var(--line);background:var(--bg);font-size:15px;outline:0">
+              </label>
+              <sc-if value="{{showStepper}}" hint-placeholder-val="{{true}}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:6px">
+                  <button onClick="{{back}}" style="height:46px;padding:0 18px;border-radius:999px;border:0;background:transparent;color:var(--ink-2);font-size:14.5px;cursor:pointer" style-hover="background:var(--hover)">Quay lại</button>
+                  <button onClick="{{next}}" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;cursor:pointer">{{reflectNext}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></button>
+                </div>
+              </sc-if>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{showB3}}" hint-placeholder-val="{{false}}">
+            <section ref="{{b3Ref}}" style="display:flex;flex-direction:column;gap:20px;padding-top:{{blockGap}}">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:{{h2Size}};line-height:1.1;letter-spacing:-.015em">Plan cho Chủ Nhật, 4/10</h1>
+                <p style="margin:0;color:var(--ink-2);text-wrap:pretty">Cửa sổ lập plan đang mở đến 10:00 sáng mai — bạn có thể quay lại chỉnh bất cứ lúc nào.</p>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <span style="font-size:14px;color:var(--ink-2)">{{tomCount}} việc · bấm ★ để chọn MIT</span>
+                <span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">{{tomMitCount}}/3 MIT</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <sc-for list="{{tomRows}}" as="r" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:12px;padding:10px 10px 10px 8px;border-radius:22px;background:var(--surface)">
+                    <button onClick="{{r.onStar}}" aria-label="MIT" style="flex:none;width:36px;height:36px;border-radius:50%;border:0;background:{{r.starBg}};display:grid;place-items:center;cursor:pointer;transition:background .2s"><svg width="17" height="17" viewBox="0 0 24 24" fill="{{r.starFill}}" stroke="{{r.starStroke}}" stroke-width="2.4" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></button>
+                    <div style="flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px">
+                      <span style="font-size:15.5px;line-height:1.4">{{r.title}}</span>
+                      <sc-if value="{{r.carried}}" hint-placeholder-val="{{false}}"><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">Dời từ hôm nay</span></sc-if>
+                      <sc-if value="{{r.warn}}" hint-placeholder-val="{{false}}"><span style="white-space:nowrap;font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink)">dời {{r.postponed}} lần · thử chia nhỏ?</span></sc-if>
+                    </div>
+                    <sc-if value="{{r.removable}}" hint-placeholder-val="{{false}}"><button onClick="{{r.onRemove}}" aria-label="Xóa" style="flex:none;width:32px;height:32px;border-radius:50%;border:0;background:transparent;color:var(--ink-3);display:grid;place-items:center;cursor:pointer" style-hover="background:var(--hover)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></sc-if>
+                  </div>
+                </sc-for>
+                <sc-if value="{{tomEmpty}}" hint-placeholder-val="{{false}}"><div style="padding:16px 18px;border-radius:22px;border:2px dashed var(--line);color:var(--ink-3);font-size:14px">Chưa có việc nào cho ngày mai. Bắt đầu bằng một việc nhỏ nhé.</div></sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 7px 6px 18px;border-radius:999px;background:var(--bg);border:2px solid var(--line)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" stroke-width="2.75" stroke-linecap="round" style="flex:none"><path d="M5 12h14M12 5v14"></path></svg>
+                <input ref="{{tomRef}}" value="{{tomInput}}" onChange="{{onTomInput}}" onKeyDown="{{onTomKey}}" placeholder="Việc cho ngày mai… Enter  (* = MIT)" style="flex:1;min-width:0;border:0;outline:0;background:transparent;font-size:15.5px;padding:8px 0">
+                <button onClick="{{addTom}}" aria-label="Thêm" style="flex:none;width:38px;height:38px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4v7a4 4 0 0 1-4 4H4M9 10l-5 5 5 5"></path></svg></button>
+              </div>
+              <sc-if value="{{showStepper}}" hint-placeholder-val="{{true}}">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:6px">
+                  <button onClick="{{back}}" style="height:46px;padding:0 18px;border-radius:999px;border:0;background:transparent;color:var(--ink-2);font-size:14.5px;cursor:pointer" style-hover="background:var(--hover)">Quay lại</button>
+                  <button onClick="{{finish}}" style="display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14.5px;cursor:pointer">Hoàn tất &amp; đóng ngày</button>
+                </div>
+              </sc-if>
+            </section>
+          </sc-if>
+
+
+          <sc-if value="{{showSummary}}" hint-placeholder-val="{{false}}">
+            <section style="position:relative;display:flex;flex-direction:column;gap:22px">
+              <span style="position:absolute;right:0;top:-10px;width:120px;height:120px;border-radius:50%;background:var(--sage);opacity:.22"></span>
+              <span style="position:absolute;right:96px;top:70px;width:44px;height:44px;border-radius:50%;background:var(--accent);opacity:.28"></span>
+              <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-ink)">Đã khép lại Thứ Bảy, 3/10</span>
+              <div style="font-family:var(--font-num);font-size:{{bigNum}};line-height:.85">{{sumPct}}<span style="font-size:.45em;color:var(--ink-3)">%</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px;max-width:520px">
+                <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:26px;line-height:1.2">{{sumHeadline}}</h2>
+                <p style="margin:0;color:var(--ink-2);text-wrap:pretty">{{sumBody}}</p>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
+                <sc-for list="{{sumStats}}" as="k" hint-placeholder-count="4">
+                  <div style="display:flex;flex-direction:column;gap:4px;padding:16px 18px;border-radius:22px;background:var(--surface)">
+                    <span style="font-family:var(--font-num);font-size:26px;line-height:1">{{k.value}}</span>
+                    <span style="font-size:13px;color:var(--ink-2)">{{k.label}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{hasGood}}" hint-placeholder-val="{{false}}">
+                <div style="padding:16px 20px;border-radius:22px;background:var(--sage-soft);font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-size:18px;font-style:italic;color:var(--sage-ink)">“{{good}}”</div>
+              </sc-if>
+              <div style="display:flex;flex-direction:column;gap:10px;padding:18px 20px;border-radius:24px;border:2px solid var(--line)">
+                <b style="font-weight:600">Ngày mai đã sẵn sàng · {{tomCount}} việc, {{tomMitCount}} MIT</b>
+                <sc-for list="{{tomMitTitles}}" as="m" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink-2)"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none"></span>{{m}}</div>
+                </sc-for>
+              </div>
+              <p style="margin:0;font-size:14px;color:var(--ink-3)">Bạn đã có plan {{consText}} ngày gần đây. Nhất quán quan trọng hơn hoàn hảo.</p>
+              <div><button onClick="{{closeRitual}}" style="height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);font-weight:600;font-size:14.5px;cursor:pointer">Về trang Hôm nay</button></div>
+            </section>
+          </sc-if>
+        </div>
+      </sc-if>
+      <sc-if value="{{isStats}}" hint-placeholder-val="{{false}}"><dc-import name="StatsView" days="{{days}}" compact="{{compact}}" on-open-day="{{openDay}}" hint-size="100%,1100px"></dc-import></sc-if>
+      <sc-if value="{{isHistory}}" hint-placeholder-val="{{false}}"><dc-import name="HistoryView" days="{{days}}" compact="{{compact}}" select-key="{{histKey}}" on-open-today="{{goToday}}" hint-size="100%,760px"></dc-import></sc-if>
+      <sc-if value="{{isSettings}}" hint-placeholder-val="{{false}}"><dc-import name="SettingsView" settings="{{settings}}" on-change="{{onSettings}}" theme-choice="{{themeChoice}}" on-theme="{{onTheme}}" on-onboarding="{{goOnboarding}}" compact="{{compact}}" hint-size="100%,1100px"></dc-import></sc-if>
+      <sc-if value="{{isOnboarding}}" hint-placeholder-val="{{false}}"><dc-import name="Onboarding" compact="{{compact}}" on-finish="{{onOnboardFinish}}" hint-size="100%,640px"></dc-import></sc-if>
+      <sc-if value="{{isGoals}}" hint-placeholder-val="{{false}}"><dc-import name="Phase2View" which="goals" days="{{days}}" compact="{{compact}}" hint-size="100%,700px"></dc-import></sc-if>
+      <sc-if value="{{isWeekly}}" hint-placeholder-val="{{false}}"><dc-import name="Phase2View" which="weekly" days="{{days}}" compact="{{compact}}" hint-size="100%,800px"></dc-import></sc-if>
+      <sc-if value="{{isMore}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:30px">Thêm</h1>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <sc-for list="{{moreItems}}" as="n" hint-placeholder-count="3">
+              <button onClick="{{n.onClick}}" style="display:flex;align-items:center;gap:14px;min-height:60px;padding:0 18px;border-radius:24px;border:0;background:var(--surface);text-align:left;font-size:15.5px;cursor:pointer">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{n.d}}"></path></svg>
+                <span style="flex:1">{{n.label}}</span>
+                <sc-if value="{{n.tag}}" hint-placeholder-val="{{false}}"><span style="font-size:11px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--line-2);color:var(--ink-3)">{{n.tag}}</span></sc-if>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </main>
+
+  <sc-if value="{{showTabs}}" hint-placeholder-val="{{false}}">
+    <nav style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:8px 8px 16px;background:var(--bg);border-top:1.5px solid var(--line-2)">
+      <sc-for list="{{tabs}}" as="n" hint-placeholder-count="4">
+        <button onClick="{{n.onClick}}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:48px;padding:4px 0;border:0;background:transparent;color:{{n.color}};font-size:11px;font-weight:{{n.weight}};cursor:pointer">
+          <span style="width:52px;height:30px;border-radius:999px;display:grid;place-items:center;background:{{n.pill}}"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{n.d}}"></path></svg></span>{{n.label}}
+        </button>
+      </sc-for>
+    </nav>
+  </sc-if>
+
+  <sc-if value="{{pickerOpen}}" hint-placeholder-val="{{false}}">
+    <div onClick="{{closePicker}}" style="position:absolute;inset:0;z-index:20;background:{{pickerScrim}};transition:background .25s"></div>
+    <div role="dialog" aria-label="Chọn ngày" style="position:absolute;z-index:21;left:{{pickerLeft}};top:{{pickerTop}};right:{{pickerRight}};bottom:{{pickerBottom}};width:{{pickerW}};display:flex;flex-direction:column;gap:12px;padding:{{pickerPad}};border-radius:{{pickerRadius}};background:var(--paper);box-shadow:var(--shadow-lg);transform:{{pickerTf}};opacity:{{pickerOp}};transition:transform .28s cubic-bezier(.2,.8,.2,1),opacity .18s ease">
+      <sc-if value="{{pickerIsSheet}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:40px;height:5px;border-radius:999px;background:var(--line)"></span></div>
+        <div style="display:flex;flex-direction:column;gap:2px;padding:0 4px"><b style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:19px">Dời sang ngày khác</b><span style="font-size:13.5px;color:var(--ink-3)">{{pickerTask}}</span></div>
+      </sc-if>
+      <dc-import name="DatePicker" selected="{{pickerSel}}" on-select="{{onPick}}" hint-size="100%,320px"></dc-import>
+      <sc-if value="{{pickerIsSheet}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;gap:8px">
+          <button onClick="{{closePicker}}" style="flex:1;height:50px;border-radius:999px;border:2px solid var(--line);background:transparent;font-size:15px;font-weight:500;cursor:pointer">Hủy</button>
+          <button onClick="{{confirmPick}}" style="flex:1.4;height:50px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-size:15px;font-weight:600;cursor:pointer;opacity:{{pickConfirmOp}}">{{pickConfirmLabel}}</button>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{sheetOpen}}" hint-placeholder-val="{{false}}">
+    <div onClick="{{closeSheet}}" style="position:absolute;inset:0;z-index:20;background:{{sheetScrim}};transition:background .25s"></div>
+    <div role="dialog" aria-label="Chuyển ô ma trận" style="position:absolute;z-index:21;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:14px;padding:12px 16px 24px;border-radius:30px 30px 0 0;background:var(--paper);box-shadow:var(--shadow-lg);transform:{{sheetTf}};transition:transform .28s cubic-bezier(.2,.8,.2,1)">
+      <div style="display:flex;justify-content:center"><span style="width:40px;height:5px;border-radius:999px;background:var(--line)"></span></div>
+      <div style="display:flex;flex-direction:column;gap:2px;padding:0 4px"><b style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:19px">Chuyển sang ô…</b><span style="font-size:13.5px;color:var(--ink-3)">{{sheetTask}}</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <sc-for list="{{sheetQuads}}" as="q" hint-placeholder-count="4">
+          <button onClick="{{q.onClick}}" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:96px;padding:14px;border-radius:22px;border:0;background:{{q.bg}};box-shadow:inset 0 0 0 2px {{q.ring}};text-align:left;cursor:pointer">
+            <span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:16px;line-height:1.2">{{q.title}}</span>
+            <span style="font-size:11.5px;color:var(--ink-3);line-height:1.3">{{q.sub}}</span>
+            <sc-if value="{{q.current}}" hint-placeholder-val="{{false}}"><span style="margin-top:auto;font-size:11px;font-weight:700;color:var(--accent-ink)">Đang ở đây</span></sc-if>
+          </button>
+        </sc-for>
+      </div>
+      <button onClick="{{closeSheet}}" style="height:50px;border-radius:999px;border:2px solid var(--line);background:transparent;font-size:15px;font-weight:500;cursor:pointer">Hủy</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{hasToast}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;left:50%;bottom:{{toastBottom}};transform:translateX(-50%);z-index:10;max-width:calc(100% - 32px);padding:12px 20px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:14px;box-shadow:var(--shadow-lg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{toast}}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820},&quot;scenario&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;normal&quot;,&quot;open&quot;,&quot;empty&quot;,&quot;missed&quot;,&quot;perfect&quot;,&quot;newuser&quot;,&quot;latenight&quot;,&quot;noplan&quot;],&quot;default&quot;:&quot;normal&quot;,&quot;tsType&quot;:&quot;'normal'|'open'|'empty'|'missed'|'perfect'|'newuser'|'latenight'|'noplan'&quot;},&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;,&quot;system&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'|'system'&quot;},&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;today&quot;,&quot;ritual&quot;,&quot;stats&quot;,&quot;history&quot;,&quot;settings&quot;,&quot;onboarding&quot;,&quot;goals&quot;,&quot;weekly&quot;,&quot;more&quot;],&quot;default&quot;:&quot;today&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;list&quot;,&quot;matrix&quot;],&quot;default&quot;:&quot;list&quot;,&quot;tsType&quot;:&quot;'list'|'matrix'&quot;},&quot;startStep&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:0,&quot;min&quot;:0,&quot;max&quot;:3,&quot;tsType&quot;:&quot;0|1|2|3&quot;},&quot;demoPicker&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;demoSheet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;embedded&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;keyboard&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  W = { S: 1, M: 2, L: 3 };
+  DATES = ['T2 · 5/10', 'T3 · 6/10', 'T4 · 7/10', 'T7 · 10/10'];
+  IC = {
+    home: 'M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z',
+    moon: 'M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z',
+    sun: 'M12 8a4 4 0 1 0 0 8 4 4 0 1 0 0-8M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41',
+    chart: 'M3 3v16a2 2 0 0 0 2 2h16M18 17V9M13 17V5M8 17v-3',
+    cal: 'M8 2v4M16 2v4M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM3 10h18',
+    target: 'M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20M12 6a6 6 0 1 0 0 12 6 6 0 1 0 0-12M12 10a2 2 0 1 0 0 4 2 2 0 1 0 0-4',
+    week: 'M8 2v4M16 2v4M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM3 10h18M9 16l2 2 4-4',
+    gear: 'M20 7h-9M14 17H5M17 14a3 3 0 1 0 0 6 3 3 0 1 0 0-6M7 4a3 3 0 1 0 0 6 3 3 0 1 0 0-6'
+  };
+  rootRef = React.createRef(); scrollRef = React.createRef(); inputRef = React.createRef(); tomRef = React.createRef();
+  b1Ref = React.createRef(); b2Ref = React.createRef(); b3Ref = React.createRef();
+  uid = Math.random().toString(36).slice(2);
+  state = this.fresh(this.props.scenario || 'normal');
+
+  fresh(sc) {
+    return { sc, theme: null, view: this.props.startView || 'today', mode: this.props.startMode || 'list', tasks: this.seed(sc), openId: null, popId: null, input: '', addFocus: false, toast: null, width: (this.state && this.state.width) || 1200, dragId: null, overQ: null, step: 0, decisions: {}, dateFor: null, energy: 0, good: '', improve: '', extra: [], tomMit: {}, tomInput: '', nextId: 100, closed: false, histKey: null, onboarded: false, picker: null, sheetId: null, sheetIn: false, remDismissed: false,
+      settings: (this.state && this.state.settings) || { habit: 'evening', start: '18|prev', lock: '10:00', dayEnd: '03:00', remindOn: true, remindPlan: '21:30', remindRitual: '21:00' } };
+  }
+  genDays(sc) {
+    if (this._days && this._daysSc === sc) return this._days;
+    let seed = 20261003; const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
+    const pool = ['Học 1 chương Databricks', 'Chạy bộ 5km', 'Gửi báo cáo tuần', 'Review PR cho team', 'Viết tài liệu pipeline ETL', 'Đọc 20 trang sách', 'Họp 1:1 với anh Tuấn', 'Dọn hộp thư', 'Tập yoga 20 phút', 'Lên kế hoạch chi tiêu tháng', 'Gọi điện cho bố mẹ', 'Sửa job Spark bị lỗi', 'Chuẩn bị slide sprint review', 'Học tiếng Anh 30 phút', 'Đi chợ cho cả tuần', 'Tối ưu truy vấn ClickHouse', 'Viết nhật ký 10 phút', 'Dọn bàn làm việc'];
+    const adhocPool = ['Hỗ trợ chị Hạnh xuất dữ liệu', 'Sửa lỗi dashboard gấp', 'Đi đón em ở trường', 'Họp đột xuất với khách hàng', 'Trả lời email của sếp'];
+    const goods = ['Hoàn thành MIT trước 11 giờ', 'Không mở mạng xã hội buổi sáng', 'Vẫn chạy bộ dù trời mưa', 'Tập trung 2 tiếng liền cho Databricks', 'Nói “không” với một cuộc họp không cần thiết', 'Ngủ đủ 7 tiếng'];
+    const imps = ['Ngủ trước 23:30', 'Chia nhỏ việc lớn ngay lúc plan', 'Ít nhận việc phát sinh hơn', 'Bắt đầu việc khó trước 9 giờ', 'Plan ít việc hơn vào cuối tuần', 'Nghỉ 5 phút sau mỗi 50 phút'];
+    const names = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+    const pad = n => String(n).padStart(2, '0'), out = [], n = sc === 'newuser' ? 0 : 182;
+    for (let i = n; i >= 1; i--) {
+      const dt = new Date(2026, 9, 3 - i), dow = (dt.getDay() + 6) % 7, nx = new Date(2026, 9, 4 - i);
+      const base = { key: dt.getFullYear() + '-' + pad(dt.getMonth() + 1) + '-' + pad(dt.getDate()), y: dt.getFullYear(), m: dt.getMonth() + 1, d: dt.getDate(), dow, label: names[dt.getDay()] + ', ' + dt.getDate() + '/' + (dt.getMonth() + 1), isToday: false };
+      const off = [6, 13, 17, 25].includes(i) || (sc === 'missed' && i === 1) || (i > 29 && rnd() < 0.13);
+      if (off) { out.push({ ...base, hasPlan: false, pct: 0, tasks: [] }); continue; }
+      const evening = rnd() < 0.62, energy = 1 + Math.floor(rnd() * 5);
+      let p = 0.3 + rnd() * 0.36 + (dow === 1 ? 0.06 : 0) - (dow === 6 ? 0.14 : dow === 5 ? 0.06 : 0) + (evening ? 0.07 : -0.04) + (energy - 3) * 0.04 + (182 - i) / 182 * 0.05;
+      if (rnd() < 0.05) p = 1.2;
+      const cnt = 5 + Math.floor(rnd() * 4), st0 = Math.floor(rnd() * pool.length), tasks = [];
+      for (let k = 0; k < cnt; k++) {
+        const mit = k < 3 && k < 1 + Math.floor(rnd() * 3), q = p > 1 ? 1 : Math.min(0.95, mit ? p + 0.1 : p), r = rnd();
+        tasks.push({ title: pool[(st0 + k * 5) % pool.length], mit, important: mit || rnd() < 0.45, urgent: rnd() < 0.35, size: ['S', 'M', 'L'][Math.floor(rnd() * 3)], adhoc: false, postponed: rnd() < 0.06 ? 3 : 0,
+          status: r < q ? 'done' : rnd() < 0.72 ? 'moved' : 'dropped', movedTo: nx.getDate() + '/' + (nx.getMonth() + 1) });
+      }
+      if (rnd() < 0.5) tasks.push({ title: adhocPool[Math.floor(rnd() * adhocPool.length)], mit: false, important: false, urgent: true, size: 'S', adhoc: true, postponed: 0, status: rnd() < 0.8 ? 'done' : 'moved', movedTo: nx.getDate() + '/' + (nx.getMonth() + 1) });
+      const pct = this.stats(tasks.filter(t => !t.adhoc)).pct, wr = rnd() < 0.75;
+      out.push({ ...base, hasPlan: true, pct, tasks, eveningPlan: evening, energy, planAt: evening ? '2' + (1 + Math.floor(rnd() * 2)) + ':' + pad(Math.floor(rnd() * 60)) : '07:' + pad(Math.floor(rnd() * 60)), good: wr ? goods[Math.floor(rnd() * goods.length)] : '', improve: wr ? imps[Math.floor(rnd() * imps.length)] : '' });
+    }
+    this._days = out; this._daysSc = sc; return out;
+  }
+  seed(sc) {
+    const T = (id, title, o) => Object.assign({ id, title, important: false, urgent: false, mit: false, size: null, status: 'todo', postponed: 0, adhoc: false, addedAt: null }, o);
+    const base = [
+      T(1, 'Học 2 chương Databricks', { important: true, mit: true, size: 'L', status: 'done' }),
+      T(2, 'Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai', { important: true, urgent: true, mit: true, size: 'L', postponed: 3 }),
+      T(3, 'Chạy bộ 5km quanh hồ', { important: true, mit: true, size: 'M', status: 'done' }),
+      T(4, 'Gửi báo cáo tuần', { important: true, urgent: true, size: 'S', status: 'done' }),
+      T(5, 'Đặt lịch khám răng', { urgent: true, size: 'S', postponed: 1 }),
+      T(6, 'Đọc 20 trang "Atomic Habits"', { important: true, size: 'S' }),
+      T(7, 'Dọn hộp thư, trả lời email tồn', { size: 'S', status: 'done' }),
+      T(8, 'Gọi điện cho mẹ', { important: true, size: 'S', status: 'done' }),
+      T(9, 'Sửa lỗi dashboard doanh thu cho chị Hạnh', { urgent: true, size: 'M', status: 'done', adhoc: true, addedAt: '14:10' }),
+      T(10, 'Mua quà sinh nhật Minh', { size: 'S', adhoc: true, addedAt: '17:30' })
+    ];
+    if (sc === 'empty' || sc === 'missed' || sc === 'newuser') return [];
+    if (sc === 'open') return base.filter(t => !t.adhoc).map(t => ({ ...t, status: 'todo' }));
+    if (sc === 'perfect') return base.map(t => ({ ...t, status: 'done' }));
+    return base;
+  }
+  cfg() {
+    return ({
+      normal: { now: '20:45', locked: true }, perfect: { now: '21:30', locked: true },
+      open: { now: '08:15', locked: false, left: '1 giờ 45 phút' }, empty: { now: '08:15', locked: false, left: '1 giờ 45 phút' },
+      missed: { now: '08:40', locked: false, left: '1 giờ 20 phút' }, newuser: { now: '08:30', locked: false, left: '1 giờ 30 phút' },
+      latenight: { now: '01:00', locked: true, lateNight: true }, noplan: { now: '21:50', locked: true }
+    })[this.state.sc] || { now: '20:45', locked: true };
+  }
+  chipDates() {
+    const DOW = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'], base = new Date(2026, 9, 3);
+    const mk = (label, off) => { const d = new Date(2026, 9, 3 + off); return { label, short: DOW[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1) }; };
+    const toMon = ((8 - base.getDay()) % 7) || 7, toSat = ((6 - base.getDay() + 7) % 7) || 7;
+    const list = [mk('Mai', 1), mk('Thứ 2 tới', toMon), mk('Cuối tuần', toSat), mk('+1 tuần', 7)];
+    return list.filter((x, i) => list.findIndex(y => y.short === x.short) === i);
+  }
+  openPicker(id, el, ctx, sel) {
+    const root = this.rootRef.current, compact = this.state.width < 720;
+    let left = 0, top = 0;
+    if (!compact && el && root) {
+      const r = el.getBoundingClientRect(), R = root.getBoundingClientRect(), sx = R.width / root.offsetWidth || 1;
+      left = Math.max(12, Math.min((r.left - R.left) / sx, root.offsetWidth - 352));
+      top = (r.bottom - R.top) / sx + 8;
+      if (top + 400 > root.offsetHeight) top = Math.max(12, (r.top - R.top) / sx - 408);
+    }
+    this.setState({ picker: { id, ctx, left, top, sel: sel || null, inn: false } });
+    setTimeout(() => this.state.picker && this.setState(s => ({ picker: { ...s.picker, inn: true } })), 20);
+  }
+  commitPick(key, label) {
+    const p = this.state.picker; if (!p) return;
+    if (p.ctx === 'review') this.decide(p.id, 'date:' + label);
+    else { const t = this.state.tasks.find(x => x.id === p.id); this.patch(p.id, { status: 'moved', movedTo: label, postponed: (t.postponed || 0) + 1 }); this.setState({ openId: null }); this.say('Đã dời sang ' + label); }
+    this.setState({ picker: null });
+  }
+  applyDemo() {
+    const p = this.props;
+    if (p.startView === 'ritual' && p.startStep > 0) {
+      this.setState({ decisions: { 2: 'tomorrow', 5: 'date:T2 5/10', 6: 'tomorrow', 10: 'drop' }, energy: 4, good: 'Vẫn chạy bộ dù trời mưa', improve: 'Bắt đầu việc khó trước 9 giờ',
+        extra: [{ key: 'x900', title: 'Viết blog về tối ưu Spark', mit: true, carried: false, postponed: 0 }, { key: 'x901', title: 'Đi chợ cho cả tuần', mit: false, carried: false, postponed: 0 }], step: Math.min(p.startStep, 2) },
+        () => { if (p.startStep >= 3) this.finish(); });
+    }
+    if (p.demoPicker) setTimeout(() => { const el = this.rootRef.current && this.rootRef.current.querySelector('[data-pick="5"]'); this.openPicker(5, el, p.startView === 'ritual' ? 'review' : 'today', '2026-10-14'); }, 450);
+    if (p.demoSheet) this.setState({ mode: 'matrix', sheetId: 4, sheetIn: true });
+  }
+  demoSig(p) { return [p.scenario, p.startView, p.startStep, p.demoPicker, p.demoSheet, p.startMode].join('|'); }
+  theme() { const t = this.state.theme || this.props.theme || 'light'; return t === 'system' ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : t; }
+
+  componentDidMount() {
+    this.onKeyB = e => this.onKey(e);
+    window.addEventListener('keydown', this.onKeyB);
+    if (this.props.keyboard) window.__bedActive = this.uid;
+    if (this.rootRef.current && window.ResizeObserver) {
+      this.ro = new ResizeObserver(([en]) => { const w = Math.round(en.contentRect.width); if (w !== this.state.width) this.setState({ width: w }); });
+      this.ro.observe(this.rootRef.current);
+    }
+    this.applyDemo();
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKeyB); this.ro && this.ro.disconnect(); clearTimeout(this.tt); }
+  componentDidUpdate(prev) {
+    if (this.demoSig(prev) !== this.demoSig(this.props)) this.setState(this.fresh(this.props.scenario || 'normal'), () => this.applyDemo());
+  }
+  onKey(e) {
+    if (window.__bedActive !== this.uid || e.metaKey || e.ctrlKey || e.altKey) return;
+    const tag = (e.target.tagName || '').toLowerCase(), typing = tag === 'input' || tag === 'textarea';
+    if (e.key === 'Escape') { if (typing) { e.target.blur(); return; } if (this.state.picker || this.state.sheetId) { this.setState({ picker: null, sheetId: null }); return; } if (this.state.view === 'ritual') this.closeRitual(); else this.setState({ openId: null }); return; }
+    if (typing) return;
+    const k = e.key.toLowerCase();
+    if (k === 'n' || k === '/') { e.preventDefault(); this.setState({ view: 'today', mode: 'list' }, () => this.inputRef.current && this.inputRef.current.focus()); }
+    else if (k === 'm') this.setState(s => ({ view: 'today', mode: s.mode === 'list' ? 'matrix' : 'list' }));
+    else if (k === 'e') this.openRitual();
+    else if (k === 't') this.toggleTheme();
+  }
+  say(msg) { clearTimeout(this.tt); this.setState({ toast: msg }); this.tt = setTimeout(() => this.setState({ toast: null }), 2600); }
+  toggleTheme() { this.setState({ theme: this.theme() === 'dark' ? 'light' : 'dark' }); }
+  weight(t) { return (this.W[t.size] || 2) * (t.mit ? 2 : 1); }
+  stats(list) {
+    const c = list.filter(t => t.status !== 'dropped');
+    const tot = c.reduce((a, t) => a + this.weight(t), 0), dn = c.filter(t => t.status === 'done').reduce((a, t) => a + this.weight(t), 0);
+    return { pct: tot ? Math.round(dn / tot * 100) : 0, done: c.filter(t => t.status === 'done').length, total: c.length };
+  }
+  gone(t) { return t.status === 'moved' || t.status === 'dropped'; }
+  patch(id, o) { this.setState(s => ({ tasks: s.tasks.map(t => t.id === id ? { ...t, ...o } : t) })); }
+  toggleDone(id) {
+    const t = this.state.tasks.find(x => x.id === id); if (!t || this.gone(t)) return;
+    const done = t.status !== 'done';
+    const tasks = this.state.tasks.map(x => x.id === id ? { ...x, status: done ? 'done' : 'todo' } : x);
+    this.setState({ tasks, popId: done ? id : null });
+    if (done) {
+      setTimeout(() => this.state.popId === id && this.setState({ popId: null }), 240);
+      const pl = tasks.filter(x => !x.adhoc && x.status !== 'dropped');
+      if (!t.adhoc && pl.length && pl.every(x => x.status === 'done')) this.say('Trọn vẹn 100% kế hoạch hôm nay. Làm tốt lắm!');
+    }
+  }
+  toggleMit(id) {
+    const t = this.state.tasks.find(x => x.id === id);
+    if (!t.mit && this.state.tasks.filter(x => x.mit && !this.gone(x)).length >= 3) return this.say('Tối đa 3 MIT — bỏ bớt một việc trước nhé');
+    this.patch(id, { mit: !t.mit });
+  }
+  parse(str) {
+    let important = false, urgent = false, mit = false, size = null; const words = [];
+    str.trim().split(/\s+/).forEach(w => {
+      if (/^[*!^]+$/.test(w)) { for (const ch of w) { if (ch === '*') mit = true; if (ch === '!') important = true; if (ch === '^') urgent = true; } }
+      else if (/^~[sml]$/i.test(w)) size = w[1].toUpperCase();
+      else if (w) words.push(w);
+    });
+    return { title: words.join(' '), important, urgent, mit, size };
+  }
+  addTask() {
+    const p = this.parse(this.state.input); if (!p.title) return;
+    const c = this.cfg(), s = this.state;
+    let mit = p.mit;
+    if (mit && s.tasks.filter(x => x.mit && !this.gone(x)).length >= 3) { mit = false; this.say('Đã có đủ 3 MIT — việc này thêm như việc thường'); }
+    else if (c.locked) this.say('Đã thêm vào nhóm Phát sinh');
+    const t = { id: s.nextId, title: p.title, important: p.important, urgent: p.urgent, mit, size: p.size, status: 'todo', postponed: 0, adhoc: !!c.locked, addedAt: c.locked ? c.now : null };
+    this.setState({ tasks: [...s.tasks, t], input: '', nextId: s.nextId + 1, mode: 'list' });
+  }
+  openRitual() { this.setState({ view: 'ritual', step: this.state.closed ? 3 : 0 }, () => this.top()); }
+  closeRitual() { this.setState({ view: 'today' }, () => this.top()); if (this.state.closed) this.say('Đã đóng ngày. Hẹn gặp lại sáng mai!'); }
+  top() { const el = this.scrollRef.current; if (el) el.scrollTop = 0; }
+  remaining() { return this.state.tasks.filter(t => t.status === 'todo' && !this.state.decisions[t.id]).length; }
+  decide(id, v) { this.setState(s => ({ decisions: { ...s.decisions, [id]: s.decisions[id] === v ? undefined : v }, dateFor: null })); }
+  reviewToggle(id) { this.setState(s => { const d = { ...s.decisions }; delete d[id]; return { decisions: d }; }); this.toggleDone(id); }
+  setStep(i) { this.setState({ step: i }, () => this.top()); }
+  tomorrow() {
+    const s = this.state;
+    const carried = s.tasks.filter(t => s.decisions[t.id] === 'tomorrow' && (t.status === 'todo' || t.status === 'moved')).map(t => {
+      const key = 'c' + t.id, p = s.closed ? t.postponed : (t.postponed || 0) + 1;
+      return { key, title: t.title, carried: true, postponed: p, mit: s.tomMit[key] !== undefined ? s.tomMit[key] : t.mit };
+    });
+    return [...carried, ...s.extra];
+  }
+  toggleTomMit(key) {
+    const list = this.tomorrow(), it = list.find(x => x.key === key);
+    if (!it.mit && list.filter(x => x.mit).length >= 3) return this.say('Tối đa 3 MIT cho ngày mai');
+    if (key[0] === 'c') this.setState(s => ({ tomMit: { ...s.tomMit, [key]: !it.mit } }));
+    else this.setState(s => ({ extra: s.extra.map(x => x.key === key ? { ...x, mit: !x.mit } : x) }));
+  }
+  addTom() {
+    const p = this.parse(this.state.tomInput); if (!p.title) return;
+    let mit = p.mit; if (mit && this.tomorrow().filter(x => x.mit).length >= 3) { mit = false; this.say('Đã đủ 3 MIT cho ngày mai'); }
+    this.setState(s => ({ extra: [...s.extra, { key: 'x' + s.nextId, title: p.title, mit, carried: false, postponed: 0 }], tomInput: '', nextId: s.nextId + 1 }));
+  }
+  finish() {
+    if (this.remaining() > 0) return this.say('Còn việc chưa xử lý — dời hoặc bỏ nhé');
+    const d = this.state.decisions;
+    const tasks = this.state.tasks.map(t => {
+      const v = d[t.id]; if (t.status !== 'todo' || !v) return t;
+      if (v === 'drop') return { ...t, status: 'dropped' };
+      return { ...t, status: 'moved', movedTo: v === 'tomorrow' ? 'mai' : v.slice(5), postponed: (t.postponed || 0) + 1 };
+    });
+    this.setState({ tasks, step: 3, closed: true }, () => this.top());
+  }
+  scrollTo(ref) { const el = ref.current, sc = this.scrollRef.current; if (el && sc) sc.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' }); }
+
+  decorate(t) {
+    const s = this.state, done = t.status === 'done', gone = this.gone(t), open = s.openId === t.id;
+    const tog = (on, label, fn) => ({ label, onClick: fn, bg: on ? 'var(--ink)' : 'transparent', color: on ? 'var(--bg)' : 'var(--ink-2)', border: on ? 'var(--ink)' : 'var(--line)' });
+    const showPostponed = t.postponed > 0 && t.postponed < 3 && !gone, warn = t.postponed >= 3 && !gone && !done;
+    return {
+      ...t, size: t.size || '', showSize: !!t.size,
+      checkBg: done ? 'var(--sage)' : 'transparent', checkBorder: done ? 'var(--sage)' : gone ? 'var(--line)' : 'var(--ink-3)',
+      checkDash: done ? 0 : 24, checkScale: s.popId === t.id ? 1.22 : 1, checkCursor: gone ? 'default' : 'pointer',
+      titleColor: done || gone ? 'var(--ink-3)' : 'var(--ink)', decoColor: done || t.status === 'dropped' ? 'var(--ink-3)' : 'transparent',
+      rowBg: open ? 'var(--hover)' : 'transparent',
+      showAdded: !!(t.adhoc && t.addedAt), showPostponed, warn, showStatus: gone,
+      statusText: t.status === 'moved' ? 'Đã dời → ' + (t.movedTo || 'mai') : 'Đã bỏ',
+      hasMeta: t.important || t.urgent || (t.adhoc && t.addedAt) || showPostponed || warn || gone,
+      isOpen: open,
+      toggles: [tog(t.mit, '★ MIT', () => this.toggleMit(t.id)), tog(t.important, 'Quan trọng', () => this.patch(t.id, { important: !t.important })), tog(t.urgent, 'Gấp', () => this.patch(t.id, { urgent: !t.urgent }))],
+      sizes: ['S', 'M', 'L'].map(z => ({ label: z, onClick: () => this.patch(t.id, { size: t.size === z ? null : z }), bg: t.size === z ? 'var(--ink)' : 'transparent', color: t.size === z ? 'var(--bg)' : 'var(--ink-2)' })),
+      actions: gone
+        ? [{ label: 'Khôi phục', onClick: () => this.patch(t.id, { status: 'todo', postponed: t.status === 'moved' ? Math.max(0, t.postponed - 1) : t.postponed }) }]
+        : [{ label: 'Dời sang mai', onClick: () => { this.patch(t.id, { status: 'moved', movedTo: 'mai', postponed: (t.postponed || 0) + 1 }); this.setState({ openId: null }); } },
+           { label: 'Ngày khác…', onClick: e => this.openPicker(t.id, e.currentTarget, 'today') },
+           { label: 'Bỏ', onClick: () => { this.patch(t.id, { status: 'dropped' }); this.setState({ openId: null }); } }],
+      onToggle: () => this.toggleDone(t.id), onExpand: () => this.setState({ openId: open ? null : t.id })
+    };
+  }
+
+  renderVals() {
+    const s = this.state, c = this.cfg(), compact = s.width < 720, theme = this.theme();
+    const tasks = s.tasks, planned = tasks.filter(t => !t.adhoc), st = this.stats(planned), adhoc = tasks.filter(t => t.adhoc);
+    const isToday = s.view === 'today', isRitual = s.view === 'ritual';
+    const past = this.genDays(s.sc);
+    const days = [...past, { key: '2026-10-03', y: 2026, m: 10, d: 3, dow: 5, label: 'Thứ Bảy, 3/10', isToday: true, hasPlan: tasks.length > 0, pct: st.pct, tasks, eveningPlan: true, energy: s.energy }];
+    const consN = days.slice(-30).filter(d => d.hasPlan).length;
+    const mitCount = tasks.filter(t => t.mit && !this.gone(t)).length;
+    const sc = s.sc, empty = tasks.length === 0;
+    const go = key => () => {
+      if (key === 'today') this.setState({ view: 'today' }, () => this.top());
+      else if (key === 'ritual') this.openRitual();
+      else this.setState({ view: key, histKey: key === 'history' ? null : s.histKey }, () => this.top());
+    };
+    const navDef = [
+      { key: 'today', label: 'Hôm nay', d: this.IC.home }, { key: 'ritual', label: 'Nghi thức tối', d: this.IC.moon },
+      { key: 'stats', label: 'Hành trình', d: this.IC.chart }, { key: 'history', label: 'Lịch sử', d: this.IC.cal },
+      { key: 'goals', label: 'Mục tiêu', d: this.IC.target, tag: 'Phase 2' }, { key: 'weekly', label: 'Tổng kết tuần', d: this.IC.week, tag: 'Phase 2' },
+      { key: 'settings', label: 'Cài đặt', d: this.IC.gear }
+    ];
+    const navItems = navDef.map(n => { const on = n.key === s.view; return { ...n, tag: n.tag || '', onClick: go(n.key), bg: on ? 'var(--paper)' : 'transparent', color: on || !n.tag ? 'var(--ink)' : 'var(--ink-2)', weight: on ? 600 : 500 }; });
+    const moreKeys = ['more', 'goals', 'weekly', 'settings'];
+    const tabs = [...navDef.slice(0, 4), { key: 'more', label: 'Thêm', d: 'M4 6h16M4 12h16M4 18h16' }].map(n => { const on = n.key === s.view || (n.key === 'more' && moreKeys.includes(s.view)); return { ...n, label: n.key === 'ritual' ? 'Buổi tối' : n.label, onClick: go(n.key), color: on ? 'var(--ink)' : 'var(--ink-3)', weight: on ? 600 : 500, pill: on ? 'var(--surface)' : 'transparent' }; });
+    const hl = p => p < 40 ? 1 : p < 60 ? 2 : p < 80 ? 3 : 4;
+    const last30 = days.slice(-30), consistency = [...Array(30 - last30.length).fill(null), ...last30].map(d => d && d.hasPlan ? { bg: 'var(--heat-' + hl(d.pct) + ')', ring: d.isToday ? 'var(--accent)' : 'transparent', title: d.label + ' · ' + d.pct + '%' } : { bg: 'transparent', ring: 'var(--line)', title: d ? d.label + ' · không có plan' : '' });
+
+    const pv = this.parse(s.input), previewChips = s.input.trim() ? [pv.mit && 'MIT', pv.important && 'Quan trọng', pv.urgent && 'Gấp', pv.size && 'Độ lớn ' + pv.size].filter(Boolean) : [];
+    const listOn = s.mode === 'list';
+    const Q = [
+      { k: 'q1', i: true, u: true, title: 'Làm ngay', sub: 'Quan trọng · Gấp' },
+      { k: 'q2', i: true, u: false, title: 'Lên lịch', sub: 'Quan trọng · Không gấp', note: 'Vùng của tiến bộ dài hạn' },
+      { k: 'q3', i: false, u: true, title: 'Làm nhanh hoặc nhờ', sub: 'Không quan trọng · Gấp' },
+      { k: 'q4', i: false, u: false, title: 'Cân nhắc bỏ', sub: 'Không quan trọng · Không gấp' }
+    ];
+    const quadrants = Q.map(q => {
+      const items = tasks.filter(t => !this.gone(t) && !!t.important === q.i && !!t.urgent === q.u), over = s.overQ === q.k;
+      return {
+        ...q, note: q.note || '', count: items.length, empty: !items.length,
+        bg: over ? 'var(--sage-soft)' : 'var(--surface)', ring: over ? 'var(--sage)' : 'transparent',
+        onDragOver: e => { e.preventDefault(); if (this.state.overQ !== q.k) this.setState({ overQ: q.k }); },
+        onDragLeave: e => { if (!e.currentTarget.contains(e.relatedTarget)) this.setState({ overQ: null }); },
+        onDrop: e => { e.preventDefault(); const id = +e.dataTransfer.getData('text/plain') || this.state.dragId; if (id) this.patch(id, { important: q.i, urgent: q.u }); this.setState({ overQ: null, dragId: null }); },
+        chips: items.map(t => ({
+          title: t.title, isMit: t.mit, adhoc: t.adhoc, draggable: compact ? 'false' : 'true', cursor: compact ? 'pointer' : 'grab',
+          onTap: e => { if (!compact || (e.target.closest && e.target.closest('button'))) return; this.setState({ sheetId: t.id, sheetIn: false }); setTimeout(() => this.setState({ sheetIn: true }), 20); },
+          onDragStart: e => { e.dataTransfer.setData('text/plain', String(t.id)); e.dataTransfer.effectAllowed = 'move'; this.setState({ dragId: t.id }); },
+          onDragEnd: () => this.setState({ dragId: null, overQ: null }),
+          opacity: s.dragId === t.id ? 0.4 : 1, color: t.status === 'done' ? 'var(--ink-3)' : 'var(--ink)', deco: t.status === 'done' ? 'line-through' : 'none',
+          checkBg: t.status === 'done' ? 'var(--sage)' : 'transparent', checkBorder: t.status === 'done' ? 'var(--sage)' : 'var(--ink-3)',
+          onToggle: () => this.toggleDone(t.id)
+        }))
+      };
+    });
+
+    // ritual
+    const isScroll = false, summary = s.step === 3;
+    const chipD = this.chipDates();
+    const rem = this.remaining();
+    const reviewRows = tasks.filter(t => t.status === 'todo' || t.status === 'done').map(t => {
+      const d = s.decisions[t.id], done = t.status === 'done', isDate = !!(d && d.startsWith('date:'));
+      const btn = (on, label, fn, pick) => ({ label, onClick: fn, pick: pick || '', bg: on ? 'var(--ink)' : 'transparent', color: on ? 'var(--bg)' : 'var(--ink-2)', border: on ? 'var(--ink)' : 'var(--line)' });
+      const isCustom = isDate && !chipD.some(c => d === 'date:' + c.short);
+      return {
+        title: t.title, isMit: t.mit, adhoc: t.adhoc, needsDecision: !done, postponed: t.postponed,
+        bg: done ? 'var(--sage-soft)' : d ? 'var(--line-2)' : 'var(--surface)',
+        titleColor: done ? 'var(--ink-2)' : 'var(--ink)',
+        checkBg: done ? 'var(--sage)' : 'transparent', checkBorder: done ? 'var(--sage)' : 'var(--ink-3)', checkDash: done ? 0 : 24, checkScale: s.popId === t.id ? 1.22 : 1,
+        onToggle: () => this.reviewToggle(t.id),
+        btns: [
+          ...chipD.map(c => { const v = c.label === 'Mai' ? 'tomorrow' : 'date:' + c.short; return btn(d === v, c.label === 'Mai' ? 'Mai' : c.label + ' · ' + c.short.split(' ')[1], () => this.decide(t.id, v)); }),
+          btn(isCustom, isCustom ? d.slice(5) : 'Chọn ngày…', e => this.openPicker(t.id, e.currentTarget, 'review'), String(t.id)),
+          btn(d === 'drop', 'Bỏ', () => this.decide(t.id, 'drop'))
+        ],
+        warn: !done && (t.postponed || 0) >= 3 && d !== 'drop'
+      };
+    });
+    const tom = this.tomorrow(), tomMitCount = tom.filter(x => x.mit).length;
+    const tomRows = tom.map(r => ({
+      ...r, removable: !r.carried, warn: r.carried && r.postponed >= 3,
+      starBg: r.mit ? 'var(--accent)' : 'var(--paper)', starFill: r.mit ? 'var(--on-accent)' : 'none', starStroke: r.mit ? 'var(--on-accent)' : 'var(--ink-3)',
+      onStar: () => this.toggleTomMit(r.key), onRemove: () => this.setState(st2 => ({ extra: st2.extra.filter(x => x.key !== r.key) }))
+    }));
+    const energyLabels = ['Cạn kiệt', 'Hơi mệt', 'Bình thường', 'Khá tốt', 'Tràn đầy'];
+    const energyOpts = energyLabels.map((label, i) => { const n = i + 1, on = s.energy === n; return { n, label, onClick: () => this.setState({ energy: on ? 0 : n }), bg: on ? 'var(--sage)' : 'transparent', color: on ? 'var(--on-accent)' : 'var(--ink)', ring: on ? 'var(--sage)' : 'var(--line)', scale: on ? 1.08 : 1, labelColor: on ? 'var(--ink)' : 'var(--ink-3)' }; });
+    const steps = ['Nhìn lại hôm nay', 'Phản tỉnh', 'Plan ngày mai'].map((label, i) => ({ num: i + 1, label, bar: s.step > i ? 'var(--sage)' : s.step === i ? 'var(--accent)' : 'var(--line)', color: s.step === i ? 'var(--ink)' : 'var(--ink-3)', cursor: i < s.step && !summary ? 'pointer' : 'default', onClick: () => { if (i < s.step && !summary) this.setStep(i); } }));
+    const ck = [rem === 0, !!(s.energy || s.good || s.improve), tom.length > 0];
+    const checkpoints = ['Nhìn lại', 'Phản tỉnh', 'Ngày mai'].map((label, i) => ({ label, mark: ck[i] ? '✓' : i + 1, dot: ck[i] ? 'var(--sage)' : 'var(--ink-3)', bg: ck[i] ? 'var(--sage-soft)' : 'var(--line-2)', color: 'var(--ink)', onClick: () => this.scrollTo([this.b1Ref, this.b2Ref, this.b3Ref][i]) }));
+
+    const sst = this.stats(planned), moved = tasks.filter(t => t.status === 'moved').length, dropped = tasks.filter(t => t.status === 'dropped').length;
+    const sumHeadline = sst.pct >= 100 ? 'Một ngày trọn vẹn.' : sst.pct >= 75 ? 'Một ngày vững vàng.' : sst.pct >= 50 ? 'Tiến thêm một bước — đều đặn là đủ.' : 'Có những ngày như vậy. Mai bắt đầu lại, nhẹ nhàng thôi.';
+    const sumBody = 'Bạn hoàn thành ' + sst.done + '/' + sst.total + ' việc đã định' + (adhoc.length ? ', cùng ' + adhoc.filter(t => t.status === 'done').length + ' việc phát sinh' : '') + '. ' + (dropped ? 'Bỏ đi một việc không còn cần cũng là kỷ luật.' : 'Những gì dang dở đã có chỗ của nó.');
+    const sumStats = [
+      { value: sst.done + '/' + sst.total, label: 'việc đã định hoàn thành' },
+      { value: String(moved), label: 'việc được dời' },
+      { value: String(dropped), label: 'việc được bỏ' },
+      { value: s.energy ? s.energy + '/5' : '—', label: 'năng lượng' }
+    ];
+
+    const toMin = (hm, endH) => { const [hh, mm] = hm.split(':').map(Number); return (hh < endH ? hh + 24 : hh) * 60 + mm; };
+    const endH = parseInt(s.settings.dayEnd), nowM = toMin(c.now, endH), remM = toMin(s.settings.remindPlan, endH);
+    const showPlanReminder = !s.closed && !s.remDismissed && !empty && s.settings.remindOn && parseInt(s.settings.remindPlan) >= 12 && nowM >= remM;
+    const pk = s.picker, sheetMode = compact, pkTask = pk ? (tasks.find(t => t.id === pk.id) || {}).title : '';
+    const DOWS = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+    const keyLabel = k => { const [y, m, dd] = k.split('-').map(Number), dt = new Date(y, m - 1, dd); return DOWS[dt.getDay()] + ' ' + dd + '/' + m; };
+    const sheetT = s.sheetId ? tasks.find(t => t.id === s.sheetId) : null;
+    const sheetQuads = Q.map(q => { const cur = sheetT && !!sheetT.important === q.i && !!sheetT.urgent === q.u; return { title: q.title, sub: q.sub, current: !!cur, bg: cur ? 'var(--accent-soft)' : 'var(--surface)', ring: cur ? 'var(--accent)' : 'transparent', onClick: () => { if (sheetT) this.patch(sheetT.id, { important: q.i, urgent: q.u }); this.setState({ sheetId: null }); if (!cur) this.say('Đã chuyển sang “' + q.title + '”'); } }; });
+
+    return {
+      kicker: c.lateNight ? 'Vẫn là hôm nay · ' + c.now + ' sáng Chủ Nhật' : 'Hôm nay · ' + c.now, isLateNight: !!c.lateNight, dayEndLabel: endH + ':00',
+      showPlanReminder, dismissReminder: () => this.setState({ remDismissed: true }),
+      pickerOpen: !!pk, pickerIsSheet: sheetMode, pickerTask: pkTask || '',
+      pickerScrim: sheetMode && pk && pk.inn ? 'color-mix(in srgb, #201e1d 38%, transparent)' : 'transparent',
+      pickerLeft: sheetMode ? '0' : (pk ? pk.left : 0) + 'px', pickerTop: sheetMode ? 'auto' : (pk ? pk.top : 0) + 'px', pickerRight: sheetMode ? '0' : 'auto', pickerBottom: sheetMode ? '0' : 'auto',
+      pickerW: sheetMode ? 'auto' : '340px', pickerPad: sheetMode ? '12px 16px 24px' : '14px', pickerRadius: sheetMode ? '30px 30px 0 0' : '24px',
+      pickerTf: pk && pk.inn ? 'none' : sheetMode ? 'translateY(100%)' : 'translateY(-6px) scale(.97)', pickerOp: sheetMode || (pk && pk.inn) ? 1 : 0,
+      pickerSel: pk && pk.sel ? pk.sel : '', closePicker: () => this.setState({ picker: null }),
+      onPick: key => { if (!sheetMode) this.commitPick(key, keyLabel(key)); else this.setState(st2 => ({ picker: { ...st2.picker, sel: key } })); },
+      confirmPick: () => { if (pk && pk.sel) this.commitPick(pk.sel, keyLabel(pk.sel)); },
+      pickConfirmLabel: pk && pk.sel ? 'Dời sang ' + keyLabel(pk.sel) : 'Chọn một ngày', pickConfirmOp: pk && pk.sel ? 1 : 0.45,
+      sheetOpen: !!sheetT, sheetTask: sheetT ? sheetT.title : '', sheetQuads, closeSheet: () => this.setState({ sheetId: null }),
+      sheetTf: s.sheetIn ? 'none' : 'translateY(100%)', sheetScrim: s.sheetIn ? 'color-mix(in srgb, #201e1d 38%, transparent)' : 'transparent',
+      rootRef: this.rootRef, scrollRef: this.scrollRef, inputRef: this.inputRef, tomRef: this.tomRef, b1Ref: this.b1Ref, b2Ref: this.b2Ref, b3Ref: this.b3Ref,
+      theme, rootH: this.props.embedded ? '100%' : '100vh', activate: () => { window.__bedActive = this.uid; },
+      showSidebar: !compact && s.view !== 'onboarding', compactHeader: compact && s.view !== 'onboarding', showTabs: compact && !isRitual && s.view !== 'onboarding',
+      compact, days, consText: consN + '/30', maxW: isToday || isRitual ? '760px' : s.view === 'onboarding' ? '640px' : '1080px',
+      isStats: s.view === 'stats', isHistory: s.view === 'history', isSettings: s.view === 'settings', isOnboarding: s.view === 'onboarding', isGoals: s.view === 'goals', isWeekly: s.view === 'weekly', isMore: s.view === 'more',
+      openDay: k => this.setState({ view: 'history', histKey: k }, () => this.top()), histKey: s.histKey || '',
+      goToday: () => this.setState({ view: 'today' }, () => this.top()), goOnboarding: () => this.setState({ view: 'onboarding' }, () => this.top()),
+      settings: s.settings, onSettings: o => this.setState(st2 => ({ settings: { ...st2.settings, ...o } })),
+      themeChoice: s.theme || this.props.theme || 'light', onTheme: v => this.setState({ theme: v }), lockAt: s.settings.lock,
+      onOnboardFinish: patch => { this.setState(st2 => ({ settings: patch ? { ...st2.settings, ...patch } : st2.settings, view: 'today', onboarded: true }), () => { this.top(); this.inputRef.current && this.inputRef.current.focus(); }); this.say('Bắt đầu thôi — viết việc đầu tiên nhé'); },
+      moreItems: navDef.slice(4).map(n => ({ ...n, tag: n.tag || '', onClick: go(n.key) })),
+      mainRadius: compact ? '0' : '30px', mainMargin: compact ? '0' : '12px 12px 12px 0',
+      pad: compact ? (isRitual || s.view === 'onboarding' ? '20px 16px 24px' : '20px 16px 110px') : '44px 44px 64px',
+      h1Size: compact ? '30px' : '44px', h2Size: compact ? '27px' : '34px', bigNum: compact ? '84px' : '112px',
+      navItems, tabs, consistency, toggleTheme: () => this.toggleTheme(),
+      themeIcon: theme === 'dark' ? this.IC.sun : this.IC.moon, themeLabel: theme === 'dark' ? 'Giao diện sáng' : 'Giao diện tối',
+      isToday, isRitual, now: c.now, locked: !!c.locked, windowOpen: !c.locked, windowLeft: c.left || '',
+      hasPlanned: planned.length > 0, pct: st.pct, pctW: st.pct + '%', doneCount: st.done, totalCount: st.total,
+      showMissed: sc === 'missed', showWelcome: sc === 'newuser' && empty && !s.onboarded, showPerfect: planned.length > 0 && st.pct === 100,
+      showEvening: (sc === 'normal' || sc === 'perfect' || sc === 'latenight') && !s.closed && !showPlanReminder,
+      input: s.input, onInput: e => this.setState({ input: e.target.value }), onInputKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.addTask(); } },
+      onAddFocus: () => this.setState({ addFocus: true }), onAddBlur: () => this.setState({ addFocus: false }),
+      addBorder: s.addFocus ? 'var(--accent)' : 'var(--line)', previewChips, addTask: () => this.addTask(),
+      showList: () => this.setState({ mode: 'list' }), showMatrix: () => this.setState({ mode: 'matrix' }),
+      listBg: listOn ? 'var(--paper)' : 'transparent', listColor: listOn ? 'var(--ink)' : 'var(--ink-3)', listShadow: listOn ? 'var(--shadow-sm)' : 'none',
+      matBg: !listOn ? 'var(--paper)' : 'transparent', matColor: !listOn ? 'var(--ink)' : 'var(--ink-3)', matShadow: !listOn ? 'var(--shadow-sm)' : 'none',
+      showEmpty: empty, showListView: listOn && !empty, showMatrixView: !listOn && !empty,
+      mitTasks: tasks.filter(t => t.mit).map(t => this.decorate(t)), mitCount, mitEmpty: !tasks.some(t => t.mit),
+      otherTasks: tasks.filter(t => !t.mit && !t.adhoc).map(t => this.decorate(t)), otherCount: tasks.filter(t => !t.mit && !t.adhoc).length, hasOther: tasks.some(t => !t.mit && !t.adhoc),
+      adhocTasks: adhoc.filter(t => !t.mit).map(t => this.decorate(t)), hasAdhoc: adhoc.some(t => !t.mit), adhocDone: adhoc.filter(t => t.status === 'done').length, adhocTotal: adhoc.length,
+      quadrants, matrixHint: compact ? 'Chạm vào một việc để chuyển sang ô khác.' : 'Kéo thả việc giữa các ô để đổi cờ Quan trọng / Gấp.',
+      openRitual: () => this.openRitual(), closeRitual: () => this.closeRitual(),
+      showStepper: !isScroll && !summary, showChecklist: isScroll && !summary,
+      showB1: !summary && (isScroll || s.step === 0), showB2: !summary && (isScroll || s.step === 1), showB3: !summary && (isScroll || s.step === 2),
+      showScrollFooter: isScroll && !summary, showSummary: summary, blockGap: isScroll ? '28px' : '0',
+      steps, checkpoints, reviewRows,
+      remainText: rem ? 'Còn ' + rem + ' việc cần quyết định' : 'Đã xử lý hết — sẵn sàng khép ngày', remainColor: rem ? 'var(--accent-ink)' : 'var(--sage-ink)',
+      gateOpacity: rem ? 0.45 : 1, gateCursor: rem ? 'not-allowed' : 'pointer',
+      next: () => { if (s.step === 0 && rem) return this.say('Còn việc chưa xử lý — dời hoặc bỏ nhé'); this.setStep(s.step + 1); },
+      back: () => this.setStep(Math.max(0, s.step - 1)),
+      reflectNext: s.energy || s.good || s.improve ? 'Tiếp tục' : 'Bỏ qua',
+      energyOpts, good: s.good, improve: s.improve, hasGood: !!s.good.trim(),
+      onGood: e => this.setState({ good: e.target.value }), onImprove: e => this.setState({ improve: e.target.value }),
+      tomRows, tomCount: tom.length, tomMitCount, tomEmpty: tom.length === 0, tomMitTitles: tom.filter(x => x.mit).map(x => x.title),
+      tomInput: s.tomInput, onTomInput: e => this.setState({ tomInput: e.target.value }), onTomKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.addTom(); } }, addTom: () => this.addTom(),
+      finish: () => this.finish(),
+      sumPct: sst.pct, sumHeadline, sumBody, sumStats,
+      hasToast: !!s.toast, toast: s.toast || '', toastBottom: compact && !isRitual && s.view !== 'onboarding' ? '92px' : '24px'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/styles.css">
+<script src="_ds/organic-dd77d15d-9114-4c2f-9fa9-22fe062ae17a/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&family=Caprasimo&display=swap">
+<style>
+:root,[data-theme="light"]{--bg:var(--color-bg);--paper:var(--color-neutral-100);--surface:var(--color-surface);--ink:var(--color-text);--ink-2:var(--color-neutral-800);--ink-3:var(--color-neutral-700);--line:var(--color-divider);--line-2:color-mix(in srgb,var(--color-text) 7%,transparent);--hover:color-mix(in srgb,var(--color-text) 5%,transparent);--accent:var(--color-accent);--accent-hover:var(--color-accent-600);--accent-soft:var(--color-accent-100);--accent-ink:var(--color-accent-700);--sage:var(--color-accent-2);--sage-soft:var(--color-accent-2-100);--sage-ink:var(--color-accent-2-700);--on-accent:var(--color-neutral-100);--heat-1:var(--color-accent-2-200);--heat-2:var(--color-accent-2-300);--heat-3:var(--color-accent-2-500);--heat-4:var(--color-accent-2-700);--font-display:"Fraunces",Georgia,serif;--font-ui:"Be Vietnam Pro",system-ui,sans-serif;--font-num:"Caprasimo",Georgia,serif}
+[data-theme="dark"]{--bg:#1c1a17;--paper:#24211d;--surface:#2e2b25;--ink:#f5ead8;--ink-2:#dcd3c4;--ink-3:#b5ab9a;--line:color-mix(in srgb,#f5ead8 16%,transparent);--line-2:color-mix(in srgb,#f5ead8 8%,transparent);--hover:color-mix(in srgb,#f5ead8 6%,transparent);--accent:#f6a06b;--accent-hover:#ffc6a5;--accent-soft:color-mix(in srgb,#d67f48 22%,transparent);--accent-ink:#ffc6a5;--sage:#aebf92;--sage-soft:color-mix(in srgb,#8fa073 22%,transparent);--sage-ink:#ccdbb2;--on-accent:#1c1a17;--heat-1:#3d472b;--heat-2:#56633f;--heat-3:#8fa073;--heat-4:#ccdbb2}
+body{margin:0;background:var(--color-neutral-200)}
+button,input{font-family:inherit;color:inherit}
+a{color:var(--color-accent-700)}a:hover{color:var(--color-text)}
+</style>
+</helmet>
+<section id="turn-3" style="display:flex;flex-direction:column;gap:72px;padding:64px 64px 0;font-family:var(--font-ui);color:var(--ink);background:var(--color-neutral-200);min-width:max-content">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:760px">
+    <span style="font-family:var(--font-num);font-size:22px">Better Every Day</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:48px;line-height:1.05;letter-spacing:-.02em">Lượt 3 — chốt thiết kế trước bàn giao</h1>
+    <p style="margin:0;font-size:16px;color:var(--ink-2);text-wrap:pretty">Nghi thức tối giữ dạng stepper. Dời việc có chip gợi ý + calendar picker (popover trên desktop, bottom sheet trên mobile). Thêm trạng thái sau nửa đêm và banner nhắc lập plan. Ma trận trên mobile dùng bottom sheet thay kéo thả. Gói bàn giao nằm trong thư mục handoff/.</p>
+  </div>
+  <sc-for list="{{t3rows}}" as="row" hint-placeholder-count="3">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:28px">{{row.title}}</h2>
+      <div style="display:flex;gap:40px;align-items:flex-start">
+        <sc-for list="{{row.items}}" as="p" hint-placeholder-count="2">
+          <div id="{{p.id}}" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">{{p.id}}</span><span style="font-size:14px;color:var(--ink-2)">{{p.label}}</span></div>
+            <sc-if value="{{p.desktop}}" hint-placeholder-val="{{true}}">
+              <div style="position:relative;width:1180px;height:800px;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg)"><dc-import name="BedApp" scenario="{{p.scenario}}" theme="{{p.theme}}" start-view="{{p.view}}" start-mode="{{p.mode}}" start-step="{{p.step}}" demo-picker="{{p.picker}}" demo-sheet="{{p.sheet}}" embedded="{{true}}" keyboard="{{false}}" style="position:absolute;inset:0" hint-size="1180px,800px"></dc-import></div>
+            </sc-if>
+            <sc-if value="{{p.phone}}" hint-placeholder-val="{{false}}">
+              <div data-theme="{{p.theme}}" style="width:414px;padding:12px;border-radius:58px;background:#201e1d;box-shadow:var(--shadow-lg)">
+                <div style="position:relative;height:844px;border-radius:46px;overflow:hidden;background:var(--paper);color:var(--ink);display:flex;flex-direction:column">
+                  <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:14px;font-weight:600"><span>{{p.time}}</span><span style="width:110px;height:30px;border-radius:999px;background:#201e1d"></span><span style="font-size:12px">100%</span></div>
+                  <div style="position:relative;flex:1;min-height:0"><dc-import name="BedApp" scenario="{{p.scenario}}" theme="{{p.theme}}" start-view="{{p.view}}" start-mode="{{p.mode}}" start-step="{{p.step}}" demo-picker="{{p.picker}}" demo-sheet="{{p.sheet}}" embedded="{{true}}" keyboard="{{false}}" style="position:absolute;inset:0" hint-size="390px,800px"></dc-import></div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</section>
+<section id="turn-2" style="display:flex;flex-direction:column;gap:72px;padding:64px 64px 0;font-family:var(--font-ui);color:var(--ink);background:var(--color-neutral-200);min-width:max-content">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:760px">
+    <span style="font-family:var(--font-num);font-size:22px">Better Every Day</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:48px;line-height:1.05;letter-spacing:-.02em">Lượt 2 — Hành trình, Lịch sử, Cài đặt, Onboarding, Phase 2</h1>
+    <p style="margin:0;font-size:16px;color:var(--ink-2);text-wrap:pretty">Sidebar giờ đã đi được tới mọi màn. Dữ liệu 6 tháng mẫu dùng chung cho heatmap, lịch và ô nhất quán; bấm một ô heatmap để nhảy sang Lịch sử của ngày đó. Đổi Cài đặt (giờ khóa) sẽ cập nhật trạng thái plan ở Hôm nay.</p>
+  </div>
+  <sc-for list="{{t2rows}}" as="row" hint-placeholder-count="4">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:28px">{{row.title}}</h2>
+      <div style="display:flex;gap:40px;align-items:flex-start">
+        <sc-for list="{{row.items}}" as="p" hint-placeholder-count="2">
+          <div id="{{p.id}}" style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">{{p.id}}</span><span style="font-size:14px;color:var(--ink-2)">{{p.label}}</span></div>
+            <sc-if value="{{p.desktop}}" hint-placeholder-val="{{true}}">
+              <div style="width:{{p.w}};height:{{p.h}};border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg)"><dc-import name="BedApp" scenario="{{p.scenario}}" theme="{{p.theme}}" start-view="{{p.view}}" embedded="{{true}}" keyboard="{{false}}" hint-size="1040px,860px"></dc-import></div>
+            </sc-if>
+            <sc-if value="{{p.phone}}" hint-placeholder-val="{{false}}">
+              <div data-theme="{{p.theme}}" style="width:414px;padding:12px;border-radius:58px;background:#201e1d;box-shadow:var(--shadow-lg)">
+                <div style="position:relative;height:844px;border-radius:46px;overflow:hidden;background:var(--paper);color:var(--ink);display:flex;flex-direction:column">
+                  <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:14px;font-weight:600"><span>20:45</span><span style="width:110px;height:30px;border-radius:999px;background:#201e1d"></span><span style="font-size:12px">100%</span></div>
+                  <div style="flex:1;min-height:0"><dc-import name="BedApp" scenario="{{p.scenario}}" theme="{{p.theme}}" start-view="{{p.view}}" embedded="{{true}}" keyboard="{{false}}" hint-size="390px,800px"></dc-import></div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</section>
+<section id="turn-1" style="display:flex;flex-direction:column;gap:72px;padding:64px;font-family:var(--font-ui);color:var(--ink);background:var(--color-neutral-200);min-width:max-content">
+  <div style="display:flex;flex-direction:column;gap:10px;max-width:760px">
+    <span style="font-family:var(--font-num);font-size:22px">Better Every Day</span>
+    <h1 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:48px;line-height:1.05;letter-spacing:-.02em">Lượt 1 — Hôm nay, Ma trận, Nghi thức buổi tối</h1>
+    <p style="margin:0;font-size:16px;color:var(--ink-2);text-wrap:pretty">Mọi khung đều bấm được. Khung desktop nhận phím tắt N · M · E · T · Esc; bấm vào khung khác để chuyển phím tắt sang khung đó. Nền Organic (kem, đất nung, xanh xô thơm), font được thay bằng bản hỗ trợ đủ dấu tiếng Việt — xem <a href="#1k">1k</a>.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:28px">Hôm nay · plan đã khóa, có việc phát sinh</h2>
+    <div style="display:flex;gap:40px;align-items:flex-start">
+      <div id="1a" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">1a</span><span style="font-size:14px;color:var(--ink-2)">Desktop 1280 — bấm vào một việc để mở công cụ; thử gõ “Viết blog * ~L”</span></div>
+        <div style="width:1280px;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);background:var(--bg)">
+          <div style="height:40px;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--color-neutral-300)"><span style="width:11px;height:11px;border-radius:50%;background:var(--color-neutral-500)"></span><span style="width:11px;height:11px;border-radius:50%;background:var(--color-neutral-500)"></span><span style="width:11px;height:11px;border-radius:50%;background:var(--color-neutral-500)"></span><span style="margin-left:16px;font-size:12px;padding:3px 14px;border-radius:999px;background:var(--color-neutral-100);color:var(--ink-2)">betterevery.day/hom-nay</span></div>
+          <div style="height:800px"><dc-import name="BedApp" scenario="normal" embedded="{{true}}" keyboard="{{true}}" hint-size="1280px,800px"></dc-import></div>
+        </div>
+      </div>
+      <div id="1b" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">1b</span><span style="font-size:14px;color:var(--ink-2)">Mobile 390 — cùng trạng thái</span></div>
+        <div style="width:414px;padding:12px;border-radius:58px;background:#201e1d;box-shadow:var(--shadow-lg)">
+          <div style="position:relative;height:844px;border-radius:46px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column">
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:14px;font-weight:600"><span>20:45</span><span style="width:110px;height:30px;border-radius:999px;background:#201e1d"></span><span style="font-size:12px">100%</span></div>
+            <div style="flex:1;min-height:0"><dc-import name="BedApp" scenario="normal" embedded="{{true}}" keyboard="{{false}}" hint-size="390px,800px"></dc-import></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:28px">Nghi thức buổi tối · stepper (đã chốt)</h2>
+    <div style="display:flex;gap:40px;align-items:flex-start">
+      <div id="1c" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">1c</span><span style="font-size:14px;color:var(--ink-2)">Stepper — quay lại bước trước bằng thanh tiến độ; “Tiếp tục” bị khóa đến khi xử lý hết việc dang dở</span></div>
+        <div style="width:1040px;height:860px;border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg)"><dc-import name="BedApp" scenario="normal" embedded="{{true}}" keyboard="{{false}}" start-view="ritual" hint-size="1040px,860px"></dc-import></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:20px">
+    <h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:28px">Trạng thái của Hôm nay</h2>
+    <div style="display:flex;gap:32px;align-items:flex-start">
+      <sc-for list="{{states}}" as="p" hint-placeholder-count="6">
+        <div id="{{p.id}}" style="display:flex;flex-direction:column;gap:12px;width:414px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">{{p.id}}</span><span style="font-size:14px;color:var(--ink-2)">{{p.label}}</span></div>
+          <div data-theme="{{p.theme}}" style="width:414px;padding:12px;border-radius:58px;background:#201e1d;box-shadow:var(--shadow-lg)">
+            <div style="position:relative;height:844px;border-radius:46px;overflow:hidden;background:var(--paper);color:var(--ink);display:flex;flex-direction:column">
+              <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 30px;font-size:14px;font-weight:600"><span>{{p.time}}</span><span style="width:110px;height:30px;border-radius:999px;background:#201e1d"></span><span style="font-size:12px">100%</span></div>
+              <div style="flex:1;min-height:0"><dc-import name="BedApp" scenario="{{p.scenario}}" theme="{{p.theme}}" start-mode="{{p.mode}}" embedded="{{true}}" keyboard="{{false}}" hint-size="390px,800px"></dc-import></div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div id="1k" style="display:flex;flex-direction:column;gap:28px;width:1280px;padding:44px;border-radius:34px;background:var(--paper)">
+    <div style="display:flex;align-items:center;gap:10px"><span style="font-family:var(--font-num);font-size:14px;padding:3px 12px;border-radius:999px;background:var(--ink);color:var(--paper)">1k</span><h2 style="margin:0;font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:32px">Design tokens &amp; components</h2></div>
+    <p style="margin:0;max-width:820px;color:var(--ink-2);text-wrap:pretty">Lớp ngữ nghĩa (semantic) đặt trên design system Organic. Component chỉ dùng token ngữ nghĩa; light/dark chỉ đổi giá trị biến qua <b>data-theme</b>. Trong Tailwind: map mỗi token thành <b>colors.{tên}: 'var(--{tên})'</b> và bật <b>darkMode: ['selector','[data-theme="dark"]']</b>.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <sc-for list="{{colors}}" as="c" hint-placeholder-count="16">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;background:var(--surface)">
+          <div style="display:flex;height:56px;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)">
+            <div data-theme="light" style="flex:1;background:var(--{{c.name}})"></div>
+            <div data-theme="dark" style="flex:1;background:var(--{{c.name}})"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <code style="font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:600">--{{c.name}}</code>
+            <span style="font-size:12.5px;color:var(--ink-2);line-height:1.4">{{c.use}}</span>
+            <span style="font-size:11.5px;color:var(--ink-3);font-family:ui-monospace,Menlo,monospace">{{c.map}}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:24px;background:var(--surface)">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Typography</span>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="font-family:var(--font-display);font-variation-settings:'SOFT' 100;font-weight:600;font-size:44px;line-height:1.05">Thứ Bảy, 3 tháng 10</span><code style="font-size:12px;color:var(--ink-3)">display 44 / 34 / 22 · 600 · SOFT 100</code></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="font-size:15.5px">Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai</span><code style="font-size:12px;color:var(--ink-3)">ui 15.5 / 14 / 12 · 400–600</code></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><span style="font-family:var(--font-num);font-size:56px;line-height:1">62%</span><code style="font-size:12px;color:var(--ink-3)">num 112 / 44 / 26 — chỉ số &amp; logo, không dùng cho chữ có dấu</code></div>
+        <p style="margin:0;font-size:13px;color:var(--ink-2);line-height:1.5;text-wrap:pretty">Caprasimo và Figtree của Organic chưa có bộ glyph tiếng Việt (ế, ộ, ữ… sẽ rơi sang font khác). Thay thế: <b>Fraunces</b> (SOFT 100, gần nhất với Caprasimo) cho tiêu đề, <b>Be Vietnam Pro</b> cho thân chữ; Caprasimo giữ cho số và logo.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;padding:24px;border-radius:24px;background:var(--surface)">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Radius · Spacing · Elevation</span>
+        <div style="display:flex;gap:12px;align-items:flex-end">
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:56px;height:56px;border-radius:16px;background:var(--paper)"></span><code style="font-size:11px">16 · row</code></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:56px;height:56px;border-radius:22px;background:var(--paper)"></span><code style="font-size:11px">22 · item</code></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:56px;height:56px;border-radius:28px 28px 28px 28px;background:var(--paper)"></span><code style="font-size:11px">28–30 · card</code></div>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:84px;height:40px;border-radius:999px;background:var(--paper)"></span><code style="font-size:11px">999 · control</code></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end">
+          <sc-for list="{{space}}" as="sp" hint-placeholder-count="8">
+            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:{{sp.px}};height:{{sp.px}};border-radius:4px;background:var(--accent)"></span><code style="font-size:11px">{{sp.n}}</code></div>
+          </sc-for>
+        </div>
+        <span style="font-size:12.5px;color:var(--ink-2)">Spacing theo thang 4px của Tailwind (1, 2, 3, 4, 5, 6, 7, 11). Elevation: <b>--shadow-sm</b> chip kéo thả, <b>--shadow-lg</b> toast/khung.</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <span style="font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)">Components</span>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <sc-for list="{{components}}" as="k" hint-placeholder-count="9">
+          <div style="display:flex;flex-direction:column;gap:6px;padding:16px 18px;border-radius:22px;border:2px solid var(--line)">
+            <code style="font-family:ui-monospace,Menlo,monospace;font-size:14px;font-weight:700">{{k.name}}</code>
+            <span style="font-size:13px;color:var(--ink-2);line-height:1.45">{{k.desc}}</span>
+            <code style="font-size:11.5px;color:var(--ink-3);line-height:1.5">{{k.props}}</code>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const X = (id, label, o) => ({ id, label, scenario: 'normal', view: 'today', mode: 'list', step: 0, picker: false, sheet: false, theme: 'light', time: '20:45', desktop: !o.phone, phone: !!o.phone, ...o });
+    const t3rows = [
+      { title: 'Dời việc · chip gợi ý + calendar picker', items: [X('3a', 'Desktop — popover neo theo nút “Chọn ngày…”', { view: 'ritual', picker: true }), X('3b', 'Mobile — bottom sheet, xác nhận bằng nút', { view: 'ritual', picker: true, phone: true })] },
+      { title: 'Trạng thái mới của Hôm nay', items: [X('3c', 'Sau 0:00, trước giờ kết thúc ngày (3:00)', { scenario: 'latenight' }), X('3d', 'Banner nhắc: chưa có plan cho ngày mai', { scenario: 'noplan', phone: true, time: '21:50' })] },
+      { title: 'Ma trận trên mobile & stepper', items: [X('3e', 'Chạm task → bottom sheet lưới 2×2', { mode: 'matrix', sheet: true, phone: true }), X('3f', 'Stepper bước 3 — quay lại bằng thanh tiến độ', { view: 'ritual', step: 2, theme: 'dark' })] }
+    ];
+    const D = (id, label, scenario, view, theme) => ({ id, label, scenario, view, theme: theme || 'light', desktop: true, phone: false, w: '1180px', h: '900px' });
+    const P = (id, label, scenario, view, theme) => ({ id, label, scenario, view, theme: theme || 'light', desktop: false, phone: true });
+    return {
+      t3rows,
+      t2rows: [
+        { title: 'Hành trình phát triển', items: [D('2a', 'Desktop — heatmap 26 tuần, thẻ chỉ số, theo thứ, insight', 'normal', 'stats'), P('2b', 'Mobile — 13 tuần', 'normal', 'stats'), P('2c', 'Chưa đủ dữ liệu', 'newuser', 'stats')] },
+        { title: 'Lịch sử', items: [D('2d', 'Desktop — lịch tháng + chi tiết ngày (chỉ đọc)', 'normal', 'history'), P('2e', 'Mobile', 'normal', 'history', 'dark')] },
+        { title: 'Onboarding & Cài đặt', items: [D('2f', 'Onboarding 3 bước', 'newuser', 'onboarding'), P('2g', 'Onboarding mobile', 'newuser', 'onboarding'), D('2h', 'Cài đặt — cửa sổ plan, giờ khóa, kết thúc ngày, theme', 'normal', 'settings')] },
+        { title: 'Phase 2 · sơ bộ', items: [D('2i', 'Mục tiêu → trọng tâm tuần', 'normal', 'goals'), P('2j', 'Tổng kết tuần (Chủ Nhật)', 'normal', 'weekly'), P('2k', 'Menu “Thêm” trên mobile', 'normal', 'more')] }
+      ],
+      states: [
+        { id: '1e', label: 'Người dùng mới', scenario: 'newuser', theme: 'light', mode: 'list', time: '08:30' },
+        { id: '1f', label: 'Hôm nay chưa có plan · cửa sổ đang mở', scenario: 'empty', theme: 'light', mode: 'list', time: '08:15' },
+        { id: '1g', label: 'Lỡ một ngày hôm qua', scenario: 'missed', theme: 'light', mode: 'list', time: '08:40' },
+        { id: '1h', label: 'Đang trong cửa sổ plan · ma trận', scenario: 'open', theme: 'light', mode: 'matrix', time: '08:15' },
+        { id: '1i', label: 'Hoàn thành 100%', scenario: 'perfect', theme: 'light', mode: 'list', time: '21:30' },
+        { id: '1j', label: 'Dark mode · đã khóa + phát sinh', scenario: 'normal', theme: 'dark', mode: 'list', time: '20:45' }
+      ],
+      colors: [
+        { name: 'bg', use: 'Nền app, sidebar', map: 'color-bg' }, { name: 'paper', use: 'Trang sổ chính, ô input', map: 'neutral-100' },
+        { name: 'surface', use: 'Card MIT, ô ma trận, hàng review', map: 'color-surface' }, { name: 'ink', use: 'Chữ chính', map: 'color-text' },
+        { name: 'ink-2', use: 'Chữ phụ, mô tả', map: 'neutral-800' }, { name: 'ink-3', use: 'Meta, placeholder', map: 'neutral-700' },
+        { name: 'line', use: 'Viền, nét đứt Phát sinh', map: 'color-divider' }, { name: 'line-2', use: 'Track tiến độ, chip trung tính', map: 'text 7%' },
+        { name: 'accent', use: 'Hành động chính, MIT', map: 'color-accent' }, { name: 'accent-soft', use: 'Nền MIT tag, cảnh báo nhẹ', map: 'accent-100' },
+        { name: 'accent-ink', use: 'Chữ trên accent-soft', map: 'accent-700' }, { name: 'sage', use: 'Hoàn thành, tiến độ', map: 'color-accent-2' },
+        { name: 'sage-soft', use: 'Nền đã xong, ngày 100%', map: 'accent-2-100' }, { name: 'sage-ink', use: 'Chữ trên sage-soft', map: 'accent-2-700' },
+        { name: 'heat-2', use: 'Heatmap 1→4 (đây là mức 2)', map: 'accent-2-200…700' }, { name: 'on-accent', use: 'Chữ/icon trên accent, sage', map: 'neutral-100' }
+      ],
+      space: [{ n: '4', px: '4px' }, { n: '8', px: '8px' }, { n: '12', px: '12px' }, { n: '16', px: '16px' }, { n: '20', px: '20px' }, { n: '24', px: '24px' }, { n: '28', px: '28px' }, { n: '44', px: '44px' }],
+      components: [
+        { name: 'AppShell', desc: 'Sidebar ≥720px, tab bar dưới trên mobile; trang “paper” bo 30px.', props: 'view, theme, onNavigate' },
+        { name: 'TaskItem', desc: 'Checkbox tròn, tiêu đề, chip cờ; bấm để mở thanh công cụ.', props: 'task, onToggle, onPatch, expanded' },
+        { name: 'QuickAdd', desc: 'Một dòng + Enter. Cú pháp * ! ^ ~S/M/L, xem trước chip.', props: 'locked, onAdd' },
+        { name: 'ProgressBar', desc: '% có trọng số (MIT ×2, L3 M2 S1), không tính phát sinh.', props: 'value, done, total' },
+        { name: 'PlanStatus', desc: 'Pill “Đang mở · còn …” hoặc “Đã khóa lúc 10:00”.', props: 'locked, lockAt, timeLeft' },
+        { name: 'MatrixQuadrant', desc: 'Ô Eisenhower nhận drop, đổi cờ Quan trọng/Gấp.', props: 'important, urgent, tasks, onDrop' },
+        { name: 'Stepper', desc: '3 thanh tiến trình + nhãn; dạng cuộn dùng Checkpoints dính.', props: 'steps, current, onStep' },
+        { name: 'ReviewRow', desc: 'Tick hoặc Dời mai / Chọn ngày / Bỏ; gợi ý khi dời ≥3 lần.', props: 'task, decision, onDecide' },
+        { name: 'EnergyScale', desc: '5 vòng tròn 1–5 có nhãn, tùy chọn.', props: 'value, onChange' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
