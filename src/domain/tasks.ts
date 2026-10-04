@@ -227,36 +227,46 @@ export function dropTask(task: Task, ctx: Ctx): Mutation {
   };
 }
 
+/**
+ * Coming back to `todo` re-opens a MIT slot, so the limit has to be re-checked:
+ * the day may have filled up while the task was away.
+ */
+function mitOnRestore(
+  task: Task,
+  related: Task[],
+): { mit: boolean; notices: Notice[]; downgraded: boolean } {
+  if (!task.mit) return { mit: false, notices: [], downgraded: false };
+  const others = related.filter((t) => t.planDate === task.planDate && t.id !== task.id);
+  if (activeMitCount(others) < MIT_LIMIT) return { mit: true, notices: [], downgraded: false };
+  return { mit: false, notices: ['mitLimit'], downgraded: true };
+}
+
+/**
+ * `related` must hold every task of `task.planDate` and, for a moved task, its copy.
+ */
 export function restoreTask(task: Task, related: Task[], ctx: Ctx): Mutation {
-  if (task.status === 'dropped') {
-    const restored: Task = { ...task, status: 'todo' };
-    return {
-      upserts: [restored],
-      deletes: [],
-      events: [makeEvent('task_restored', task.id, task.planDate, { from: 'dropped' }, ctx)],
-      notices: [],
-    };
+  if (task.status !== 'dropped' && task.status !== 'moved') {
+    throw new DomainError('cannot_restore');
   }
 
+  // Resolve the copy before anything else: a moved task with no live copy cannot come back.
+  let copy: Task | undefined;
   if (task.status === 'moved') {
-    const copy = related.find((t) => t.originTaskId === task.id);
-    if (!copy || copy.status !== 'todo') throw new DomainError('cannot_restore');
-    const restored: Task = { ...task, status: 'todo', movedTo: null };
-    return {
-      upserts: [restored],
-      deletes: [copy.id],
-      events: [
-        makeEvent(
-          'task_restored',
-          task.id,
-          task.planDate,
-          { from: 'moved', removedTaskId: copy.id },
-          ctx,
-        ),
-      ],
-      notices: [],
-    };
+    copy = related.find((t) => t.originTaskId === task.id);
+    if (copy === undefined || copy.status !== 'todo') throw new DomainError('cannot_restore');
   }
 
-  throw new DomainError('cannot_restore');
+  const { mit, notices, downgraded } = mitOnRestore(task, related);
+  const payload: Record<string, unknown> =
+    copy === undefined ? { from: 'dropped' } : { from: 'moved', removedTaskId: copy.id };
+  if (downgraded) payload.mitDowngraded = true;
+
+  const restored: Task = { ...task, status: 'todo', mit, movedTo: null };
+
+  return {
+    upserts: [restored],
+    deletes: copy ? [copy.id] : [],
+    events: [makeEvent('task_restored', task.id, task.planDate, payload, ctx)],
+    notices,
+  };
 }

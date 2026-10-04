@@ -430,6 +430,45 @@ describe('restoreTask', () => {
     }
   });
 
+  it('downgrades a restored MIT when the day is already full', () => {
+    const t = task({ status: 'dropped', mit: true });
+    const related = [...mits(3, '2026-10-03'), t];
+    const m = restoreTask(t, related, ctx(MIDDAY));
+    expect(m.upserts[0]).toMatchObject({ status: 'todo', mit: false });
+    expect(m.notices).toEqual(['mitLimit']);
+    expect(m.events[0].payload).toEqual({ from: 'dropped', mitDowngraded: true });
+  });
+
+  it('keeps the MIT flag when the day still has room', () => {
+    const t = task({ status: 'dropped', mit: true });
+    const related = [...mits(2, '2026-10-03'), t];
+    const m = restoreTask(t, related, ctx(MIDDAY));
+    expect(m.upserts[0]).toMatchObject({ status: 'todo', mit: true });
+    expect(m.notices).toEqual([]);
+    expect(m.events[0].payload).toEqual({ from: 'dropped' });
+  });
+
+  it('re-checks the MIT limit for a moved task coming back', () => {
+    const original = task({ status: 'moved', movedTo: '2026-10-04', mit: true });
+    const copy = task({ planDate: '2026-10-04', status: 'todo', originTaskId: original.id });
+    const m = restoreTask(original, [...mits(3, '2026-10-03'), original, copy], ctx(MIDDAY));
+    expect(m.upserts[0]).toMatchObject({ status: 'todo', movedTo: null, mit: false });
+    expect(m.deletes).toEqual([copy.id]);
+    expect(m.notices).toEqual(['mitLimit']);
+    expect(m.events[0].payload).toEqual({
+      from: 'moved',
+      removedTaskId: copy.id,
+      mitDowngraded: true,
+    });
+  });
+
+  it('ignores MITs of other days when restoring', () => {
+    const t = task({ status: 'dropped', mit: true });
+    const m = restoreTask(t, [...mits(3, '2026-10-04'), t], ctx(MIDDAY));
+    expect(m.upserts[0].mit).toBe(true);
+    expect(m.notices).toEqual([]);
+  });
+
   it('throws cannot_restore for todo and done tasks', () => {
     for (const status of ['todo', 'done'] as const) {
       try {

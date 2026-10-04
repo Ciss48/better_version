@@ -14,6 +14,9 @@
     "readOnly": "Chỉ đọc", "mit": "MIT", "important": "Quan trọng", "urgent": "Gấp", "adhoc": "Phát sinh",
     "size": "Độ lớn", "done": "Hoàn thành", "escHint": "Esc"
   },
+  "format": {
+    "duration": { "minutes": "{m} phút", "hours": "{h} giờ", "hoursMinutes": "{h} giờ {m} phút" }
+  },
   "date": {
     "weekdayShort": ["CN", "T2", "T3", "T4", "T5", "T6", "T7"],
     "weekdayLong": ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"],
@@ -55,7 +58,7 @@
       "lockedHint": "· việc mới sẽ vào Phát sinh",
       "previewSize": "Độ lớn {size}"
     },
-    "view": { "list": "Danh sách", "matrix": "Ma trận" },
+    "view": { "list": "Danh sách", "matrix": "Ma trận", "aria": "Chế độ xem" },
     "empty": { "title": "Hôm nay vẫn là một trang trắng.", "body": "Chọn 1–3 việc quan trọng nhất trước {lockAt}. Gõ một dòng ở trên, thêm dấu * để đánh dấu MIT." },
     "mit": { "title": "Việc quan trọng nhất", "count": "{n}/3 MIT", "empty": "Chưa có MIT. Bấm vào một việc rồi chọn ★ MIT — tối đa 3 việc." },
     "others": { "title": "Các việc khác" },
@@ -72,6 +75,7 @@
     "matrix": {
       "hintDesktop": "Kéo thả việc giữa các ô để đổi cờ Quan trọng / Gấp.",
       "hintMobile": "Chạm vào một việc để chuyển sang ô khác.",
+      "dragInstructions": "Nhấn Space để nhấc việc lên, dùng các phím mũi tên để di chuyển, Space để thả, Esc để hủy.",
       "dropHere": "Kéo việc vào đây",
       "q1": { "title": "Làm ngay", "sub": "Quan trọng · Gấp" },
       "q2": { "title": "Lên lịch", "sub": "Quan trọng · Không gấp", "note": "Vùng của tiến bộ dài hạn" },

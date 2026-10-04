@@ -84,8 +84,11 @@ next time it is edited.
 empty target day for any date other than date+1, so the MIT flag survives the move. Encoded
 in the test "ignores a tomorrowMit entry for a task moved elsewhere". Not changed on my own
 authority because `CloseDayInput` is a locked contract that Phase 4/5 consume.
-**Status:** unresolved — needs a decision from the planning session before Phase 4 builds
-the ritual screen.
+**Status:** **resolved in Phase 3.** The planning session chose the first option:
+`CloseDayInput` now carries `otherTargets: Record<ISODate, Task[]>`, the MIT limit is
+enforced per target date (existing tasks first, then moved-in tasks in `todayTasks` order),
+and a move to a date with no `otherTargets` entry throws `DomainError('missing_target_day')`.
+See `tasks/phase_03_components_core.md` Part A and `memory/phase_03_report.md`.
 
 ## [Phase 2] `validateSettings` returns English diagnostics, not Vietnamese copy — Tier: Moderate
 **Finding:** the contract asks for "a list of human-readable problems", while CLAUDE.md
@@ -102,3 +105,24 @@ them), so they never need to surface a message; if a message is ever needed, add
 and map it from the problem list rather than printing the raw string.
 **Status:** resolved in Phase 2 — no plan.md change needed, but Phase 3/4 should not render
 these strings directly.
+
+## [Phase 3] The shadcn registry is unreachable from this machine — Tier: Moderate
+**Finding:** `pnpm exec shadcn add …` fails with `connect ETIMEDOUT` on
+`ui.shadcn.com`. Network egress from this machine reaches `registry.npmjs.org` and nothing
+else (`github.com`, `vercel.com` and `www.npmjs.com` all fail or 403 the same way, with and
+without the tool sandbox), so no version of the CLI can fetch a component.
+**Impact:** Phase 3 Part B and every later phase that wants a new shadcn primitive.
+**How it was handled:** the underlying libraries are all on npm, so they were installed
+directly (`@base-ui/react` was already a dependency) and the thin wrappers the CLI would
+have generated were hand-written into `src/components/ui/` in the same style as the
+generated `button.tsx` — token-styled from the start, which the CLI output needs anyway.
+Nothing about the locked stack changes: same libraries, same file layout, same aliases.
+The pre-flight half of the CLAUDE.md shadcn rule was still run
+(`components.json → tailwind.css === "src/app/globals.css"`), and `design/handoff/tokens.css`
+was re-diffed against `src/styles/tokens.css` afterwards — identical, `git status design/`
+clean.
+**Rule for later phases:** try the CLI first; if `ui.shadcn.com` is still unreachable,
+hand-write the primitive over the Base UI part that matches and keep it in
+`src/components/ui/`. Check Base UI's bundled docs (`node_modules/@base-ui/react/docs/`)
+rather than guessing a Radix-shaped API.
+**Status:** resolved in Phase 3 — no plan.md change needed.

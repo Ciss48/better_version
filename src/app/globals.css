@@ -48,6 +48,10 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* Motion: the tick pop from motion.md §1 — scale(1) → 1.22 → 1 on the
+     checkbox, overshooting with --ease-spring. */
+  --animate-tick-pop: tick-pop 520ms var(--ease-spring);
+
   /* shadcn's t-shirt radii, derived from the token scale */
   --radius-md: var(--radius-row);
   --radius-lg: var(--radius-item);
@@ -76,5 +80,17 @@
     font-family: var(--font-display);
     font-weight: 600;
     font-variation-settings: "SOFT" 100;
+  }
+}
+
+@keyframes tick-pop {
+  0% {
+    transform: scale(1);
+  }
+  46% {
+    transform: scale(1.22);
+  }
+  100% {
+    transform: scale(1);
   }
 }

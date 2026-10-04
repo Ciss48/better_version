@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { t } from '@/lib/copy';
+import { useShortcut } from '@/lib/hooks/use-shortcut';
 import { useHydrated } from '@/lib/use-hydrated';
 import { cn } from '@/lib/utils';
 import { ConsistencyMini } from './ConsistencyMini';
@@ -41,30 +42,6 @@ function useThemeToggle() {
   return { isDark, toggle };
 }
 
-/** `T` toggles the theme, unless the user is typing. */
-function useThemeShortcut(toggle: () => void) {
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key.toLowerCase() !== 't') return;
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-
-      const target = event.target as HTMLElement | null;
-      if (
-        target?.isContentEditable ||
-        ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName ?? '')
-      ) {
-        return;
-      }
-
-      event.preventDefault();
-      toggle();
-    }
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [toggle]);
-}
-
 const SHORTCUT_HINTS = [
   { kbd: 'N', labelKey: 'nav.shortcuts.add' },
   { kbd: 'M', labelKey: 'nav.shortcuts.matrix' },
@@ -76,7 +53,8 @@ export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const view = viewFromPathname(pathname);
   const { isDark, toggle } = useThemeToggle();
-  useThemeShortcut(toggle);
+  // `T` switches light / dark, unless the user is typing.
+  useShortcut('t', toggle);
 
   const showTabs = view !== 'ritual';
   const ThemeIcon = isDark ? Sun : Moon;

@@ -23,7 +23,7 @@ evening ritual (review, decide on unfinished tasks, reflect, plan D+1) → metri
 ```
 Browser (Next.js App Router, React, Tailwind v4 + shadcn/ui)
   ├─ src/app/            routes: (app)/today|ritual|stats|history|settings|goals|weekly|more, onboarding, auth
-  ├─ src/components/     presentational components (props only, from design/components.md)
+  ├─ src/components/     presentational components (props only, from design/handoff/components.md)
   ├─ src/features/       screen containers: wire store → components
   ├─ src/domain/         PURE business logic + tests (no React, no I/O, time injected)
   ├─ src/data/           Repository interface + implementations (memory/localStorage → Supabase)
@@ -41,7 +41,7 @@ Deploy: Vercel (Phase 7)
 | Choice | Why |
 |---|---|
 | Next.js App Router + TS strict | Matches handoff (React + TS); Vercel-native deploy; server routes for auth callback |
-| Tailwind v4 + shadcn/ui | Handoff tokens are written for `@theme inline` + shadcn aliases |
+| Tailwind v4 + shadcn/ui (Base UI flavour, CLI v4 default) | Handoff tokens are written for `@theme inline` + shadcn aliases; Base UI is shadcn's current default (Phase 1 finding) |
 | pnpm, Vitest | Fast; Vitest for pure domain tests (most of the risk lives there) |
 | date-fns v4 + @date-fns/tz | Timezone-correct logical-day math; small |
 | next-themes (`attribute="class"`) | tokens.css switches on `.dark` |
@@ -82,6 +82,7 @@ Deploy: Vercel (Phase 7)
 | MIT limit | max 3 per day among tasks with status todo/done |
 | Postpone nudge | `postponedCount ≥ 3` |
 | Closing the day | every todo task (incl. adhoc) needs a decision (move date / drop) |
+| MIT limit when moving/restoring | enforced on **every** target day: `closeDay` receives the existing tasks of each distinct move date; `restoreTask` re-checks the limit on the task's own day. Over-limit → the moved/restored task becomes a normal task + `mitLimit` notice |
 | Consistency | days with a plan in the last 30 logical days (never resets; no streak) |
 | Reminders (in-app) | `remindPlan` (evening 21:30 / morning 07:00) drives the planReminder banner; `remindRitual` (21:00) is stored but only used by future push notifications; the ritual banner shows from 18:00 or during late night |
 | Timezone | per user, IANA, default `Asia/Ho_Chi_Minh` |
@@ -97,39 +98,47 @@ Deploy: Vercel (Phase 7)
 
 ## 3. Phase list
 
-### Phase 1: Scaffold & design system — [HAS DETAILED TASK FILE]
+### Phase 1: Scaffold & design system — [DONE]
 Next.js app at repo root with tokens, fonts, theme switching, typed copy helper `t()`,
 route skeleton, full AppShell (sidebar/bottom tabs), `/dev/tokens` page, Vitest, git.
 Comes first because every later phase builds on this frame.
 
-### Phase 2: Domain logic — [HAS DETAILED TASK FILE]
+### Phase 2: Domain logic — [DONE]
 Pure TypeScript module `src/domain/` implementing every business rule above with
 exhaustive unit tests (timezone, late night, lock, weights, quick-add parser, date chips,
 move/drop/restore, close-day, banners, consistency). Highest-risk logic, verified in
 isolation before any UI depends on it.
 
-### Phase 3: Component library — [SKETCH, TASK FILE WRITTEN AFTER PHASE 2]
-All MVP components from `design/components.md` as presentational, props-only components
-with the specified states and motion (`design/motion.md`), plus a `/dev/components`
-gallery showing every state in light/dark. Adds shadcn primitives (popover, drawer,
-calendar, toggle-group, select, switch, sonner, tooltip, collapsible) and dnd-kit.
+### Phase 3: Components A — core & Today — [HAS DETAILED TASK FILE]
+Two small domain amendments (MIT limit on every move target; restore re-checks the
+limit), `src/lib/format.ts`, and the presentational components for the Today screen:
+Banner, PlanStatus, ProgressBar, Tag, EmptyState, Segmented/ViewToggle, TaskInput,
+TaskItem, MITSection, TaskGroup, Matrix (board, quadrant, bottom sheet), DatePickerChips,
+DatePicker, Toast. `/dev/components` gallery + a Today playground driven by the domain,
+component tests, Playwright screenshot script.
 
-### Phase 4: Screens on a local repository — [SKETCH]
+### Phase 4: Components B — ritual, stats, history, settings, onboarding — [SKETCH, TASK FILE AFTER PHASE 3]
+Stepper, ReviewRow, RitualFooter, ReflectionForm, TomorrowPlanList, RitualSummary,
+StatCard, Heatmap, WeekdayChart, InsightCard, CalendarMonth, DayDetail, Settings
+controls (TimeSelect, Switch, PlanWindowTimeline, SettingsSection), Onboarding pieces,
+Phase2Notice — all in the gallery with every state.
+
+### Phase 5: Screens on a local repository — [SKETCH]
 All MVP screens wired to a zustand store and an in-memory/localStorage `Repository`,
 with seed data and a dev-only `?now=` clock override so every state in
-`design/screens.md` is reproducible and comparable against the screenshots.
+`design/handoff/screens.md` is reproducible and comparable against the screenshots.
 Deliverable: a fully clickable app with no backend.
 
-### Phase 5: Supabase persistence & auth — [SKETCH]
+### Phase 6: Supabase persistence & auth — [SKETCH]
 Migrations for the four tables, RLS, magic-link auth (login page, callback, middleware),
 `SupabaseRepository` writing state + events, onboarding/settings persisted, ritual draft
 in localStorage. Deliverable: the same app, now multi-user and persistent.
 
-### Phase 6: Stats in SQL — [SKETCH]
+### Phase 7: Stats in SQL — [SKETCH]
 SQL views/RPC functions for day summaries, the six stat cards, weekday chart and the
 four insight templates; wire Journey, History and ConsistencyMini to them.
 
-### Phase 7: Ship — [SKETCH]
+### Phase 8: Ship — [SKETCH]
 GitHub remote, Vercel deploy with env vars, Supabase auth redirect URLs, PWA manifest +
 icons (installable on phone, no service worker), production smoke test on mobile.
 
@@ -149,3 +158,6 @@ icons (installable on phone, no service worker), production smoke test on mobile
 | Date | Change | Reason | Source |
 |------|--------|--------|--------|
 | 2026-10-04 | Initial plan | — | — |
+| 2026-10-04 | Design handoff path is `design/handoff/`; shadcn is the Base UI flavour | Actual repo layout / shadcn CLI v4 default | Phase 1 report + discoveries |
+| 2026-10-04 | MIT limit enforced on every move target (`CloseDayInput.otherTargets`) and on restore | Over-limit days were possible | Phase 2 discoveries (closeDay MIT), report finding 4 |
+| 2026-10-04 | Component work split into Phase 3 (core & Today) and Phase 4 (rest); later phases renumbered 5–8 | ~35 components is too much for one reliable session | Planning |

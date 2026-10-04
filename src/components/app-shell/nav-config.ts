@@ -56,7 +56,7 @@ export const MORE_NAV: NavDef[] = SIDEBAR_NAV.filter((n) =>
   (['goals', 'weekly', 'settings'] as ViewKey[]).includes(n.key),
 );
 
-/** Views the "Thêm" tab stays highlighted for. */
+/** Views the "more" tab stays highlighted for. */
 export const MORE_VIEWS: ViewKey[] = ['more', 'goals', 'weekly', 'settings'];
 
 /** Maps a pathname onto the view it renders. */

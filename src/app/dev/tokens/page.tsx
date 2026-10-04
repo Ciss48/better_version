@@ -3,10 +3,11 @@
 import { notFound } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
+import { GALLERY_SAMPLES } from '@/dev/fixtures';
 import { t } from '@/lib/copy';
 import { useHydrated } from '@/lib/use-hydrated';
 
-const SAMPLE = 'Tiến bộ 1% mỗi ngày — Việc quan trọng nhất';
+const SAMPLE = GALLERY_SAMPLES.typeSpecimen;
 
 /** Every `--color-*` token defined in src/styles/tokens.css, in source order. */
 const COLOR_GROUPS: { title: string; tokens: string[] }[] = [

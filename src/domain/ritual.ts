@@ -37,6 +37,12 @@ export interface CloseDayInput {
   tomorrowMit: Record<string, boolean>;
   /** typed in step 3, in order */
   tomorrowNew: ParsedTask[];
+  /**
+   * Existing tasks of every distinct move date other than date+1, keyed by that date.
+   * A key must be present (possibly `[]`) for each such date, so the MIT limit can be
+   * enforced there too.
+   */
+  otherTargets: Record<ISODate, Task[]>;
   reflection: Reflection;
 }
 
@@ -52,6 +58,20 @@ export function closeDay(input: CloseDayInput, ctx: Ctx): Mutation & { dayLog: D
   const notices: Notice[] = [];
   /** Running picture of date+1, so the MIT limit is applied in the contract's order. */
   const tomorrow: Task[] = [...input.tomorrowExisting];
+  /** The same running picture for every other move target, seeded from `otherTargets`. */
+  const others = new Map<ISODate, Task[]>();
+
+  /** The target day's tasks so far; throws when the caller did not supply that day. */
+  const targetTasks = (date: ISODate): Task[] => {
+    if (date === nextDate) return tomorrow;
+    const seeded = others.get(date);
+    if (seeded !== undefined) return seeded;
+    const existing = input.otherTargets[date];
+    if (existing === undefined) throw new DomainError('missing_target_day');
+    const running = [...existing];
+    others.set(date, running);
+    return running;
+  };
 
   const absorb = (m: Mutation) => {
     for (const t of m.upserts) upserts.set(t.id, t);
@@ -71,14 +91,15 @@ export function closeDay(input: CloseDayInput, ctx: Ctx): Mutation & { dayLog: D
     }
 
     const toTomorrow = decision.date === nextDate;
+    const dayTasks = targetTasks(decision.date);
     // The MIT flag of the copy may be overridden in ritual step 2; the original keeps its own.
     const seed: Task = toTomorrow
       ? { ...task, mit: input.tomorrowMit[task.id] ?? task.mit }
       : task;
-    const m = moveTask(seed, decision.date, { dayTasks: toTomorrow ? tomorrow : [] }, ctx);
+    const m = moveTask(seed, decision.date, { dayTasks }, ctx);
     const [moved, copy] = m.upserts;
     absorb({ ...m, upserts: [{ ...moved, mit: task.mit }, copy] });
-    if (toTomorrow) tomorrow.push(copy);
+    dayTasks.push(copy);
   }
 
   for (const parsed of input.tomorrowNew) {

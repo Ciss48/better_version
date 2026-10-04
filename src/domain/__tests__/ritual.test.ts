@@ -16,6 +16,10 @@ function parsed(overrides: Partial<ParsedTask> = {}): ParsedTask {
   return { title: 'Việc mai', mit: false, important: false, urgent: false, size: null, ...overrides };
 }
 
+function mits(n: number, planDate: string): Task[] {
+  return Array.from({ length: n }, () => task({ planDate, mit: true, status: 'todo' }));
+}
+
 function input(overrides: Partial<CloseDayInput> = {}): CloseDayInput {
   return {
     date: '2026-10-03',
@@ -24,6 +28,7 @@ function input(overrides: Partial<CloseDayInput> = {}): CloseDayInput {
     tomorrowExisting: [],
     tomorrowMit: {},
     tomorrowNew: [],
+    otherTargets: {},
     reflection: REFLECTION,
     ...overrides,
   };
@@ -96,6 +101,7 @@ describe('closeDay', () => {
           [doneTask.id]: { kind: 'drop' },
         },
         tomorrowExisting,
+        otherTargets: { '2026-10-10': [] },
         tomorrowMit: { [toTomorrow.id]: false },
         tomorrowNew: [parsed({ title: 'Chạy bộ', mit: true }), parsed({ title: 'Gọi mẹ' })],
       }),
@@ -214,11 +220,78 @@ describe('closeDay', () => {
       input({
         todayTasks: [a],
         decisions: { [a.id]: { kind: 'move', date: '2026-10-10' } },
+        otherTargets: { '2026-10-10': [] },
         tomorrowMit: { [a.id]: false },
       }),
       ctx(EVENING),
     );
     expect(result.upserts.find((t) => t.originTaskId === a.id)?.mit).toBe(true);
+  });
+
+  it('enforces the MIT limit on a move date other than tomorrow', () => {
+    const a = task({ planDate: '2026-10-03', mit: true, status: 'todo' });
+    const result = closeDay(
+      input({
+        todayTasks: [a],
+        decisions: { [a.id]: { kind: 'move', date: '2026-10-10' } },
+        otherTargets: { '2026-10-10': mits(3, '2026-10-10') },
+      }),
+      ctx(EVENING),
+    );
+
+    expect(result.upserts.find((t) => t.originTaskId === a.id)?.mit).toBe(false);
+    // The original keeps its own MIT flag.
+    expect(result.upserts.find((t) => t.id === a.id)?.mit).toBe(true);
+    expect(result.notices).toEqual(['mitLimit']);
+  });
+
+  it('counts moved-in tasks when two MITs go to the same other date', () => {
+    const a = task({ planDate: '2026-10-03', mit: true, status: 'todo', position: 0 });
+    const b = task({ planDate: '2026-10-03', mit: true, status: 'todo', position: 1 });
+    const result = closeDay(
+      input({
+        todayTasks: [a, b],
+        decisions: {
+          [a.id]: { kind: 'move', date: '2026-10-10' },
+          [b.id]: { kind: 'move', date: '2026-10-10' },
+        },
+        otherTargets: { '2026-10-10': mits(2, '2026-10-10') },
+      }),
+      ctx(EVENING),
+    );
+
+    expect(result.upserts.find((t) => t.originTaskId === a.id)?.mit).toBe(true);
+    expect(result.upserts.find((t) => t.originTaskId === b.id)?.mit).toBe(false);
+    expect(result.notices).toEqual(['mitLimit']);
+  });
+
+  it('positions copies after the target day\'s existing tasks', () => {
+    const a = task({ planDate: '2026-10-03', status: 'todo' });
+    const result = closeDay(
+      input({
+        todayTasks: [a],
+        decisions: { [a.id]: { kind: 'move', date: '2026-10-10' } },
+        otherTargets: { '2026-10-10': [task({ planDate: '2026-10-10', position: 4 })] },
+      }),
+      ctx(EVENING),
+    );
+    expect(result.upserts.find((t) => t.originTaskId === a.id)?.position).toBe(5);
+  });
+
+  it('throws missing_target_day when a move date has no otherTargets entry', () => {
+    const a = task({ planDate: '2026-10-03', status: 'todo' });
+    try {
+      closeDay(
+        input({
+          todayTasks: [a],
+          decisions: { [a.id]: { kind: 'move', date: '2026-10-10' } },
+        }),
+        ctx(EVENING),
+      );
+      throw new Error('expected a throw');
+    } catch (e) {
+      expect((e as DomainError).code).toBe('missing_target_day');
+    }
   });
 
   it('closes an empty day with a 0% day_closed event', () => {

@@ -21,7 +21,7 @@ function heatClass(pct: number): string {
   return 'bg-heat-4';
 }
 
-/** Sidebar card: "n/30 ngày có plan" plus a 10×3 grid of day dots. */
+/** Sidebar card: the n-of-30 planned-days count plus a 10x3 grid of day dots. */
 export function ConsistencyMini({ days = [] }: ConsistencyMiniProps) {
   const recent = days.slice(-WINDOW);
   const cells: (ConsistencyDay | null)[] = [

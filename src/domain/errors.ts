@@ -4,7 +4,8 @@ export type DomainErrorCode =
   | 'not_movable'
   | 'invalid_move_date'
   | 'cannot_restore'
-  | 'undecided_tasks';
+  | 'undecided_tasks'
+  | 'missing_target_day';
 
 export class DomainError extends Error {
   constructor(
