@@ -57,7 +57,7 @@
       "open": "Đang mở · khóa lúc {lockAt}",
       "openHint": "còn {timeLeft} để chỉnh plan"
     },
-    "progress": { "count": "{done}/{total} việc đã định", "weighted": "có trọng số", "tooltip": "Có trọng số: MIT ×2 · L=3, M=2, S=1. Việc phát sinh không tính vào tỉ lệ." },
+    "progress": { "count": "{done}/{total} việc đã định", "weighted": "có trọng số", "tooltip": "Có trọng số: MIT (việc quan trọng nhất) ×2 · L=3, M=2, S=1. Việc phát sinh không tính vào tỉ lệ." },
     "ritualBanner": { "title": "Ngày sắp khép lại", "body": "5 phút nhìn lại hôm nay và chuẩn bị cho ngày mai nhé?", "cta": "Bắt đầu nghi thức tối" },
     "planReminder": { "title": "Chưa có plan cho {tomorrow}", "body": "Cửa sổ lập plan đang mở đến {lockAt} {weekdayLong}. Ba phút là đủ.", "cta": "Lập plan ngày mai", "dismiss": "Để sau" },
     "missed": { "title": "Lỡ một ngày không sao. Đừng lỡ hai ngày liền.", "body": "Hôm qua trang sổ còn trống — chuyện bình thường của ai cũng vậy. Bắt đầu lại thật nhỏ: một việc cho hôm nay là đủ." },
@@ -67,7 +67,7 @@
       "body": "Better Every Day đo khoảng cách giữa điều bạn định làm và điều bạn thực sự làm. Mỗi ngày gần hơn một chút là đủ.",
       "steps": [
         { "title": "Viết plan", "body": "Tối hôm trước, hoặc trước 10:00 sáng" },
-        { "title": "Làm và tick", "body": "Ưu tiên 1–3 việc MIT" },
+        { "title": "Làm và tick", "body": "Ưu tiên 1–3 việc quan trọng nhất" },
         { "title": "Nhìn lại buổi tối", "body": "5 phút, rồi chuẩn bị ngày mai" }
       ],
       "cta": "Thiết lập trong 1 phút",
@@ -81,7 +81,7 @@
       "previewSize": "Độ lớn {size}"
     },
     "view": { "list": "Danh sách", "matrix": "Ma trận", "aria": "Chế độ xem" },
-    "empty": { "title": "Hôm nay vẫn là một trang trắng.", "body": "Chọn 1–3 việc quan trọng nhất trước {lockAt}. Gõ một dòng ở trên, thêm dấu * để đánh dấu MIT." },
+    "empty": { "title": "Hôm nay vẫn là một trang trắng.", "body": "Chọn 1–3 việc quan trọng nhất (MIT) trước {lockAt}. Gõ một dòng ở trên, thêm dấu * để đánh dấu." },
     "mit": { "title": "Việc quan trọng nhất", "count": "{n}/3 MIT", "empty": "Chưa có MIT. Bấm vào một việc rồi chọn ★ MIT — tối đa 3 việc." },
     "others": { "title": "Các việc khác" },
     "adhoc": { "tag": "Phát sinh", "note": "Thêm sau giờ khóa · {done}/{total} xong · không tính vào tỉ lệ" },
@@ -197,7 +197,7 @@
     "insights": {
       "title": "Điều dữ liệu nói với bạn",
       "evening": "Những ngày bạn plan từ tối hôm trước, tỉ lệ hoàn thành cao hơn {n}% so với plan buổi sáng.",
-      "mit": "Bạn hoàn thành {mit}% việc MIT, so với {other}% việc thường — chọn MIT đang có tác dụng.",
+      "mit": "Bạn hoàn thành {mit}% việc quan trọng nhất (MIT), so với {other}% việc thường — chọn MIT đang có tác dụng.",
       "weekday": "{best} là ngày bạn làm tốt nhất ({bestPct}%). {worst} nhẹ hơn ({worstPct}%) — thử đặt ít việc hơn vào ngày này.",
       "energy": "Ngày năng lượng 4–5, bạn hoàn thành {high}%; ngày mệt chỉ {low}%. Giấc ngủ có thể là MIT ẩn.",
       "empty": "Insight sẽ xuất hiện sau khoảng hai tuần dữ liệu. Hiện tại, chỉ cần giữ nhịp viết plan mỗi ngày."
@@ -237,7 +237,7 @@
     "dayEnd": { "title": "Giờ kết thúc một ngày", "body": "Cho người thức khuya: tick việc trước giờ này vẫn được tính cho hôm trước." },
     "reminders": { "title": "Nhắc nhở", "toggleAria": "Bật/tắt nhắc nhở", "plan": "Nhắc lập plan", "ritual": "Nhắc nghi thức buổi tối" },
     "theme": { "title": "Giao diện", "light": "Sáng", "dark": "Tối", "system": "Theo hệ thống" },
-    "weights": { "title": "Cách tính tỉ lệ hoàn thành", "body": "Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT. Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.", "onboarding": "Xem lại hướng dẫn bắt đầu" },
+    "weights": { "title": "Cách tính tỉ lệ hoàn thành", "body": "Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT (việc quan trọng nhất). Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.", "onboarding": "Xem lại hướng dẫn bắt đầu" },
     "account": { "title": "Tài khoản", "signedInAs": "Đang đăng nhập với {email}", "signOut": "Đăng xuất" }
   },
   "onboarding": {
