@@ -1,15 +1,19 @@
 # State
 
-**Last updated:** 2026-10-04 — Phase 6 complete, committed as `phase-06: stats & history`
+**Last updated:** 2026-10-10 — Phase 7 complete (Supabase persistence & auth)
 
 ## Where things stand
-Current phase: 7 — not started, **task file not written yet**.
-Phases 1–6 are done. **The MVP is feature-complete on localStorage**: every screen in
-`design/handoff/screens.md` exists and runs on real data. A user can onboard, plan, tick, move /
-drop / restore, use the matrix, run the whole evening ritual and close the day, read the Journey
-screen (six cards, 26-week heat map, weekday chart, four insights), walk back through History
-month by month, and change settings — and all of it survives a reload. Goals and Weekly are
-static Phase 2 previews. Still no Supabase, no auth, no network of any kind.
+Current phase: 8 — ship. Status: not started, task file not written yet.
+Phases 1–7 are done. **The app runs on Supabase**: magic-link auth gates every route via
+`src/proxy.ts`, all user data (tasks, day logs, task events, settings) lives in Postgres under
+RLS, mutations commit atomically through one RPC, and `NEXT_PUBLIC_DATA_BACKEND=local` still
+gives the full localStorage experience for dev/e2e/screenshots. Every screen in
+`design/handoff/screens.md` exists and runs on real data. A user can sign in, onboard, plan,
+tick, move / drop / restore, use the matrix, run the whole evening ritual and close the day,
+read the Journey screen (six cards, 26-week heat map, weekday chart, four insights), walk back
+through History month by month, and change settings — and all of it survives a reload and
+persists server-side. Goals and Weekly are static Phase 2 previews. See
+`memory/phase_07_report.md` for the full Phase 7 account.
 
 ## Completed
 - **Phase 1 — Scaffold & design system** (`memory/phase_01_report.md`).
@@ -19,6 +23,11 @@ static Phase 2 previews. Still no Supabase, no auth, no network of any kind.
   (`memory/phase_04_report.md`).
 - **Phase 5 — App core on a local repository** (`memory/phase_05_report.md`).
 - **Phase 6 — Stats & history** (`memory/phase_06_report.md`).
+- **Phase 7 — Supabase persistence & auth** (`memory/phase_07_report.md`). Magic-link auth,
+  4 Postgres tables under RLS, atomic commit RPC, `SupabaseRepository`, `DATA_BACKEND` switch.
+  `pnpm lint/typecheck/test` (446 tests), `pnpm build`, `pnpm e2e` (16/16), `pnpm test:supabase`
+  (23/23) all exit 0. RLS confirmed on all 4 tables; one cosmetic advisor warning (leaked-password
+  protection, dashboard toggle, not RLS).
   `src/stats/` (pure: `computeStats`, `monthSummary`, `planTimingOf` — no React/zustand/Next),
   `statsView` + `historyDay` selectors, the store action `ensureMonthLoaded`, the Journey,
   History, Goals and Weekly screens, `src/content/phase2-samples.vi.json`, the three allowed
@@ -35,9 +44,8 @@ static Phase 2 previews. Still no Supabase, no auth, no network of any kind.
 - **Where a task file and a handoff screenshot disagree on *appearance*, the screenshot wins**
   (CLAUDE.md names it visual truth) and the deviation is logged in `memory/discoveries.md`.
   Where they disagree on a *rule*, the task file wins. Two Phase 6 cases, both logged.
-- **Phase numbering in force: 6 stats & history, 7 Supabase, 8 ship (end of MVP),
-  9 SQL analytics (optional).** `docs/plan.md` §3 still carries the pre-renumbering list — for
-  the user and the planning session to reconcile.
+- **Phase numbering: 6 stats & history, 7 Supabase, 8 ship (end of MVP), 9 SQL analytics
+  (optional).** `docs/plan.md` is now reconciled.
 - **`src/stats/` is pure and knows nothing about storage.** It takes `{tasks, dayLogs, today,
   settings}` and returns `StatsResult`. Every rule it needs comes from `src/domain`. If stats ever
   move to SQL, this module is the executable spec and its 49 tests are the comparison harness.
@@ -93,5 +101,6 @@ static Phase 2 previews. Still no Supabase, no auth, no network of any kind.
   early at step 3.
 
 ## Next action
-Phase 07 task file to be written by the planning session — bring `memory/STATE.md`,
-`memory/phase_06_report.md` and `memory/discoveries.md` back to it.
+Phase 08 task file to be written by the planning session — bring `memory/STATE.md`,
+`memory/phase_07_report.md` and `memory/discoveries.md` back to it. Phase 8 is "ship": GitHub
+remote, Vercel project, production env vars, production redirect URL in the Supabase dashboard.

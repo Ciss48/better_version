@@ -1,19 +1,22 @@
+import { DATA_BACKEND } from '@/lib/env';
 import { LocalRepository } from './local-repository';
 import type { Repository } from './repository';
+import { SupabaseRepository } from './supabase-repository';
 
 export type { DateRange, Repository, SeedableRepository, SeedData } from './repository';
 export { applyMutation, earliestPlanDate, isSeedable } from './repository';
 export { LocalRepository, KEYS } from './local-repository';
 export { MemoryRepository } from './memory-repository';
+export { SupabaseRepository } from './supabase-repository';
 
 let instance: Repository | null = null;
 
 /**
- * The repository the app runs on. **Phase 7 swaps this one line** for the
- * Supabase implementation; nothing above `src/data` knows the difference.
+ * The repository the app runs on, chosen by `NEXT_PUBLIC_DATA_BACKEND`.
+ * Nothing above `src/data` knows the difference.
  */
 export function getRepository(): Repository {
-  instance ??= new LocalRepository();
+  instance ??= DATA_BACKEND === 'local' ? new LocalRepository() : new SupabaseRepository();
   return instance;
 }
 

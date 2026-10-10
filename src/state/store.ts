@@ -38,6 +38,7 @@ import { noticeKey, showToast } from '@/lib/toast';
 import { getNow } from './clock-source';
 import { clearDraft } from './ritual-draft';
 import { tasksOn } from './selectors';
+import { storageKey } from './storage-namespace';
 import { applyTheme } from './theme-bridge';
 
 export type { RitualDraft } from './ritual-draft';
@@ -46,8 +47,6 @@ import type { RitualDraft } from './ritual-draft';
 /** How much history and future the app keeps in memory around `today`. */
 const PAST_DAYS = 190;
 const FUTURE_DAYS = 30;
-
-const UI_KEY = 'bed:v1:ui';
 
 export type TodayViewMode = 'list' | 'matrix';
 
@@ -71,7 +70,7 @@ const QUADRANT_TITLE = {
 /** The two Today preferences that should survive a reload. */
 function loadUiPrefs(): UiPrefs {
   if (typeof window === 'undefined') return DEFAULT_UI;
-  const raw = window.localStorage.getItem(UI_KEY);
+  const raw = window.localStorage.getItem(storageKey('ui'));
   if (raw === null) return DEFAULT_UI;
   try {
     const parsed = JSON.parse(raw) as Partial<UiPrefs>;
@@ -90,7 +89,7 @@ function loadUiPrefs(): UiPrefs {
 
 function saveUiPrefs(ui: UiPrefs): void {
   if (typeof window === 'undefined') return;
-  window.localStorage.setItem(UI_KEY, JSON.stringify(ui));
+  window.localStorage.setItem(storageKey('ui'), JSON.stringify(ui));
 }
 
 export interface AppState {
@@ -130,6 +129,8 @@ export interface AppState {
   dismissPlanReminder(today: ISODate): void;
   setTodayView(v: TodayViewMode): void;
   setExpanded(id: string | null): void;
+  /** Supabase mode only: drops every loaded field back to the pre-`init()` state. */
+  signOut(): void;
 }
 
 function byId(tasks: Task[]): Record<string, Task> {
@@ -602,6 +603,20 @@ export function createAppStore(repo?: Repository) {
 
       setExpanded(id) {
         set({ ui: { ...get().ui, expandedTaskId: id } });
+      },
+
+      signOut() {
+        set({
+          status: 'loading',
+          settings: DEFAULT_SETTINGS,
+          onboarded: false,
+          tasks: {},
+          dayLogs: {},
+          loaded: NOTHING_LOADED,
+          firstPlanDate: null,
+          ui: { todayView: 'list', expandedTaskId: null, planReminderDismissedOn: null },
+          lastClose: null,
+        });
       },
     };
   });

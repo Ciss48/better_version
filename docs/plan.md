@@ -33,8 +33,8 @@ Browser (Next.js App Router, React, Tailwind v4 + shadcn/ui)
 Supabase Postgres
   ├─ user_settings, tasks, day_logs        (current state)
   ├─ task_events                           (append-only event log)
-  └─ SQL views / RPC functions for stats   (Phase 6)
-Deploy: Vercel (Phase 7)
+  └─ SQL analytics views (Phase 9, post-MVP, parity-checked against src/stats)
+Deploy: Vercel (Phase 8)
 ```
 
 **Locked stack and why.**
@@ -56,18 +56,24 @@ Deploy: Vercel (Phase 7)
    *before* any screen. UI and data layers call them; they never re-implement them.
 2. **Repository seam.** Screens talk to a `Repository` interface. Phase 4 ships an
    in-memory/localStorage implementation so the whole app is clickable without a backend;
-   Phase 5 swaps in Supabase without touching screens.
+   Phase 7 swaps in Supabase without touching screens.
 3. **Event log.** Every mutating domain function returns the `TaskEvent`s it implies; the
-   repository persists state + events together. Stats and insights (Phase 6) are computed
-   from state tables and the event log.
+   repository persists state + events together.
+4b. **Stats are computed client-side in TypeScript** (`src/stats/`, pure + tested, Phase 6)
+   from tasks + day logs. One user's data is a few thousand rows at most, so this is cheap
+   and keeps one source of truth for the MVP. Phase 9 (post-MVP) adds SQL analytics views on Supabase
+   (portfolio value, future dashboards) and checks them for parity against `src/stats/`.
 4. **Moving a task creates a new task** on the target date (`originTaskId` → original,
    `postponedCount + 1`, flags and MIT kept); the original becomes `status='moved'`,
    `movedTo=<date>`. History therefore shows both sides truthfully.
-5. **Ritual is a draft until "Hoàn tất & đóng ngày".** Draft lives client-side
+5. **Clock context.** Components that need "now", "today" or the user's timezone read them
+   from `ClockProvider` / `useClock()` (`src/lib/clock.tsx`), fed by the screen (real clock,
+   or the dev `?now=` override). Components never construct dates from the system clock.
+6. **Ritual is a draft until "Hoàn tất & đóng ngày".** Draft lives client-side
    (localStorage, keyed by user + date); closing applies everything atomically.
-6. **Breakpoint:** viewport `app:` variant (≥720px). The handoff's "container" wording only
+7. **Breakpoint:** viewport `app:` variant (≥720px). The handoff's "container" wording only
    mattered for the design canvas; in the real app the container is the viewport.
-7. **Fonts** via `next/font/google`: Fraunces (SOFT 100, weight 600) for headings, Be
+8. **Fonts** via `next/font/google`: Fraunces (SOFT 100, weight 600) for headings, Be
    Vietnam Pro for UI, Caprasimo for numerals/logo only.
 
 **Business rules (locked; resolves inconsistencies found in the handoff).**
@@ -90,7 +96,8 @@ Deploy: Vercel (Phase 7)
 | Ritual state | ticking done/undone is applied immediately (it is a fact); decisions, reflection and new tomorrow tasks stay a draft until "Hoàn tất & đóng ngày" |
 | Plan timing (for insights) | first planned task created before D's dayEnd boundary → "evening"; before lock → "morning"; after → "late" |
 
-**Data model (sketch — finalised in the Phase 5 task file; TS types are locked in Phase 2).**
+**Data model (sketch — finalised in the Phase 7 task file; TS types are locked in Phase 2).**
+- Final schema: see `tasks/phase_07_supabase.md` §2 (supersedes this sketch).
 - `user_settings(user_id pk, timezone, habit, window_start_hour, window_start_offset, lock_time, day_end, remind_on, remind_plan, remind_ritual, theme, onboarded_at, created_at, updated_at)`
 - `tasks(id uuid pk, user_id, plan_date date, title, important, urgent, mit, size, status, postponed_count, adhoc, position, moved_to date, origin_task_id, created_at, completed_at, updated_at)`
 - `day_logs(user_id, plan_date, closed_at, energy, good, improve; pk(user_id, plan_date))` — "first planned at" is derived as `min(tasks.created_at)` of planned tasks, not stored
@@ -109,7 +116,7 @@ exhaustive unit tests (timezone, late night, lock, weights, quick-add parser, da
 move/drop/restore, close-day, banners, consistency). Highest-risk logic, verified in
 isolation before any UI depends on it.
 
-### Phase 3: Components A — core & Today — [HAS DETAILED TASK FILE]
+### Phase 3: Components A — core & Today — [DONE]
 Two small domain amendments (MIT limit on every move target; restore re-checks the
 limit), `src/lib/format.ts`, and the presentational components for the Today screen:
 Banner, PlanStatus, ProgressBar, Tag, EmptyState, Segmented/ViewToggle, TaskInput,
@@ -117,30 +124,37 @@ TaskItem, MITSection, TaskGroup, Matrix (board, quadrant, bottom sheet), DatePic
 DatePicker, Toast. `/dev/components` gallery + a Today playground driven by the domain,
 component tests, Playwright screenshot script.
 
-### Phase 4: Components B — ritual, stats, history, settings, onboarding — [SKETCH, TASK FILE AFTER PHASE 3]
+### Phase 4: Components B — ritual, stats, history, settings, onboarding — [DONE]
 Stepper, ReviewRow, RitualFooter, ReflectionForm, TomorrowPlanList, RitualSummary,
 StatCard, Heatmap, WeekdayChart, InsightCard, CalendarMonth, DayDetail, Settings
 controls (TimeSelect, Switch, PlanWindowTimeline, SettingsSection), Onboarding pieces,
 Phase2Notice — all in the gallery with every state.
 
-### Phase 5: Screens on a local repository — [SKETCH]
-All MVP screens wired to a zustand store and an in-memory/localStorage `Repository`,
-with seed data and a dev-only `?now=` clock override so every state in
-`design/handoff/screens.md` is reproducible and comparable against the screenshots.
-Deliverable: a fully clickable app with no backend.
+### Phase 5: App core on a local repository — [DONE]
+Repository + LocalRepository, zustand store, clock source with dev `?now=`/`?seed=`,
+real Today, Ritual, Onboarding, Settings, More screens; 9 e2e flows, 48 screen shots.
 
-### Phase 6: Supabase persistence & auth — [SKETCH]
-Migrations for the four tables, RLS, magic-link auth (login page, callback, middleware),
-`SupabaseRepository` writing state + events, onboarding/settings persisted, ritual draft
-in localStorage. Deliverable: the same app, now multi-user and persistent.
+### Phase 6: Stats & History — [DONE]
+Pure `src/stats/` module (averages + deltas, consistency, Q2/adhoc/moved shares, weekday
+averages, four insights with thresholds) with tests; Journey and History screens;
+Goals/Weekly Phase-2 placeholder pages; small leftovers from Phase 5; more shots and e2e.
+**After this phase the app is feature-complete for the MVP (on localStorage).**
 
-### Phase 7: Stats in SQL — [SKETCH]
-SQL views/RPC functions for day summaries, the six stat cards, weekday chart and the
-four insight templates; wire Journey, History and ConsistencyMini to them.
+### Phase 7: Supabase persistence & auth — [HAS DETAILED TASK FILE]
+Schema (4 tables, RLS, atomic `commit_mutation` RPC), magic-link auth with `@supabase/ssr`
+(login page, callback, route protection, sign-out), `SupabaseRepository` implementing the
+Phase 5 interface (paginated reads), backend switch `NEXT_PUBLIC_DATA_BACKEND`
+(`supabase` for the real app, `local` for e2e/seeds), the repository contract suite run
+against Supabase with a throwaway test user, two cosmetic leftovers from Phase 6.
+Local browser data is **not** migrated to the account (test data only).
 
 ### Phase 8: Ship — [SKETCH]
 GitHub remote, Vercel deploy with env vars, Supabase auth redirect URLs, PWA manifest +
-icons (installable on phone, no service worker), production smoke test on mobile.
+icons, production smoke test on mobile. **End of MVP.**
+
+### Phase 9 (post-MVP, optional): SQL analytics — [SKETCH]
+Views/RPC on Supabase mirroring `src/stats/`, with a parity test against the TS
+implementation on seeded data. Portfolio value; not needed for the app to work.
 
 ## 4. Risks / assumptions to validate early
 - **R1 Timezone & late-night math** (dayEnd, window crossing midnight, multi-user).
@@ -153,6 +167,10 @@ icons (installable on phone, no service worker), production smoke test on mobile
   after real usage.
 - **R5 shadcn init overwriting globals.css colour variables** that tokens.css owns.
   Phase 1 handles explicitly.
+- **R6 Claude Code's network reaches only registry.npmjs.org at times** (Phase 3; Phase 4 found ui.shadcn.com reachable again — intermittent). The
+  Supabase MCP has worked, but Phase 7 must verify the app itself can reach `*.supabase.co`
+  from `pnpm dev`, and Phase 8 (GitHub push, Vercel) may need the user to run those steps
+  or widen Claude Code's network allowlist. Check before writing those task files.
 
 ## 5. Plan change log
 | Date | Change | Reason | Source |
@@ -161,3 +179,7 @@ icons (installable on phone, no service worker), production smoke test on mobile
 | 2026-10-04 | Design handoff path is `design/handoff/`; shadcn is the Base UI flavour | Actual repo layout / shadcn CLI v4 default | Phase 1 report + discoveries |
 | 2026-10-04 | MIT limit enforced on every move target (`CloseDayInput.otherTargets`) and on restore | Over-limit days were possible | Phase 2 discoveries (closeDay MIT), report finding 4 |
 | 2026-10-04 | Component work split into Phase 3 (core & Today) and Phase 4 (rest); later phases renumbered 5–8 | ~35 components is too much for one reliable session | Planning |
+| 2026-10-04 | Added ClockProvider/useClock decision; risk R6 (network allowlist) | `formatClockLocal` used DEFAULT_SETTINGS; DatePicker used the real today; registry unreachable | Phase 3 report |
+| 2026-10-04 | Screens split into Phase 5 (core loop) and Phase 6 (stats & history); stats computed in TS (`src/stats/`), SQL analytics becomes Phase 8 with parity check; Supabase → 7, ship → 9 | Stats had no home before Supabase; keep one source of truth; phase size | Phase 4 report |
+| 2026-10-04 | Ship moved before SQL analytics: 7 Supabase, 8 Ship (end of MVP), 9 SQL analytics (optional) | Reach a usable deployed product sooner | Planning, after Phase 5 |
+| 2026-10-04 | Phase 7 detailed: atomic RPC commit, backend switch env, e2e stays on local backend, no local→cloud data migration | Phase 5/6 reports (atomicity, R6 cleared) | Planning |

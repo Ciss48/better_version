@@ -23,6 +23,7 @@ const ROUTES = [
   '/settings',
   '/more',
   '/onboarding',
+  '/login',
 ];
 
 export default async function globalSetup(config: FullConfig): Promise<void> {

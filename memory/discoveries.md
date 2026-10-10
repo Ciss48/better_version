@@ -181,7 +181,8 @@ Phase 6 as "Supabase persistence & auth", 7 as "Stats in SQL" and 8 as "Ship", w
 **How it was handled:** nothing — `docs/plan.md` is edited only by the user and the planning
 model (CLAUDE.md). The task file was treated as authoritative: `src/data/repository.ts` names
 **Phase 7** as the Supabase implementer, and stats/History are deferred to **Phase 6**.
-**Status:** open — for the user/planning session to reconcile in `docs/plan.md`.
+**Status:** resolved — plan.md re-issued by the planning session (the user had not copied it in).
+Order: 6 stats & history, 7 Supabase, 8 ship (end of MVP), 9 SQL analytics (optional).
 
 ## [Phase 6] Two presentational details in the Phase 06 contract disagree with the handoff screenshots — Tier: Moderate
 **Finding:** `tasks/phase_06_stats_history.md` §1 and §3 specify two things that
@@ -224,3 +225,19 @@ in 12.4s. No worker cap was needed — verified at both the default and `--worke
 the routes before blaming memory, the seed or the store. Add every new route to the list in
 `e2e/global-setup.ts`.
 **Status:** resolved in Phase 6 — no plan.md change needed.
+
+## [Phase 7] Playwright `reuseExistingServer` attaches to any stray process on the port — Tier: Moderate
+**Finding:** `playwright.config.ts` sets `reuseExistingServer: process.env.CI === undefined`, so
+every local (non-CI) `pnpm e2e` run reuses whatever is already bound to port 3000/3001 — even a
+manually started `pnpm dev` left over from testing in the browser — instead of launching its own
+server with the project's `env` block (`NEXT_PUBLIC_DATA_BACKEND=local`). When that happens every
+local-backend spec fails with `[data-ready] not found`, because the stray server defaults to
+`DATA_BACKEND=supabase` and redirects every page to `/login`. The failure looks exactly like an
+app regression.
+**Impact:** Phase 7 only (surfaced because auth now makes the two backends diverge visibly;
+before Phase 7 both backends rendered the same pages so a stray server was never wrong env).
+**How it was handled:** no code change — this is Playwright's intended local-iteration speedup.
+Documented here and in `memory/phase_07_report.md` so a future run isn't alarmed: before trusting
+a red local e2e run, check `lsof -nP -iTCP:3000 -sTCP:LISTEN` (and `:3001`) for a leftover
+`next-server` and kill it first.
+**Status:** resolved — no plan.md change needed, behavioural note only.

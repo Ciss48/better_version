@@ -4,7 +4,7 @@ import { Tag } from '@/components/common/Tag';
 import { completion } from '@/domain';
 import type { DayLog, HHMM, ISODate, Task } from '@/domain';
 import { t } from '@/lib/copy';
-import { formatDateLong, formatDateShort } from '@/lib/format';
+import { formatDateShort, formatWeekdayDayMonth } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 export interface DayDetailProps {
@@ -70,7 +70,9 @@ export function DayDetail({
     >
       <div className="flex items-start justify-between gap-2.5">
         <div className="flex flex-col gap-1">
-          <span className="font-display text-[24px] leading-[1.15]">{formatDateLong(date)}</span>
+          <span className="font-display text-[24px] leading-[1.15]">
+            {formatWeekdayDayMonth(date)}
+          </span>
           {planTiming === null ? null : (
             <span className="text-caption text-ink-3">
               {t(

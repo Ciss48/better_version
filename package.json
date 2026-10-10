@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:supabase": "vitest run --config vitest.supabase.config.ts",
     "shots": "tsx scripts/shots.ts",
     "shots:screens": "tsx scripts/shots-screens.ts",
     "e2e": "playwright test"
@@ -18,6 +19,8 @@
     "@base-ui/react": "^1.8.0",
     "@date-fns/tz": "^1.5.0",
     "@dnd-kit/core": "^6.3.1",
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.117.2",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
     "date-fns": "^4.4.0",

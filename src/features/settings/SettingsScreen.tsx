@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useTheme } from 'next-themes';
 import { PageContainer } from '@/components/app-shell/PageContainer';
 import { Segmented } from '@/components/common/Segmented';
+import { AccountSection } from '@/components/settings/AccountSection';
 import { DayEndChips } from '@/components/settings/DayEndChips';
 import { PlanWindowTimeline } from '@/components/settings/PlanWindowTimeline';
 import { SettingsSection } from '@/components/settings/SettingsSection';
@@ -11,6 +12,7 @@ import { Switch } from '@/components/settings/Switch';
 import { TimeSelect } from '@/components/settings/TimeSelect';
 import type { Habit, HHMM, Theme } from '@/domain';
 import { t } from '@/lib/copy';
+import { DATA_BACKEND } from '@/lib/env';
 import { useHydrated } from '@/lib/use-hydrated';
 import { ScreenState } from '@/features/common/ScreenState';
 import { useStore } from '@/state/store';
@@ -206,6 +208,8 @@ function SettingsBody() {
           </Link>
         </div>
       </section>
+
+      {DATA_BACKEND === 'supabase' ? <AccountSection /> : null}
     </div>
   );
 }

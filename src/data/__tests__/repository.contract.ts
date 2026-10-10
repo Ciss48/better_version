@@ -14,8 +14,11 @@ import type { Repository } from '../repository';
  * than once on its own with nothing to test.
  */
 
-let seq = 0;
-const nextId = () => `id${++seq}`;
+// A real UUID, not a counter: `tasks.id` and `task_events.id` are `uuid`
+// columns in Postgres, so the Supabase repository rejects anything else — and
+// this suite is shared by `repository.test.ts` (Memory/Local) *and* the
+// Supabase contract run (`pnpm test:supabase`).
+const nextId = () => crypto.randomUUID();
 
 export function makeTask(planDate: ISODate, overrides: Partial<Task> = {}): Task {
   return {
@@ -157,7 +160,10 @@ export function describeRepositoryContract(
     });
 
     it('ignores a delete of an unknown id', async () => {
-      await repo.commit(mutation({ deletes: ['nope'] }));
+      // A syntactically valid id that was never written — `tasks.id` is a
+      // Postgres `uuid` column, so an arbitrary string would fail to cast
+      // before the "unknown id" behaviour this case is testing ever runs.
+      await repo.commit(mutation({ deletes: [crypto.randomUUID()] }));
       expect(await repo.loadTasks(ALL)).toEqual([]);
     });
 

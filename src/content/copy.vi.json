@@ -1,5 +1,24 @@
 {
   "app": { "name": "Better Every Day", "tagline": "Tiến bộ 1% mỗi ngày" },
+  "auth": {
+    "kicker": "Đăng nhập",
+    "title": "Chào bạn quay lại",
+    "body": "Nhập email để nhận link đăng nhập — không cần mật khẩu.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "ban@vidu.com",
+    "submit": "Gửi link đăng nhập",
+    "sending": "Đang gửi…",
+    "sentTitle": "Kiểm tra email của bạn",
+    "sentBody": "Đã gửi link đăng nhập tới {email}. Mở email đó trên chính thiết bị này để tiếp tục.",
+    "resend": "Gửi lại",
+    "resendWait": "Gửi lại sau {seconds}s",
+    "error": {
+      "invalidEmail": "Email này chưa đúng định dạng — thử kiểm tra lại nhé.",
+      "rateLimit": "Email vừa được gửi gần đây — đợi một chút rồi thử lại.",
+      "link": "Link đăng nhập này không dùng được nữa — gửi lại một link mới nhé.",
+      "generic": "Chưa gửi được — thử lại nhé."
+    }
+  },
   "nav": {
     "today": "Hôm nay", "ritual": "Nghi thức tối", "stats": "Hành trình", "history": "Lịch sử",
     "goals": "Mục tiêu", "weekly": "Tổng kết tuần", "settings": "Cài đặt", "more": "Thêm",
@@ -218,7 +237,8 @@
     "dayEnd": { "title": "Giờ kết thúc một ngày", "body": "Cho người thức khuya: tick việc trước giờ này vẫn được tính cho hôm trước." },
     "reminders": { "title": "Nhắc nhở", "toggleAria": "Bật/tắt nhắc nhở", "plan": "Nhắc lập plan", "ritual": "Nhắc nghi thức buổi tối" },
     "theme": { "title": "Giao diện", "light": "Sáng", "dark": "Tối", "system": "Theo hệ thống" },
-    "weights": { "title": "Cách tính tỉ lệ hoàn thành", "body": "Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT. Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.", "onboarding": "Xem lại hướng dẫn bắt đầu" }
+    "weights": { "title": "Cách tính tỉ lệ hoàn thành", "body": "Mỗi việc có trọng số theo độ lớn — S = 1, M = 2 (mặc định), L = 3 — và nhân đôi nếu là MIT. Việc Phát sinh và việc đã Bỏ không tính vào tỉ lệ; việc Dời vẫn tính là chưa xong.", "onboarding": "Xem lại hướng dẫn bắt đầu" },
+    "account": { "title": "Tài khoản", "signedInAs": "Đang đăng nhập với {email}", "signOut": "Đăng xuất" }
   },
   "onboarding": {
     "skip": "Bỏ qua, dùng mặc định",

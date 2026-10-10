@@ -22,6 +22,14 @@ export default defineConfig({
     // all at once thrashes the machine and makes interaction tests flake.
     maxWorkers: 4,
     include: ['src/**/*.test.{ts,tsx}'],
+    // `src/lib/env.ts` throws at import when supabase mode has no credentials.
+    // The unit suite runs on the local backend; the few tests that care about
+    // the switch stub these and re-import the module.
+    env: {
+      NEXT_PUBLIC_DATA_BACKEND: 'local',
+      NEXT_PUBLIC_SUPABASE_URL: 'https://stub.supabase.co',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'stub-anon-key',
+    },
     setupFiles: ['./src/test/setup-dom.ts'],
     coverage: {
       provider: 'v8',

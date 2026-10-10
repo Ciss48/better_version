@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { getRepository, isSeedable } from '@/data';
+import { DATA_BACKEND } from '@/lib/env';
 import { setNowOverride, restoreNowOverride } from '@/state/clock-source';
 import { buildSeed, isSeedName } from './seeds';
 
@@ -10,7 +11,10 @@ import { buildSeed, isSeedName } from './seeds';
  * Dev-only URL parameters, applied **before** the store loads:
  *
  * - `?seed=<name>` wipes the repository and writes that dataset (see `seeds.ts`)
+ *   — **only on the local backend**; against Supabase it is refused, because a
+ *   seed resets whatever account happens to be signed in
  * - `?now=<ISO instant>` freezes the clock for the session; `?now=off` clears it
+ *   — works on both backends
  *
  * Both params are then removed from the URL, so a reload neither re-seeds nor
  * loses the frozen clock — that is what makes "change something, reload, it is
@@ -60,7 +64,11 @@ export function DevParams({ onReady }: DevParamsProps) {
         }
 
         if (seedParam !== null) {
-          if (!isSeedName(seedParam)) {
+          if (DATA_BACKEND !== 'local') {
+            console.warn(
+              `[dev] ?seed=${seedParam} needs NEXT_PUBLIC_DATA_BACKEND=local — ignoring it.`,
+            );
+          } else if (!isSeedName(seedParam)) {
             console.warn(`[dev] unknown ?seed=${seedParam} — ignoring it.`);
           } else {
             const repo = getRepository();

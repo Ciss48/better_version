@@ -8,7 +8,7 @@ test('a heat-map cell opens that day in History', async ({ page }) => {
   await expect(page).toHaveURL(/\/history\?date=2026-10-01/);
   await ready(page);
 
-  await expect(page.getByText('Thứ Năm, 1 tháng 10', { exact: true })).toBeVisible();
+  await expect(page.getByText('Thứ Năm, 1/10', { exact: true })).toBeVisible();
   await expect(page.getByText('Chỉ đọc')).toBeVisible();
 });
 
@@ -24,7 +24,7 @@ test('History walks back a month and stops at the current one', async ({ page })
 
   // 2026-09-15 is a day with a plan in the `demo` seed.
   await page.getByRole('button', { name: /Thứ Ba, 15 tháng 9/ }).click();
-  await expect(page.getByText('Thứ Ba, 15 tháng 9', { exact: true })).toBeVisible();
+  await expect(page.getByText('Thứ Ba, 15/9', { exact: true })).toBeVisible();
   await expect(page.getByText('Học 1 chương Databricks')).toBeVisible();
   await expect(page.getByText(/việc đã định/)).toBeVisible();
 });

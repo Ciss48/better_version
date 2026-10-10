@@ -175,27 +175,6 @@ function RitualBody() {
     };
   }, [state, today]);
 
-  if (step === 3) {
-    return (
-      <div ref={topRef} className="flex max-w-[680px] flex-col gap-7">
-        <RitualSummary
-          date={summary.date}
-          pct={summary.pct}
-          done={summary.done}
-          total={summary.total}
-          adhocDone={summary.adhocDone}
-          moved={summary.moved}
-          dropped={summary.dropped}
-          energy={summary.energy}
-          good={summary.good}
-          tomorrow={summary.tomorrow}
-          consistencyPlanned={summary.consistencyPlanned}
-          onDone={() => router.push('/today')}
-        />
-      </div>
-    );
-  }
-
   return (
     <div ref={topRef} className="flex max-w-[680px] flex-col gap-7">
       <div className="flex items-center justify-between gap-3">
@@ -220,11 +199,28 @@ function RitualBody() {
         </button>
       </div>
 
-      <Stepper
-        steps={steps}
-        current={step}
-        onStepClick={(index) => update({ step: index as 0 | 1 | 2 })}
-      />
+      {step === 3 ? (
+        <RitualSummary
+          date={summary.date}
+          pct={summary.pct}
+          done={summary.done}
+          total={summary.total}
+          adhocDone={summary.adhocDone}
+          moved={summary.moved}
+          dropped={summary.dropped}
+          energy={summary.energy}
+          good={summary.good}
+          tomorrow={summary.tomorrow}
+          consistencyPlanned={summary.consistencyPlanned}
+          onDone={() => router.push('/today')}
+        />
+      ) : (
+        <Stepper
+          steps={steps}
+          current={step}
+          onStepClick={(index) => update({ step: index as 0 | 1 | 2 })}
+        />
+      )}
 
       {step === 0 ? (
         <section key="step-1" className={`${STEP_SECTION} gap-5`}>

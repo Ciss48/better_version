@@ -97,10 +97,10 @@ The six new rows (each shot light + dark × desktop + mobile).
 
 | Row | Design file | Verdict |
 |---|---|---|
-| `ritual_summary` | `desktop/ritual_summary_{light,dark}` | **Match on the numbers** — 62%, 5/8, 3 dời, 1 bỏ, 4/5 năng lượng, "Ngày mai đã sẵn sàng · 4 việc, 2 MIT" with the same two titles; the kicker now reads "ĐÃ KHÉP LẠI THỨ BẢY, 3/10" (§4.2). **One difference:** the design also shows the ritual header ("NGHI THỨC BUỔI TỐI / Thứ Bảy, 3/10 · 20:45" + "Để sau Esc") above the summary; `RitualScreen` returns the summary on its own at step 3. That is a Phase 5 screen decision, outside §4's three allowed changes — left alone, listed under "Input for the next phase". |
+| `ritual_summary` | `desktop/ritual_summary_{light,dark}` | **Match.** 62%, 5/8, 3 dời, 1 bỏ, 4/5 năng lượng, "Ngày mai đã sẵn sàng · 4 việc, 2 MIT" with the same two titles; the kicker reads "ĐÃ KHÉP LẠI THỨ BẢY, 3/10" (§4.2). **Phase 7 fix:** `RitualScreen` now keeps the ritual header ("NGHI THỨC BUỔI TỐI / Thứ Bảy, 3/10 · 21:30" + "Để sau Esc") above the summary at step 3, matching the design — see `memory/phase_07_report.md` §5. Re-shot in `artifacts/screens/`. |
 | `stats_default` | `desktop/` + `mobile/` | **Match on structure, layout and type** — header, 4+2 card grid, 26-week map (13 on mobile), weekday chart + insights side by side, all four insight sentences present with the design's dot colours. Figures differ because they are computed from the seed, not pinned (86/72/28-30/46/7/19 vs the design's 76/75/26-30/38/6/23). **One deliberate difference:** the q2 card carries its delta chip; the design shows none. The task file's contract says "q2Share: percent, **delta shown**", so the contract won — flagged here. |
 | `stats_not-enough-data` | `desktop/` | **Match on treatment** — accent-soft sparse card, seven dots, every card but the consistency score at "—", flat weekday bars, the "come back in two weeks" insight line. Content differs by design of the task table: the row is seeded `sparse` (a 4-day user → "4/7", "0/30" → "4/30", a partly-filled map), the design file pictures a 0-day user. |
-| `history_default` | `desktop/` + `mobile/` | **Match on layout and the selected day** — calendar left / detail right, sticky on desktop, stacked on mobile; the detail is the same 2/10 fixture, 100%, "Plan lúc 07:59 sáng · 8 việc đã định" (the fixture's `createdAt` was fixed to produce it), the same eight rows and the same reflection. **Two differences:** the month line reads "3/3 ngày có plan · TB 100%" where the design shows "2/2 · TB 92%" — the task file defines the month total as *dates of the month ≤ today*, so today is counted (the prototype silently dropped it); and `DayDetail`'s heading is "Thứ Sáu, 2 tháng 10" where the design has "Thứ Sáu, 2/10". The latter is a `DayDetail` (Phase 4) detail and `DayDetail` is not one of §4's three allowed component changes — left alone, listed for the next phase. |
+| `history_default` | `desktop/` + `mobile/` | **Match on layout and the selected day** — calendar left / detail right, sticky on desktop, stacked on mobile; the detail is the same 2/10 fixture, 100%, "Plan lúc 07:59 sáng · 8 việc đã định" (the fixture's `createdAt` was fixed to produce it), the same eight rows and the same reflection. **One remaining difference:** the month line reads "3/3 ngày có plan · TB 100%" where the design shows "2/2 · TB 92%" — the task file defines the month total as *dates of the month ≤ today*, so today is counted (the prototype silently dropped it); this is a rule difference, not a defect, and stays. **Phase 7 fix:** `DayDetail`'s heading now uses `formatWeekdayDayMonth` → "Thứ Sáu, 2/10", matching the design (was "Thứ Sáu, 2 tháng 10") — see `memory/phase_07_report.md` §5. Re-shot in `artifacts/screens/`. |
 | `goals_phase2` | `desktop/goals_phase2_{light,dark}` | **Match** — notice, header, three goal cards with the right horizons/metrics/percentages/focus boxes/linked counts, the dashed "+ Thêm mục tiêu" tile on the second row. One small difference: `@tên-mục-tiêu` is plain text, not monospace-bold — the copy key is one string and splitting it would mean inventing copy. |
 | `weekly_phase2` | `desktop/weekly-review_phase2_{light,dark}` | **Match** — notice, "Tuần 28/9 – 4/10", the three figures (79% / 6/7 / 11/14), the seven-bar chart with a dashed CN and an accent T7, and the three disabled focus fields with the design's placeholders. Note the **file names differ**: the task table calls the row `weekly_phase2`, the design file is `weekly-review_phase2`. The task table was followed. |
 
@@ -180,11 +180,10 @@ were resolved in favour of the screenshots (CLAUDE.md: "How it looks | `design/s
 
 ## Open issues
 
-- **`DayDetail`'s heading** prints `formatDateLong` ("Thứ Sáu, 2 tháng 10"); the design has
-  "Thứ Sáu, 2/10". A one-line change, but `DayDetail` is not one of §4's three allowed component
-  changes, so it was left alone.
-- **The ritual summary drops the ritual header** that `ritual_summary` shows. `RitualScreen`
-  returns early at step 3. Also outside this phase's scope.
+- ~~**`DayDetail`'s heading** prints `formatDateLong` ("Thứ Sáu, 2 tháng 10"); the design has
+  "Thứ Sáu, 2/10".~~ **Fixed in Phase 7** (`memory/phase_07_report.md` §5).
+- ~~**The ritual summary drops the ritual header** that `ritual_summary` shows. `RitualScreen`
+  returns early at step 3.~~ **Fixed in Phase 7** (`memory/phase_07_report.md` §5).
 - **`docs/plan.md` §3 still carries the pre-renumbering phase list** (Phase 5 finding). The brief
   for this session confirmed the live numbering — 6 stats & history, 7 Supabase, 8 ship (end of
   MVP), 9 SQL analytics (optional) — but `plan.md` itself has not been updated.

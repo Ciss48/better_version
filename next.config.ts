@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
   // The floating dev badge is fixed-position and lands inside `pnpm shots`
   // screenshots of individual sections.
   devIndicators: false,
+  // `next dev`'s lockfile (`<distDir>/dev/lock`) is keyed by distDir, not by
+  // port: e2e's `supabase` project runs a second `next dev` on :3001 from the
+  // same checkout, so it needs its own distDir or the two collide.
+  // `playwright.config.ts` sets NEXT_DIST_DIR for that server only.
+  distDir: process.env.NEXT_DIST_DIR ?? '.next',
 };
 
 export default nextConfig;

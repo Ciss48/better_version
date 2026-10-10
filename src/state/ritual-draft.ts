@@ -1,4 +1,5 @@
 import type { Decision, ISODate, ParsedTask, Reflection } from '@/domain';
+import { storageKey } from './storage-namespace';
 
 /**
  * Everything the evening ritual has decided but not yet committed. Ticking a
@@ -19,10 +20,8 @@ export interface RitualDraft {
   tomorrowNew: { id: string; parsed: ParsedTask }[];
 }
 
-const PREFIX = 'bed:v1:ritual:';
-
 export function draftKey(date: ISODate): string {
-  return `${PREFIX}${date}`;
+  return storageKey(`ritual:${date}`);
 }
 
 export function emptyDraft(date: ISODate): RitualDraft {
