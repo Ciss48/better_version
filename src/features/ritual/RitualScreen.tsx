@@ -3,18 +3,24 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PageContainer } from '@/components/app-shell/PageContainer';
+import { EmptyState } from '@/components/common/EmptyState';
 import { Kbd } from '@/components/common/Kbd';
+import { MatrixBoard } from '@/components/matrix/MatrixBoard';
 import { ReflectionForm } from '@/components/ritual/ReflectionForm';
 import { ReviewRow } from '@/components/ritual/ReviewRow';
 import { RitualFooter } from '@/components/ritual/RitualFooter';
 import { RitualSummary } from '@/components/ritual/RitualSummary';
 import { Stepper } from '@/components/ritual/Stepper';
 import { TomorrowPlanList } from '@/components/ritual/TomorrowPlanList';
+import { TaskInput } from '@/components/today/TaskInput';
+import { ViewToggle } from '@/components/today/ViewToggle';
+import type { ViewMode } from '@/components/today/ViewToggle';
 import { addDays, completion, ritualRemaining } from '@/domain';
 import type { Decision, ParsedTask } from '@/domain';
 import { useClock } from '@/lib/clock';
 import { t, tRaw } from '@/lib/copy';
 import { formatClock, formatWeekdayDayMonth } from '@/lib/format';
+import { useIsDesktop } from '@/lib/hooks/use-media';
 import { useShortcut } from '@/lib/hooks/use-shortcut';
 import { showToast } from '@/lib/toast';
 import { ScreenState } from '@/features/common/ScreenState';
@@ -51,9 +57,11 @@ function RitualBody() {
   const tomorrow = addDays(today, 1);
 
   const state = useStore();
-  const { toggleDone, patchTask, closeDay } = state;
+  const { toggleDone, patchTask, closeDay, addTask, dropTask, setQuadrant } = state;
+  const isDesktop = useIsDesktop();
 
   const [draft, setDraft] = useState<RitualDraft>(() => emptyDraft(today));
+  const [tomorrowMode, setTomorrowMode] = useState<ViewMode>('list');
   const loadedFor = useRef<string | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +155,51 @@ function RitualBody() {
     });
   }
 
+  // ── Tomorrow board (shown after closing) ────────────────────────────────
+  // Unlike `items` above (a draft, mixing not-yet-real entries until the
+  // ritual closes), these are the real `tasks` rows already on tomorrow's
+  // date — editable the same way Today edits today's.
+  const tomorrowBoardTasks = useMemo(
+    () =>
+      tasksOn(state.tasks, tomorrow).filter(
+        (task) => task.status === 'todo' || task.status === 'done',
+      ),
+    [state.tasks, tomorrow],
+  );
+  const tomorrowBoardItems = useMemo(
+    () =>
+      tomorrowBoardTasks.map((task) => ({
+        id: task.id,
+        title: task.title,
+        mit: task.mit,
+        carried: false,
+        postponedCount: task.postponedCount,
+        removable: true,
+      })),
+    [tomorrowBoardTasks],
+  );
+
+  function onAddTomorrowClosed(parsed: ParsedTask): void {
+    let next = parsed;
+    const mitCount = tomorrowBoardTasks.filter((task) => task.mit).length;
+    if (parsed.mit && mitCount >= MIT_LIMIT) {
+      showToast('ritual.step3.mitFullOnAdd');
+      next = { ...parsed, mit: false };
+    }
+    void addTask(tomorrow, next, 'tomorrow');
+  }
+
+  function onToggleMitClosed(id: string): void {
+    const task = state.tasks[id];
+    if (task === undefined) return;
+    const mitCount = tomorrowBoardTasks.filter((entry) => entry.mit).length;
+    if (!task.mit && mitCount >= MIT_LIMIT) {
+      showToast('ritual.step3.mitMax');
+      return;
+    }
+    void patchTask(id, { mit: !task.mit });
+  }
+
   const steps = tRaw<string[]>('ritual.steps');
   const reflectionTouched =
     draft.reflection.energy !== 0 ||
@@ -158,7 +211,9 @@ function RitualBody() {
     const date = state.lastClose?.date ?? today;
     const log = state.lastClose?.result.dayLog ?? state.dayLogs[date];
     const after = tasksOn(state.tasks, date);
-    const tomorrowAfter = tasksOn(state.tasks, addDays(date, 1));
+    const tomorrowAfter = tasksOn(state.tasks, addDays(date, 1)).filter(
+      (task) => task.status === 'todo' || task.status === 'done',
+    );
     return {
       date,
       ...completion(after),
@@ -220,6 +275,49 @@ function RitualBody() {
           onStepClick={(index) => update({ step: index as 0 | 1 | 2 })}
         />
       )}
+
+      {step === 3 ? (
+        <section key="tomorrow-board" className={`${STEP_SECTION} gap-5`}>
+          <div className="flex flex-col gap-2">
+            <h3 className="font-display text-display-xs">
+              {t('ritual.step3.title', { tomorrow: formatWeekdayDayMonth(tomorrow) })}
+            </h3>
+            <p className="text-pretty text-ink-2">
+              {t('ritual.step3.body', { lockAt: settings.lockTime })}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-start gap-3">
+            <TaskInput
+              locked={false}
+              scope="tomorrow"
+              showSyntax={false}
+              onAdd={onAddTomorrowClosed}
+              className="min-w-0 flex-1 basis-[280px]"
+            />
+            <ViewToggle value={tomorrowMode} onChange={setTomorrowMode} />
+          </div>
+
+          {tomorrowBoardTasks.length === 0 ? (
+            <EmptyState title={t('ritual.step3.empty')} className="px-[18px] py-4" />
+          ) : tomorrowMode === 'list' ? (
+            <TomorrowPlanList
+              items={tomorrowBoardItems}
+              onToggleMit={onToggleMitClosed}
+              onRemove={(id) => void dropTask(id)}
+              onAdd={onAddTomorrowClosed}
+              showInput={false}
+            />
+          ) : (
+            <MatrixBoard
+              tasks={tomorrowBoardTasks}
+              interaction={isDesktop === false ? 'tap' : 'drag'}
+              onSetQuadrant={(id, quadrant) => void setQuadrant(id, quadrant)}
+              onToggleDone={(id) => void toggleDone(id)}
+            />
+          )}
+        </section>
+      ) : null}
 
       {step === 0 ? (
         <section key="step-1" className={`${STEP_SECTION} gap-5`}>

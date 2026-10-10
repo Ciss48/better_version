@@ -24,6 +24,8 @@ export interface TomorrowPlanListProps {
   onToggleMit(id: string): void;
   onRemove(id: string): void;
   onAdd(p: ParsedTask): void;
+  /** False when a caller renders its own quick-add above (e.g. alongside a view toggle). */
+  showInput?: boolean;
   className?: string;
 }
 
@@ -33,6 +35,7 @@ export function TomorrowPlanList({
   onToggleMit,
   onRemove,
   onAdd,
+  showInput = true,
   className,
 }: TomorrowPlanListProps) {
   const mitCount = items.filter((item) => item.mit).length;
@@ -99,9 +102,11 @@ export function TomorrowPlanList({
         )}
       </div>
 
-      {/* Step 3 is not where the quick-add syntax is taught — the design
-          leaves the legend off here. */}
-      <TaskInput locked={false} scope="tomorrow" showSyntax={false} onAdd={onAdd} />
+      {showInput ? (
+        // Step 3 is not where the quick-add syntax is taught — the design
+        // leaves the legend off here.
+        <TaskInput locked={false} scope="tomorrow" showSyntax={false} onAdd={onAdd} />
+      ) : null}
     </div>
   );
 }
