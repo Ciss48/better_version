@@ -17,7 +17,7 @@ export interface RitualSummaryProps {
   dropped: number;
   energy: Reflection['energy'];
   good: string;
-  tomorrow: { count: number; mitTitles: string[] };
+  tomorrow: { items: { title: string; mit: boolean }[] };
   consistencyPlanned: number;
   onDone(): void;
   className?: string;
@@ -66,6 +66,7 @@ export function RitualSummary({
   ];
 
   const quote = good.trim();
+  const tomorrowMitCount = tomorrow.items.filter((item) => item.mit).length;
 
   return (
     <section className={cn('relative flex flex-col gap-[22px]', className)}>
@@ -113,14 +114,20 @@ export function RitualSummary({
       <div className="flex flex-col gap-2.5 rounded-card border-2 border-line px-5 py-[18px]">
         <b className="font-semibold">
           {t('ritual.summary.tomorrow', {
-            n: tomorrow.count,
-            mit: tomorrow.mitTitles.length,
+            n: tomorrow.items.length,
+            mit: tomorrowMitCount,
           })}
         </b>
-        {tomorrow.mitTitles.map((title) => (
-          <span key={title} className="flex items-center gap-2.5 text-[14.5px] text-ink-2">
-            <span aria-hidden className="size-2 shrink-0 rounded-full bg-accent" />
-            {title}
+        {tomorrow.items.map((item, index) => (
+          <span
+            key={`${item.title}-${index}`}
+            className="flex items-center gap-2.5 text-[14.5px] text-ink-2"
+          >
+            <span
+              aria-hidden
+              className={cn('size-2 shrink-0 rounded-full', item.mit ? 'bg-accent' : 'bg-ink-3')}
+            />
+            {item.title}
           </span>
         ))}
       </div>

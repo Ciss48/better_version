@@ -168,8 +168,7 @@ function RitualBody() {
       energy: log?.energy ?? 0,
       good: log?.good ?? '',
       tomorrow: {
-        count: tomorrowAfter.length,
-        mitTitles: tomorrowAfter.filter((task) => task.mit).map((task) => task.title),
+        items: tomorrowAfter.map((task) => ({ title: task.title, mit: task.mit })),
       },
       consistencyPlanned: consistencyView(state, today).planned,
     };

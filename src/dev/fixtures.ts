@@ -202,10 +202,12 @@ export const GALLERY_SAMPLES = {
   /** Ritual step 2, filled in. */
   reflectionGood: 'Vẫn chạy bộ dù trời mưa',
   reflectionImprove: 'Bắt đầu việc khó trước 9 giờ',
-  /** Tomorrow's MITs, as the ritual summary lists them. */
-  summaryMitTitles: [
-    'Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai',
-    'Viết blog về tối ưu Spark',
+  /** Tomorrow's full plan, as the ritual summary lists it — some MIT, some not. */
+  summaryTomorrowItems: [
+    { title: 'Hoàn thiện slide demo quý 4 cho buổi họp thứ Hai', mit: true },
+    { title: 'Viết blog về tối ưu Spark', mit: true },
+    { title: 'Dọn hộp thư', mit: false },
+    { title: 'Đặt lịch khám răng', mit: false },
   ],
 };
 

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The `supabase` Playwright project's dist dir (see playwright.config.ts).
+    ".next-e2e-supabase/**",
     // Read-only design handoff — never edited, never linted.
     "design/**",
   ]),

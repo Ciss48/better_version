@@ -94,8 +94,7 @@ interface Closed {
   moved: number;
   dropped: number;
   adhocDone: number;
-  tomorrowCount: number;
-  tomorrowMitTitles: string[];
+  tomorrowItems: { title: string; mit: boolean }[];
 }
 
 export function RitualPlayground() {
@@ -235,8 +234,7 @@ export function RitualPlayground() {
       moved: after.filter((task) => task.status === 'moved').length,
       dropped: after.filter((task) => task.status === 'dropped').length,
       adhocDone: adhoc.filter((task) => task.status === 'done').length,
-      tomorrowCount: tomorrowAfter.length,
-      tomorrowMitTitles: tomorrowAfter.filter((task) => task.mit).map((task) => task.title),
+      tomorrowItems: tomorrowAfter.map((task) => ({ title: task.title, mit: task.mit })),
     });
   }
 
@@ -350,7 +348,7 @@ export function RitualPlayground() {
             dropped={closed.dropped}
             energy={closed.dayLog.energy}
             good={closed.dayLog.good}
-            tomorrow={{ count: closed.tomorrowCount, mitTitles: closed.tomorrowMitTitles }}
+            tomorrow={{ items: closed.tomorrowItems }}
             consistencyPlanned={consistency(statsDays(26), TODAY).planned}
             onDone={reset}
           />

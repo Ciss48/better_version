@@ -168,7 +168,7 @@
       "bodyDropped": "Bỏ đi một việc không còn cần cũng là kỷ luật.",
       "bodyNoDrop": "Những gì dang dở đã có chỗ của nó.",
       "stats": { "done": "việc đã định hoàn thành", "moved": "việc được dời", "dropped": "việc được bỏ", "energy": "năng lượng" },
-      "tomorrow": "Ngày mai đã sẵn sàng · {n} việc, {mit} MIT",
+      "tomorrow": "Ngày mai đã sẵn sàng · {n} việc, {mit} MIT (việc quan trọng nhất)",
       "consistency": "Bạn đã có plan {n}/30 ngày gần đây. Nhất quán quan trọng hơn hoàn hảo.",
       "cta": "Về trang Hôm nay"
     }

@@ -19,7 +19,7 @@ function renderSummary(pct: number) {
       dropped={1}
       energy={4}
       good=""
-      tomorrow={{ count: 3, mitTitles: [] }}
+      tomorrow={{ items: [{ title: 'A', mit: false }, { title: 'B', mit: false }, { title: 'C', mit: false }] }}
       consistencyPlanned={26}
       onDone={vi.fn()}
     />,

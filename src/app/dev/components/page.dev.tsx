@@ -718,7 +718,7 @@ export default function ComponentsGalleryPage() {
               dropped={0}
               energy={5}
               good={GALLERY_SAMPLES.reflectionGood}
-              tomorrow={{ count: 4, mitTitles: GALLERY_SAMPLES.summaryMitTitles }}
+              tomorrow={{ items: GALLERY_SAMPLES.summaryTomorrowItems }}
               consistencyPlanned={26}
               onDone={noop}
             />
@@ -734,7 +734,7 @@ export default function ComponentsGalleryPage() {
               dropped={1}
               energy={4}
               good={GALLERY_SAMPLES.reflectionGood}
-              tomorrow={{ count: 4, mitTitles: GALLERY_SAMPLES.summaryMitTitles }}
+              tomorrow={{ items: GALLERY_SAMPLES.summaryTomorrowItems }}
               consistencyPlanned={26}
               onDone={noop}
             />
@@ -750,7 +750,7 @@ export default function ComponentsGalleryPage() {
               dropped={0}
               energy={0}
               good=""
-              tomorrow={{ count: 2, mitTitles: GALLERY_SAMPLES.summaryMitTitles.slice(0, 1) }}
+              tomorrow={{ items: GALLERY_SAMPLES.summaryTomorrowItems.slice(1, 3) }}
               consistencyPlanned={21}
               onDone={noop}
             />
